@@ -30,6 +30,7 @@
 package org.hisp.dhis.android.trackercapture.fragments.enrollment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -66,6 +67,9 @@ import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.SaveThread;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
+import org.hisp.dhis.android.trackercapture.fragments.selectprogram.EnrollmentDateSetterHelper;
+import org.hisp.dhis.android.trackercapture.fragments.selectprogram.SelectProgramFragment;
+import org.hisp.dhis.android.trackercapture.fragments.selectprogram.select_address;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -429,6 +433,9 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
                     public void onClick(DialogInterface dialog, int which) {
                         //discard
                         discardChanges();
+
+//                        Intent intent = new Intent(getActivity(), SelectProgramFragment.class);
+//                        startActivity(intent);
                         getActivity().finish();
                     }
                 }, new DialogInterface.OnClickListener() {
@@ -443,6 +450,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
     /**
      * confirms that we want to save changes, which flags the data to be sent to server
      */
+
     private void confirmSave() {
         if (form != null && form.getTrackedEntityInstance() != null) {
             if (form.getTrackedEntityInstance().getLocalId() < 0) {
