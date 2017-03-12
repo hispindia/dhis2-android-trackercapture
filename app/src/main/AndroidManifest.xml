@@ -65,8 +65,25 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_main"
             android:windowSoftInputMode="adjustPan"></activity>
+
+        <activity
+            android:name=".fragments.selectprogram.select_address"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_main"
+            android:windowSoftInputMode="adjustPan"></activity>
+
+        <activity
+            android:name=".fragments.selectprogram.EnrollmentDateSetterHelper"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_main"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".activities.HolderActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>  <activity
+            android:name="org.hisp.dhis.android.trackercapture.fragments.selectprogram.SelectProgramFragment"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustPan|stateHidden">
 
