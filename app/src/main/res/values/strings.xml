@@ -38,7 +38,11 @@
     <string name="register_relationship">Register relationship</string>
     <string name="new_event">New event</string>
     <string name="enroll">Enroll</string>
-
+<string name="select_district">Select District</string>
+<string name="select_taluk">Select District</string>
+<string name="select_block">Select Block</string>
+<string name="select_village">Select Village</string>
+<string name="select_habitation">Select Habitation</string>
     <string name="is">is</string>
     <string name="please_enter">Please enter</string>
 

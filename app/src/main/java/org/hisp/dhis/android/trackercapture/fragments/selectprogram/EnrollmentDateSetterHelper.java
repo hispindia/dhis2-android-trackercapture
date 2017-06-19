@@ -29,9 +29,13 @@
 
 package org.hisp.dhis.android.trackercapture.fragments.selectprogram;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.widget.DatePicker;
 
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
@@ -39,21 +43,59 @@ import org.hisp.dhis.android.trackercapture.R;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import static org.hisp.dhis.android.trackercapture.R.layout.select_address;
+
 /**
  * Helper-class for showing DatePickers for selecting Enrollment date, then incident date,
  * and then triggering Enrollment-creation in a chain of events.
  */
-public class EnrollmentDateSetterHelper {
-    private final IEnroller enroller;
-    private final Context context;
-    private final boolean showIncidentDate;
-    private final boolean enrollmentDatesInFuture;
-    private final boolean incidentDatesInFuture;
-    private final String enrollmentDateLabel;
-    private final String incidentDateLabel;
+public class EnrollmentDateSetterHelper extends Activity{
+    private static IEnroller enroller;
+    private static Context context;
+    private static boolean showIncidentDate;
+    private static boolean enrollmentDatesInFuture;
+    private static boolean incidentDatesInFuture;
+    private static String enrollmentDateLabel;
+    private static String incidentDateLabel;
     private TrackedEntityInstance trackedEntityInstance;
     private DateTime enrollmentDate;
     private DateTime incidentDate;
+    private static int int_condition;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(select_address);
+
+        String newString;
+
+        String district = getIntent().getExtras().getString("district");
+        String taluk = getIntent().getExtras().getString("taluk");
+        String village = getIntent().getExtras().getString("village");
+//        String habitation = getIntent().getExtras().getString("habitation");
+
+        Log.e("District",district);
+        Log.e("District",taluk);
+        Log.e("District",village);
+//        Log.e("District",habitation);
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                newString= null;
+            } else {
+                newString= extras.getString("Date");
+            }
+        } else {
+            newString= (String) savedInstanceState.getSerializable("Date");
+        }
+    }
+    public EnrollmentDateSetterHelper() {
+        showEnrollmentFragment();
+//            super();
+
+    }
 
     public EnrollmentDateSetterHelper(IEnroller enroller, Context context, boolean showIncidentDate,
                                       boolean enrollmentDatesInFuture, boolean incidentDatesInFuture, String enrollmentDateLabel, String incidentDateLabel) {
@@ -76,12 +118,29 @@ public class EnrollmentDateSetterHelper {
         this.incidentDatesInFuture = incidentDatesInFuture;
         this.enrollmentDateLabel = enrollmentDateLabel;
         this.incidentDateLabel = incidentDateLabel;
+//
+//
+//        int p = getIntent().getIntExtra("enroll",int_condition);
+//
+//        if(int_condition==0)
+//        {
+//            showEnrollmentFragment();
+////Call the method
+//        }
+//        else
+//        {
+//            showEnrollmentFragment();
+////method you want
+//        }
     }
+
 
     public static void createEnrollment(TrackedEntityInstance trackedEntityInstance, IEnroller enroller, Context context, boolean showIncidentDate,
                                         boolean enrollmentDatesInFuture, boolean incidentDatesInFuture, String enrollmentDateLabel, String incidentDateLabel) {
         EnrollmentDateSetterHelper enrollmentDateSetterHelper = new EnrollmentDateSetterHelper(trackedEntityInstance, enroller, context, showIncidentDate, enrollmentDatesInFuture, incidentDatesInFuture, enrollmentDateLabel, incidentDateLabel);
         enrollmentDateSetterHelper.showEnrollmentDatePicker();
+
+
     }
 
     public static void createEnrollment(IEnroller enroller, Context context, boolean showIncidentDate,
@@ -114,7 +173,11 @@ public class EnrollmentDateSetterHelper {
                         if (showIncidentDate) {
                             showIncidentDatePicker();
                         } else {
-                            showEnrollmentFragment();
+                            Intent intent = new Intent(EnrollmentDateSetterHelper.this.context, select_address.class);
+                            intent.putExtra("Date",enrollmentDate);
+                            EnrollmentDateSetterHelper.this.context.startActivity(intent);
+
+//                            showEnrollmentFragment();
                         }
                     }
                 });
@@ -162,6 +225,7 @@ public class EnrollmentDateSetterHelper {
     }
 
     private void showEnrollmentFragment() {
+
         enroller.showEnrollmentFragment(trackedEntityInstance, enrollmentDate, incidentDate);
     }
 }

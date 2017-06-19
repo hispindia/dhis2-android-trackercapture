@@ -193,6 +193,8 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register_new_event: {
+//                Intent intent = new Intent(getActivity(), SelectAddressFragment.class);
+//                startActivity(intent);
                 createEnrollment();
                 break;
             }
@@ -221,7 +223,11 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
     }
 
     public void showEnrollmentFragment(TrackedEntityInstance trackedEntityInstance, DateTime enrollmentDate, DateTime incidentDate) {
-        String enrollmentDateString = enrollmentDate.toString();
+//        String enrollmentDateString = enrollmentDate.toString();
+
+        String enrollmentDateString = "2017-03-10T01:00:00.000+05:30";
+//        Log.e("Enrolldate",enrollmentDate.toString());
+
         String incidentDateString = null;
         if (incidentDate != null) {
             incidentDateString = incidentDate.toString();

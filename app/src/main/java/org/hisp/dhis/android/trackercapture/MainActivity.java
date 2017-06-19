@@ -49,9 +49,11 @@ import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.SelectProgramFragment;
 import org.hisp.dhis.client.sdk.ui.activities.AbsHomeActivity;
-import org.hisp.dhis.client.sdk.ui.fragments.InformationFragment;
+//import org.hisp.dhis.client.sdk.ui.fragments.InformationFragment;
 import org.hisp.dhis.client.sdk.ui.fragments.WrapperFragment;
 
+import static org.hisp.dhis.android.trackercapture.activities.HolderActivity.ARG_TYPE;
+import static org.hisp.dhis.android.trackercapture.activities.HolderActivity.ARG_TYPE_SETTINGSFRAGMENT;
 import static org.hisp.dhis.client.sdk.utils.StringUtils.isEmpty;
 
 public class MainActivity extends AbsHomeActivity {
@@ -193,10 +195,49 @@ public class MainActivity extends AbsHomeActivity {
         } else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_settings) {
             HolderActivity.navigateToSettingsFragment(this);
             isSelected = true;
-        } else if (menuItemId == R.id.drawer_item_information) {
-            attachFragment(getInformationFragment());
-            isSelected = true;
         }
+
+        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports) {
+
+            Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.LabReports.class);
+            intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+            MainActivity.this.startActivity(intent);
+
+//            HolderActivity.navigateToSettingsFragment(this);
+//            isSelected = true;
+        }
+        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_ames) {
+
+            Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.LabReportsAmes.class);
+            intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+            MainActivity.this.startActivity(intent);
+
+//            HolderActivity.navigateToSettingsFragment(this);
+//            isSelected = true;
+        } else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_apex_ames) {
+
+            Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.Apex_org_wise_ames.class);
+            intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+            MainActivity.this.startActivity(intent);
+
+//            HolderActivity.navigateToSettingsFragment(this);
+//            isSelected = true;
+        }
+
+        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_apex) {
+
+            Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.Apex_org_wise.class);
+            intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+            MainActivity.this.startActivity(intent);
+
+//            HolderActivity.navigateToSettingsFragment(this);
+//            isSelected = true;
+        }
+
+//        else if (menuItemId == R.id.drawer_item_information) {
+//            attachFragment(getInformationFragment());
+//            isSelected = true;
+//        }
         /*else if (menuItemId == R.id.drawer_item_help) {
             attachFragment(getHelpFragment());
             isSelected = true;
@@ -213,16 +254,16 @@ public class MainActivity extends AbsHomeActivity {
 
         return isSelected;
     }
-
-    protected Fragment getInformationFragment() {
-        Bundle args = new Bundle();
-        Session session = DhisController.getInstance().getSession();
-        if (session != null && session.getCredentials() != null) {
-            args.putString(InformationFragment.USERNAME, session.getCredentials().getUsername());
-            args.putString(InformationFragment.URL, String.valueOf(session.getServerUrl()));
-        }
-        return WrapperFragment.newInstance(InformationFragment.class,
-                getString(R.string.drawer_item_information),
-                args);
-    }
+//
+//    protected Fragment getInformationFragment() {
+//        Bundle args = new Bundle();
+//        Session session = DhisController.getInstance().getSession();
+//        if (session != null && session.getCredentials() != null) {
+////            args.putString(InformationFragment.USERNAME, session.getCredentials().getUsername());
+////            args.putString(InformationFragment.URL, String.valueOf(session.getServerUrl()));
+//        }
+//        return WrapperFragment.newInstance(dispatchKeyShortcutEvent()
+//                getString(R.string.character_counter_pattern),
+//                args);
+//    }
 }

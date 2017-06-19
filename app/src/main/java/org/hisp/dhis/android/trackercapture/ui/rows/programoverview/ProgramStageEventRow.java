@@ -117,6 +117,7 @@ public class ProgramStageEventRow implements ProgramStageRow {
         if(event.getOrganisationUnitId()!=null) {
             OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit(event.getOrganisationUnitId());
             if(organisationUnit != null) {
+
                 holder.orgUnit.setText(organisationUnit.getLabel());
             }
         } else {
