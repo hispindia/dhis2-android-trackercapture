@@ -12,7 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.hisp.dhis.android.sdk.controllers.realm.ROrganisationHelper;
+import org.hisp.dhis.android.sdk.controllers.realm.ROrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.Cascading;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
@@ -23,6 +26,7 @@ import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectAddress;
 import org.hisp.dhis.android.trackercapture.fragments.enrollmentdate.EnrollmentDateFragmentQuery;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
 
@@ -61,12 +65,13 @@ public class select_address extends Activity{
 
         List<String> list = new ArrayList<String>();
         List<String> list11 = new ArrayList<String>();
-        List<OrganisationUnitforcascading> orgUnits = MetaDataController
-                .getorganisationUnitsLevelWise1(3);
-        for (OrganisationUnitforcascading orgunit: orgUnits)
+//        List<OrganisationUnitforcascading> orgUnits = MetaDataController
+//                .getorganisationUnitsLevelWise1(3);
+        List<ROrganisationUnit> organisationUnitListlevel3= ROrganisationHelper.getOrgFromLocalByLevel(3);
+        for (ROrganisationUnit orgunit: organisationUnitListlevel3)
         {
             list.add(orgunit.getId());
-            list11.add(orgunit.getLabel());
+            list11.add(orgunit.getDisplayName());
 
         }
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -77,21 +82,24 @@ public class select_address extends Activity{
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+//                String orgname=String.valueOf(spinner1.getSelectedItem());
+//                OrganisationUnitforcascading mOrgUnit = MetaDataController.getOrganisationUnitID1(String.valueOf(spinner1.getSelectedItem()));
+                List<ROrganisationUnit> mOrgUnit1 = ROrganisationHelper.getOrganisationUnitID(String.valueOf(String.valueOf(spinner1.getSelectedItem())));
+                Iterator<ROrganisationUnit> iter = mOrgUnit1.iterator();
+                String ouuid = iter.next().getId();
+                List<ROrganisationUnit> organisationUnitList_=ROrganisationHelper.getOrgFromLocalByLevel(ouuid,5);
 
-                OrganisationUnitforcascading mOrgUnit = MetaDataController.getOrganisationUnitID1(String.valueOf(spinner1.getSelectedItem()));
 
-                Log.e("Spinner1_state", String.valueOf(mOrgUnit.getId()));
-
-                List<OrganisationUnitforcascading> orgUnits1 = MetaDataController
-                        .getLevel5OrgUnitWithParentLevel31(String.valueOf(mOrgUnit.getId()));
+//                List<OrganisationUnitforcascading> orgUnits1 = MetaDataController
+//                        .getLevel5OrgUnitWithParentLevel31(String.valueOf(mOrgUnit.getId()));
 
                 List<String> list1 = new ArrayList<String>();
                 List<String> list22 = new ArrayList<String>();
 
-                for (OrganisationUnitforcascading orgUnit1 : orgUnits1) {
+                for (ROrganisationUnit orgUnit1 : organisationUnitList_) {
 
                     list1.add(orgUnit1.getId());
-                    list22.add(orgUnit1.getLabel());
+                    list22.add(orgUnit1.getDisplayName());
                 }
 
 
@@ -112,16 +120,25 @@ public class select_address extends Activity{
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                OrganisationUnitforcascading mOrgUnit2 = MetaDataController.getOrganisationUnitID1(String.valueOf(spinner2.getSelectedItem()));
-                Log.e("Spinner2_district", String.valueOf(mOrgUnit2.getId()));
-                List<OrganisationUnitforcascading> orgUnits2 = MetaDataController
-                        .getLevel6OrgUnitWithParentLevel51(String.valueOf(mOrgUnit2.getId()));
+//                OrganisationUnitforcascading mOrgUnit2 = MetaDataController.getOrganisationUnitID1(String.valueOf(spinner2.getSelectedItem()));
+//                Log.e("Spinner2_district", String.valueOf(mOrgUnit2.getId()));
+//
+//                List<ROrganisationUnit> organisationUnitList_=ROrganisationHelper.getOrgFromLocalByLevel(String.valueOf(mOrgUnit2.getId()),6);
+//
+////                List<OrganisationUnitforcascading> orgUnits2 = MetaDataController
+////                        .getLevel6OrgUnitWithParentLevel51(String.valueOf(mOrgUnit2.getId()));
+
+                List<ROrganisationUnit> mOrgUnit1 = ROrganisationHelper.getOrganisationUnitID(String.valueOf(String.valueOf(spinner2.getSelectedItem())));
+                Iterator<ROrganisationUnit> iter = mOrgUnit1.iterator();
+                String ouuid = iter.next().getId();
+                List<ROrganisationUnit> organisationUnitList_=ROrganisationHelper.getOrgFromLocalByLevel(ouuid,6);
+
                 List<String> list2 = new ArrayList<String>();
                 List<String> list33 = new ArrayList<String>();
-                for (OrganisationUnitforcascading orgUnit2 : orgUnits2) {
+                for (ROrganisationUnit orgUnit2 : organisationUnitList_) {
 
                     list2.add(orgUnit2.getId());
-                    list33.add(orgUnit2.getLabel());
+                    list33.add(orgUnit2.getDisplayName());
                 }
                 ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(select_address.this,
                         android.R.layout.simple_spinner_item, list33);
@@ -139,16 +156,24 @@ public class select_address extends Activity{
         spinner4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                OrganisationUnitforcascading mOrgUnit44 = MetaDataController.getOrganisationUnitID1(String.valueOf(spinner4.getSelectedItem()));
-                Log.e("Spinner_block", String.valueOf(mOrgUnit44.getId()));
-                List<OrganisationUnitforcascading> orgUnits2 = MetaDataController
-                        .getLevel7OrgUnitWithParentLevel61(String.valueOf(mOrgUnit44.getId()));
+//                OrganisationUnitforcascading mOrgUnit44 = MetaDataController.getOrganisationUnitID1(String.valueOf(spinner4.getSelectedItem()));
+//                Log.e("Spinner_block", String.valueOf(mOrgUnit44.getId()));
+//                List<ROrganisationUnit> organisationUnitList_=ROrganisationHelper.getOrgFromLocalByLevel(String.valueOf(mOrgUnit44.getId()),6);
+
+//                List<OrganisationUnitforcascading> orgUnits2 = MetaDataController
+//                        .getLevel7OrgUnitWithParentLevel61(String.valueOf(mOrgUnit44.getId()));
+
+                List<ROrganisationUnit> mOrgUnit1 = ROrganisationHelper.getOrganisationUnitID(String.valueOf(String.valueOf(spinner2.getSelectedItem())));
+                Iterator<ROrganisationUnit> iter = mOrgUnit1.iterator();
+                String ouuid = iter.next().getId();
+                List<ROrganisationUnit> organisationUnitList_=ROrganisationHelper.getOrgFromLocalByLevel(ouuid,7);
+
                 List<String> list22 = new ArrayList<String>();
                 List<String> list333 = new ArrayList<String>();
-                for (OrganisationUnitforcascading orgUnit22 : orgUnits2) {
+                for (ROrganisationUnit orgUnit22 : organisationUnitList_) {
 
                     list22.add(orgUnit22.getId());
-                    list333.add(orgUnit22.getLabel());
+                    list333.add(orgUnit22.getDisplayName());
                 }
                 ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(select_address.this,
                         android.R.layout.simple_spinner_item, list333);

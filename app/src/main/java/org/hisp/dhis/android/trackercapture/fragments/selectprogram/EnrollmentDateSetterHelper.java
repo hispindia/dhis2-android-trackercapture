@@ -209,7 +209,7 @@ public class EnrollmentDateSetterHelper extends Activity{
                     public void onClick(DialogInterface dialog, int which) {
                         DatePicker dp = incidentDatePickerDialog.getDatePicker();
                         incidentDate = incidentDate.withYear(dp.getYear());
-                        incidentDate = incidentDate.withMonthOfYear(dp.getMonth() + 1);
+//                        incidentDate = incidentDate.showEnrollmentFragmentwithMonthOfYear(dp.getMonth() + 1);
                         incidentDate = incidentDate.withDayOfMonth(dp.getDayOfMonth());
                         showEnrollmentFragment();
                     }
