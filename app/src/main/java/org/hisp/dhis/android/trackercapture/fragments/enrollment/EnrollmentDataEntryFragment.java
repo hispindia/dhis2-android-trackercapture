@@ -30,7 +30,6 @@
 package org.hisp.dhis.android.trackercapture.fragments.enrollment;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -67,9 +66,6 @@ import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.SaveThread;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
-import org.hisp.dhis.android.trackercapture.fragments.selectprogram.EnrollmentDateSetterHelper;
-import org.hisp.dhis.android.trackercapture.fragments.selectprogram.SelectProgramFragment;
-import org.hisp.dhis.android.trackercapture.fragments.selectprogram.select_address;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -367,7 +363,6 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
     @Subscribe
     public void onRowValueChanged(final RowValueChangedEvent event) {
         super.onRowValueChanged(event);
-
         // do not run program rules for EditTextRows - DelayedDispatcher takes care of this
         if (event.getRow() == null || !(event.getRow() instanceof EditTextRow)) {
             evaluateRules(event.getId());
