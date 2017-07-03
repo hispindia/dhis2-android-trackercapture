@@ -142,22 +142,26 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         }
         currentEnrollment.setAttributes(trackedEntityAttributeValues);
         for (int i = 0; i < programTrackedEntityAttributes.size(); i++) {
-            boolean editable = true;
-            boolean shouldNeverBeEdited = false;
-            if(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().isGenerated()) {
-                editable = false;
-                shouldNeverBeEdited = true;
-            }
-            if(ValueType.COORDINATE.equals(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getValueType())) {
-                GpsController.activateGps(context);
-            }
-            Row row = DataEntryRowFactory.createDataEntryView(programTrackedEntityAttributes.get(i).getMandatory(),
-                    programTrackedEntityAttributes.get(i).getAllowFutureDate(), programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getOptionSet(),
-                    programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getName(),
-                    getTrackedEntityDataValue(programTrackedEntityAttributes.get(i).
-                            getTrackedEntityAttribute().getUid(), trackedEntityAttributeValues),
-                    programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getValueType(),
-                    editable, shouldNeverBeEdited, mProgram.getDataEntryMethod());
+//            boolean editable = true;
+//            boolean shouldNeverBeEdited = false;
+//            if(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().isGenerated()) {
+//                editable = false;
+//                shouldNeverBeEdited = true;
+//            }
+//            if(ValueType.COORDINATE.equals(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getValueType())) {
+//                GpsController.activateGps(context);
+//            }
+//            Row row = DataEntryRowFactory.createDataEntryView(programTrackedEntityAttributes.get(i).getMandatory(),
+//                    programTrackedEntityAttributes.get(i).getAllowFutureDate(), programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getOptionSet(),
+//                    programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getName(),
+//                    getTrackedEntityDataValue(programTrackedEntityAttributes.get(i).
+//                            getTrackedEntityAttribute().getUid(), trackedEntityAttributeValues),
+//                    programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getValueType(),
+//                    editable, shouldNeverBeEdited, mProgram.getDataEntryMethod());
+//            dataEntryRows.add(row);
+
+            Row row = createDataEntryView(programTrackedEntityAttributes.get(i), programTrackedEntityAttributes.get(i).getTrackedEntityAttribute(),
+                    getTrackedEntityDataValue(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getUid(), trackedEntityAttributeValues));
             dataEntryRows.add(row);
         }
         for (TrackedEntityAttributeValue trackedEntityAttributeValue : trackedEntityAttributeValues) {
@@ -181,5 +185,130 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         trackedEntityAttributeValue.setValue("");
         trackedEntityAttributeValues.add(trackedEntityAttributeValue);
         return trackedEntityAttributeValue;
+    }
+
+    public Row createDataEntryView(ProgramTrackedEntityAttribute programTrackedEntityAttribute, TrackedEntityAttribute trackedEntityAttribute, TrackedEntityAttributeValue dataValue) {
+        Row row;
+        String trackedEntityAttributeName = trackedEntityAttribute.getName();
+        if (trackedEntityAttribute.getOptionSet() != null) {
+            OptionSet optionSet = MetaDataController.getOptionSet(trackedEntityAttribute.getOptionSet());
+            if (optionSet == null) {
+                row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.TEXT);
+            } else {
+                row = new AutoCompleteRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, optionSet);
+            }
+        }
+        else  if(trackedEntityAttribute.getShortName().equals("pin_code"))
+        {
+
+//            MetaDataController.getLevelOrganisationUnits(dhisApi);
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.PINCODE);
+        }
+
+        else  if(trackedEntityAttribute.getShortName().equals("nimhansid"))
+        {
+
+//            MetaDataController.getLevelOrganisationUnits(dhisApi);
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.Nimhans);
+        }
+
+
+        else  if(trackedEntityAttribute.getShortName().equals("patient_name"))
+        {
+//            String cas=MetaDataController.getCascaded();
+//            Cascading cascade=new Cascading();
+//            Log.e("cascade taluk", cascade.getTaluk());
+//            Log.e("cascade taluk", );
+
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.PATIENTNAME);
+        }
+        else  if(trackedEntityAttribute.getShortName().equals("phone_number"))
+        {
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.PHONE_NUMBER);
+        }
+//        else  if(trackedEntityAttribute.getShortName().equals("age_months"))
+//        {
+//
+//            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
+//        }
+//        else  if(trackedEntityAttribute.getShortName().equals("age_years"))
+//        {
+//
+//            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
+//        }
+
+        else  if(trackedEntityAttribute.getShortName().equals("Age"))
+        {
+
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
+        }
+
+// TO disable Age months
+        else  if(trackedEntityAttribute.getShortName().equals("age_in_months"))
+        {
+
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE_MONTHS);
+        }
+
+        else  if(trackedEntityAttribute.getShortName().equals("State") ||trackedEntityAttribute.getShortName().equals("District") || trackedEntityAttribute.getShortName().equals("block_taluk")||trackedEntityAttribute.getShortName().equals("Village"))
+        {
+
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.ORGANISATION_UNIT);
+        }
+
+//        else if(trackedEntityAttribute.getShortName().equals("taluk"))
+//        {
+//
+////            MetaDataController.getLevelOrganisationUnits(dhisApi);
+//            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
+//        }
+
+        else if (trackedEntityAttribute.getValueType().equals(ValueType.TEXT)) {
+
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.TEXT);
+        }
+
+        else if (trackedEntityAttribute.getValueType().equals(ValueType.LONG_TEXT)) {
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.LONG_TEXT);
+        } else if (trackedEntityAttribute.getValueType().equals(ValueType.NUMBER)) {
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.NUMBER);
+        } else if (trackedEntityAttribute.getValueType().equals(ValueType.INTEGER)) {
+
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.INTEGER);
+        }
+
+
+//        else if(trackedEntityAttribute.getShortName().equals("age_in_years"))
+//        {
+//            System.out.println("Short name:" + trackedEntityAttribute.getShortName());
+//
+//
+//
+//        }
+
+        else if (trackedEntityAttribute.getValueType().equals(ValueType.INTEGER_ZERO_OR_POSITIVE)) {
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.INTEGER_ZERO_OR_POSITIVE);
+        }
+        else if (trackedEntityAttribute.getValueType().equals(ValueType.INTEGER_POSITIVE)) {
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.INTEGER_POSITIVE);
+        } else if (trackedEntityAttribute.getValueType().equals(ValueType.INTEGER_NEGATIVE)) {
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.INTEGER_NEGATIVE);
+        } else if (trackedEntityAttribute.getValueType().equals(ValueType.BOOLEAN)) {
+            row = new RadioButtonsRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.BOOLEAN);
+        } else if (trackedEntityAttribute.getValueType().equals(ValueType.TRUE_ONLY)) {
+            row = new CheckBoxRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue);
+        } else if (trackedEntityAttribute.getValueType().equals(ValueType.DATE)) {
+            row = new DatePickerRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, programTrackedEntityAttribute.getAllowFutureDate());
+        }
+        else if (trackedEntityAttribute.getValueType().equals(ValueType.ORGANISATION_UNIT)) {
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.ORGANISATION_UNIT);
+        }
+
+
+        else {
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.LONG_TEXT);
+        }
+        System.out.println("Short Names:"+trackedEntityAttribute.getShortName());
+        return row;
     }
 }

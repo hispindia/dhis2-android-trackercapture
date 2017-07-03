@@ -61,6 +61,20 @@
             android:theme="@style/LoginScreenTheme"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity
+            android:name="org.hisp.dhis.android.trackercapture.LabReports.LabReports"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+
+        <activity
+            android:name="org.hisp.dhis.android.trackercapture.LabReports.LabReportsAmes"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+
+        <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_main"

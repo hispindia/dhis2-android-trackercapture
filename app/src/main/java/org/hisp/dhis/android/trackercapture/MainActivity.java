@@ -29,6 +29,8 @@
 
 package org.hisp.dhis.android.trackercapture;
 
+import static org.hisp.dhis.android.trackercapture.activities.HolderActivity.ARG_TYPE;
+import static org.hisp.dhis.android.trackercapture.activities.HolderActivity.ARG_TYPE_SETTINGSFRAGMENT;
 import static org.hisp.dhis.client.sdk.utils.StringUtils.isEmpty;
 
 import android.content.Intent;
@@ -182,12 +184,37 @@ public class MainActivity extends AbsHomeActivity {
             isSelected = openApp(APPS_EVENT_CAPTURE_PACKAGE);
         } else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_tracker_capture) {
             isSelected = openApp(APPS_TRACKER_CAPTURE_PACKAGE);
-        } else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_tracker_capture_reports) {
-            isSelected = openApp(APPS_TRACKER_CAPTURE_REPORTS_PACKAGE);
-        } else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_profile) {
+        }
+
+//        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_tracker_capture_reports) {
+//            isSelected = openApp(APPS_TRACKER_CAPTURE_REPORTS_PACKAGE);
+//        }
+
+        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_profile) {
             attachFragmentDelayed(getProfileFragment());
             isSelected = true;
-        } else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_settings) {
+
+
+        }
+        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports) {
+
+            Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.LabReports.class);
+            intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+            MainActivity.this.startActivity(intent);
+
+//            HolderActivity.navigateToSettingsFragment(this);
+//            isSelected = true;
+        }
+        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_ames) {
+
+            Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.LabReportsAmes.class);
+            intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+            MainActivity.this.startActivity(intent);
+
+//            HolderActivity.navigateToSettingsFragment(this);
+//            isSelected = true;
+        }
+        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_settings) {
             HolderActivity.navigateToSettingsFragment(this);
             isSelected = true;
         } else if (menuItemId == R.id.drawer_item_information) {
