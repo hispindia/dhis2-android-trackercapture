@@ -73,6 +73,54 @@
             android:windowSoftInputMode="adjustPan|stateHidden">
 
         </activity>
+        <activity
+            android:name="org.hisp.dhis.android.trackercapture.LabReports.ApexLab"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+        <activity
+            android:name="org.hisp.dhis.android.trackercapture.LabReports.ApexLabAmes"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+        <activity
+            android:name="org.hisp.dhis.android.trackercapture.LabReports.Apex_org_wise"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+        <activity
+            android:name="org.hisp.dhis.android.trackercapture.LabReports.Apex_org_wise_ames"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+        <activity
+            android:name="org.hisp.dhis.android.trackercapture.LabReports.Nimhans_org_wise"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+        <activity
+            android:name="org.hisp.dhis.android.trackercapture.LabReports.Nimhans_org_wise_ames"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+        <activity
+            android:name="org.hisp.dhis.android.trackercapture.LabReports.NimhansLab"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+        <activity
+            android:name="org.hisp.dhis.android.trackercapture.LabReports.NimhansLabAmes"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
 
         <activity
             android:name=".MainActivity"
