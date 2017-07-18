@@ -37,6 +37,7 @@ import org.hisp.dhis.android.sdk.job.NetworkJob;
 import org.hisp.dhis.android.sdk.network.APIException;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
@@ -76,7 +77,7 @@ public class OnlineSearchResultFragment extends Fragment implements AdapterView.
     private ProgressBar mProgressBar;
     private FontEditText filterButton;
     private Button searchButton;
-
+    private List<OrganisationUnit> assignedOrganisationUnits;
     public static final String EXTRA_TRACKEDENTITYINSTANCESLIST = "extra:trackedEntityInstances";
     public static final String EXTRA_TRACKEDENTITYINSTANCESSELECTED = "extra:trackedEntityInstancesSelected";
     public static final String EXTRA_ORGUNIT = "extra:orgUnit";
@@ -383,29 +384,66 @@ public class OnlineSearchResultFragment extends Fragment implements AdapterView.
                 }
 
 
-                if (downloadedTrackedEntityInstances != null && downloadedTrackedEntityInstances.size() == 1) {
-                    if (downloadedEnrollments != null) {
-                        Enrollment activeEnrollment = getActiveEnrollmentByProgram(programId);
+//                assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
+//                if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("apex")||assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("nimhans"))
+//
+////                {
+//
+//                    if (downloadedTrackedEntityInstances != null ) {
+//                        if (downloadedEnrollments != null) {
+//                            Enrollment activeEnrollment = getActiveEnrollmentByProgram(programId);
+//
+//                            final Enrollment enrollment = activeEnrollment;
+//                            if (enrollment != null) {
+//                                for(int i=0;i<downloadedTrackedEntityInstances.size();i++)
+//                                {
+//                                    final TrackedEntityInstance trackedEntityInstance =
+//                                            downloadedTrackedEntityInstances.get(i);
+//
+//                                    if (!backNavigation) {
+//                                        activity.runOnUiThread(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                HolderActivity.navigateToProgramOverviewFragment(activity,
+//                                                        orgUnitId,
+//                                                        enrollment.getProgram().getUid(),
+//                                                        trackedEntityInstance.getLocalId());
+//                                            }
+//                                        });
+//                                    }
+//                                }
+//
+//                            }
+//                        }
+//                    }
+//                }
 
-                        final Enrollment enrollment = activeEnrollment;
-                        if (enrollment != null) {
-                            final TrackedEntityInstance trackedEntityInstance =
-                                    downloadedTrackedEntityInstances.get(0);
+                    if (downloadedTrackedEntityInstances != null&&downloadedTrackedEntityInstances.size()==1 ) {
+                        if (downloadedEnrollments != null) {
+                            Enrollment activeEnrollment = getActiveEnrollmentByProgram(programId);
 
-                            if (!backNavigation) {
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        HolderActivity.navigateToProgramOverviewFragment(activity,
-                                                orgUnitId,
-                                                enrollment.getProgram().getUid(),
-                                                trackedEntityInstance.getLocalId());
+                            final Enrollment enrollment = activeEnrollment;
+                            if (enrollment != null) {
+                                    final TrackedEntityInstance trackedEntityInstance =
+                                            downloadedTrackedEntityInstances.get(0);
+
+                                    if (!backNavigation) {
+                                        activity.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                HolderActivity.navigateToProgramOverviewFragment(activity,
+                                                        orgUnitId,
+                                                        enrollment.getProgram().getUid(),
+                                                        trackedEntityInstance.getLocalId());
+                                            }
+                                        });
                                     }
-                                });
+
                             }
                         }
                     }
-                }
+
+
                 Dhis2Application.getEventBus().post(
                         new OnTeiDownloadedEvent(OnTeiDownloadedEvent.EventType.END,
                                 getSelectedTrackedEntityInstances().size()));
