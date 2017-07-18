@@ -301,6 +301,7 @@ public class HolderActivity extends AbsHomeActivity {
 
 
             intent.putExtra(OnlineSearchResultFragment.EXTRA_ORGUNIT, orgUnit);
+
             intent.putExtra(OnlineSearchResultFragment.EXTRA_SELECTALL, false);
             intent.putExtra(OnlineSearchResultFragment.EXTRA_PROGRAM, program);
             intent.putExtra(OnlineSearchResultFragment.EXTRA_TRACKEDENTITYINSTANCESSELECTED, parameterSerializible1);
