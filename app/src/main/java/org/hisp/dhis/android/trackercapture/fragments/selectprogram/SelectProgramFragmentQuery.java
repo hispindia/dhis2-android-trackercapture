@@ -36,6 +36,8 @@ import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.sql.queriable.StringQuery;
 
+import org.hisp.dhis.android.sdk.controllers.realm.ROrganisationHelper;
+import org.hisp.dhis.android.sdk.controllers.realm.ROrganisationUnit;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
@@ -63,6 +65,7 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.EventRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
+import org.hisp.dhis.android.sdk.ui.option_dialogue_package.Model;
 import org.hisp.dhis.android.sdk.utils.comparators.EnrollmentDateComparator;
 import org.hisp.dhis.android.sdk.utils.comparators.EnrollmentLocalIdComparator;
 import org.hisp.dhis.android.sdk.utils.comparators.EventDateComparator;
@@ -76,10 +79,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+//@sou To Do downlaod on local for Parent ou
+
 public class SelectProgramFragmentQuery implements Query<SelectProgramFragmentForm> {
     private final String mOrgUnitId;
     private final String mProgramId;
-
+    private List<OrganisationUnit> assignedOrganisationUnits;
+    List<ROrganisationUnit> orgUnitList = new ArrayList<>();
     public SelectProgramFragmentQuery(String orgUnitId, String programId) {
         mOrgUnitId = orgUnitId;
         mProgramId = programId;
@@ -133,58 +139,172 @@ public class SelectProgramFragmentQuery implements Query<SelectProgramFragmentFo
         }
         teiRows.add(columnNames);
 
-        if(!selectedProgram.isDisplayFrontPageList()) {
+        if (!selectedProgram.isDisplayFrontPageList()) {
             return fragmentForm; // we don't want to show any values or any list header
         }
+        assignedOrganisationUnits = MetaDataController.getAssignedOrganisationUnits();
+        if (assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("apex")) {
+            orgUnitList = ROrganisationHelper.getOrgFromLocalByLevel(assignedOrganisationUnits.get(0).getId(), 5);
+            for (int i = 0; i < orgUnitList.size(); i++) {
+                String query = getTrackedEntityInstancesWithEnrollmentQuery(orgUnitList.get(i).getId(), mProgramId);
+                if (query == null) {
+                    return fragmentForm;
+                }
 
-        String query = getTrackedEntityInstancesWithEnrollmentQuery(mOrgUnitId, mProgramId);
-        if(query == null) {
-            return fragmentForm;
-        }
+                List<TrackedEntityInstance> resultTrackedEntityInstances = new StringQuery<>(TrackedEntityInstance.class, query).queryList();
 
-        List<TrackedEntityInstance> resultTrackedEntityInstances = new StringQuery<>(TrackedEntityInstance.class, query).queryList();
+                //caching tracked entity attributes
+                List<TrackedEntityAttribute> trackedEntityAttributes = new Select().from(TrackedEntityAttribute.class).queryList();
+                Map<String, TrackedEntityAttribute> allTrackedEntityAttributesMap = new HashMap<>();
+                for (TrackedEntityAttribute trackedEntityAttribute : trackedEntityAttributes) {
+                    allTrackedEntityAttributesMap.put(trackedEntityAttribute.getUid(), trackedEntityAttribute);
+                }
 
-        //caching tracked entity attributes
-        List<TrackedEntityAttribute> trackedEntityAttributes = new Select().from(TrackedEntityAttribute.class).queryList();
-        Map<String, TrackedEntityAttribute> allTrackedEntityAttributesMap = new HashMap<>();
-        for(TrackedEntityAttribute trackedEntityAttribute : trackedEntityAttributes) {
-            allTrackedEntityAttributesMap.put(trackedEntityAttribute.getUid(), trackedEntityAttribute);
-        }
+                //putting teis in map indexed by localid
+                Map<Long, TrackedEntityInstance> trackedEntityInstanceLocalIdToTeiMap = new HashMap<>();
+                for (TrackedEntityInstance trackedEntityInstance : resultTrackedEntityInstances) {
+                    trackedEntityInstanceLocalIdToTeiMap.put(trackedEntityInstance.getLocalId(), trackedEntityInstance);
+                }
 
-        //putting teis in map indexed by localid
-        Map<Long, TrackedEntityInstance> trackedEntityInstanceLocalIdToTeiMap = new HashMap<>();
-        for(TrackedEntityInstance trackedEntityInstance : resultTrackedEntityInstances) {
-            trackedEntityInstanceLocalIdToTeiMap.put(trackedEntityInstance.getLocalId(), trackedEntityInstance);
-        }
+                //searching for Failed Items for any of the resulting TEI
+                Set<String> failedItemsForTrackedEntityInstances = getFailedItemsForTrackedEntityInstances(trackedEntityInstanceLocalIdToTeiMap);
 
-        //searching for Failed Items for any of the resulting TEI
-        Set<String> failedItemsForTrackedEntityInstances = getFailedItemsForTrackedEntityInstances(trackedEntityInstanceLocalIdToTeiMap);
+                //Caching Option Sets for further use to avoid repeated db calls
+                Map<String, Map<String, Option>> optionsForOptionSetMap = getCachedOptionsForOptionSets(attributesToShowMap);
 
-        //Caching Option Sets for further use to avoid repeated db calls
-        Map<String, Map<String, Option>> optionsForOptionSetMap = getCachedOptionsForOptionSets(attributesToShowMap);
+                //caching TrackedEntityAttributeValues to avoid looped db queries
+                Map<Long, Map<String, TrackedEntityAttributeValue>> cachedTrackedEntityAttributeValuesForTrackedEntityInstances = getCachedTrackedEntityAttributeValuesForTrackedEntityInstances(attributesToShow, resultTrackedEntityInstances);
 
-        //caching TrackedEntityAttributeValues to avoid looped db queries
-        Map<Long, Map<String, TrackedEntityAttributeValue>> cachedTrackedEntityAttributeValuesForTrackedEntityInstances = getCachedTrackedEntityAttributeValuesForTrackedEntityInstances(attributesToShow, resultTrackedEntityInstances);
+                for (TrackedEntityInstance trackedEntityInstance : resultTrackedEntityInstances) {
+                    if (trackedEntityInstance == null) {
+                        continue;
+                    }
+                    teiRows.add(createTrackedEntityInstanceItem(context,
+                            trackedEntityInstance, attributesToShow, attributesToShowMap,
+                            failedItemsForTrackedEntityInstances,
+                            cachedTrackedEntityAttributeValuesForTrackedEntityInstances,
+                            optionsForOptionSetMap));
+                }
 
-        for (TrackedEntityInstance trackedEntityInstance : resultTrackedEntityInstances) {
-            if (trackedEntityInstance == null) {
-                continue;
+                fragmentForm.setEventRowList(teiRows);
+                fragmentForm.setColumnNames(columnNames);
+
+                if (selectedProgram.getTrackedEntity() != null) {
+                    columnNames.setTrackedEntity(selectedProgram.getTrackedEntity().getName());
+                    columnNames.setTitle(selectedProgram.getTrackedEntity().getName() + " (" + (teiRows.size() - 1) + ")");
+                }
+
+//                return fragmentForm;
             }
-            teiRows.add(createTrackedEntityInstanceItem(context,
-                    trackedEntityInstance, attributesToShow, attributesToShowMap,
-                    failedItemsForTrackedEntityInstances,
-                    cachedTrackedEntityAttributeValuesForTrackedEntityInstances,
-                    optionsForOptionSetMap));
+
+//            for(int i=0;i<)
         }
+        else if (assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("nimhans")) {
+            orgUnitList = ROrganisationHelper.getOrgFromLocalByLevel(assignedOrganisationUnits.get(0).getId(), 5);
+            for (int i = 0; i < orgUnitList.size(); i++) {
+                String query = getTrackedEntityInstancesWithEnrollmentQuery(orgUnitList.get(i).getId(), mProgramId);
+                if (query == null) {
+                    return fragmentForm;
+                }
 
-        fragmentForm.setEventRowList(teiRows);
-        fragmentForm.setColumnNames(columnNames);
+                List<TrackedEntityInstance> resultTrackedEntityInstances = new StringQuery<>(TrackedEntityInstance.class, query).queryList();
 
-        if(selectedProgram.getTrackedEntity() != null) {
-            columnNames.setTrackedEntity(selectedProgram.getTrackedEntity().getName());
-            columnNames.setTitle(selectedProgram.getTrackedEntity().getName() + " (" + ( teiRows.size() - 1 ) + ")") ;
+                //caching tracked entity attributes
+                List<TrackedEntityAttribute> trackedEntityAttributes = new Select().from(TrackedEntityAttribute.class).queryList();
+                Map<String, TrackedEntityAttribute> allTrackedEntityAttributesMap = new HashMap<>();
+                for (TrackedEntityAttribute trackedEntityAttribute : trackedEntityAttributes) {
+                    allTrackedEntityAttributesMap.put(trackedEntityAttribute.getUid(), trackedEntityAttribute);
+                }
+
+                //putting teis in map indexed by localid
+                Map<Long, TrackedEntityInstance> trackedEntityInstanceLocalIdToTeiMap = new HashMap<>();
+                for (TrackedEntityInstance trackedEntityInstance : resultTrackedEntityInstances) {
+                    trackedEntityInstanceLocalIdToTeiMap.put(trackedEntityInstance.getLocalId(), trackedEntityInstance);
+                }
+
+                //searching for Failed Items for any of the resulting TEI
+                Set<String> failedItemsForTrackedEntityInstances = getFailedItemsForTrackedEntityInstances(trackedEntityInstanceLocalIdToTeiMap);
+
+                //Caching Option Sets for further use to avoid repeated db calls
+                Map<String, Map<String, Option>> optionsForOptionSetMap = getCachedOptionsForOptionSets(attributesToShowMap);
+
+                //caching TrackedEntityAttributeValues to avoid looped db queries
+                Map<Long, Map<String, TrackedEntityAttributeValue>> cachedTrackedEntityAttributeValuesForTrackedEntityInstances = getCachedTrackedEntityAttributeValuesForTrackedEntityInstances(attributesToShow, resultTrackedEntityInstances);
+
+                for (TrackedEntityInstance trackedEntityInstance : resultTrackedEntityInstances) {
+                    if (trackedEntityInstance == null) {
+                        continue;
+                    }
+                    teiRows.add(createTrackedEntityInstanceItem(context,
+                            trackedEntityInstance, attributesToShow, attributesToShowMap,
+                            failedItemsForTrackedEntityInstances,
+                            cachedTrackedEntityAttributeValuesForTrackedEntityInstances,
+                            optionsForOptionSetMap));
+                }
+
+                fragmentForm.setEventRowList(teiRows);
+                fragmentForm.setColumnNames(columnNames);
+
+                if (selectedProgram.getTrackedEntity() != null) {
+                    columnNames.setTrackedEntity(selectedProgram.getTrackedEntity().getName());
+                    columnNames.setTitle(selectedProgram.getTrackedEntity().getName() + " (" + (teiRows.size() - 1) + ")");
+                }
+//
+//                return fragmentForm;
+            }
         }
+        else {
+            String query = getTrackedEntityInstancesWithEnrollmentQuery(mOrgUnitId, mProgramId);
 
+            if (query == null) {
+                return fragmentForm;
+            }
+
+            List<TrackedEntityInstance> resultTrackedEntityInstances = new StringQuery<>(TrackedEntityInstance.class, query).queryList();
+
+            //caching tracked entity attributes
+            List<TrackedEntityAttribute> trackedEntityAttributes = new Select().from(TrackedEntityAttribute.class).queryList();
+            Map<String, TrackedEntityAttribute> allTrackedEntityAttributesMap = new HashMap<>();
+            for (TrackedEntityAttribute trackedEntityAttribute : trackedEntityAttributes) {
+                allTrackedEntityAttributesMap.put(trackedEntityAttribute.getUid(), trackedEntityAttribute);
+            }
+
+            //putting teis in map indexed by localid
+            Map<Long, TrackedEntityInstance> trackedEntityInstanceLocalIdToTeiMap = new HashMap<>();
+            for (TrackedEntityInstance trackedEntityInstance : resultTrackedEntityInstances) {
+                trackedEntityInstanceLocalIdToTeiMap.put(trackedEntityInstance.getLocalId(), trackedEntityInstance);
+            }
+
+            //searching for Failed Items for any of the resulting TEI
+            Set<String> failedItemsForTrackedEntityInstances = getFailedItemsForTrackedEntityInstances(trackedEntityInstanceLocalIdToTeiMap);
+
+            //Caching Option Sets for further use to avoid repeated db calls
+            Map<String, Map<String, Option>> optionsForOptionSetMap = getCachedOptionsForOptionSets(attributesToShowMap);
+
+            //caching TrackedEntityAttributeValues to avoid looped db queries
+            Map<Long, Map<String, TrackedEntityAttributeValue>> cachedTrackedEntityAttributeValuesForTrackedEntityInstances = getCachedTrackedEntityAttributeValuesForTrackedEntityInstances(attributesToShow, resultTrackedEntityInstances);
+
+            for (TrackedEntityInstance trackedEntityInstance : resultTrackedEntityInstances) {
+                if (trackedEntityInstance == null) {
+                    continue;
+                }
+                teiRows.add(createTrackedEntityInstanceItem(context,
+                        trackedEntityInstance, attributesToShow, attributesToShowMap,
+                        failedItemsForTrackedEntityInstances,
+                        cachedTrackedEntityAttributeValuesForTrackedEntityInstances,
+                        optionsForOptionSetMap));
+            }
+
+            fragmentForm.setEventRowList(teiRows);
+            fragmentForm.setColumnNames(columnNames);
+
+            if (selectedProgram.getTrackedEntity() != null) {
+                columnNames.setTrackedEntity(selectedProgram.getTrackedEntity().getName());
+                columnNames.setTitle(selectedProgram.getTrackedEntity().getName() + " (" + (teiRows.size() - 1) + ")");
+            }
+
+//            return fragmentForm;
+        }
         return fragmentForm;
     }
 
@@ -341,6 +461,7 @@ public class SelectProgramFragmentQuery implements Query<SelectProgramFragmentFo
      * @param programId
      * @return
      */
+
     private String getTrackedEntityInstancesWithEnrollmentQuery(String organisationUnitId, String programId) {
         String query = "SELECT * FROM " + TrackedEntityInstance.class.getSimpleName() + " t1 " +
                 "JOIN "
