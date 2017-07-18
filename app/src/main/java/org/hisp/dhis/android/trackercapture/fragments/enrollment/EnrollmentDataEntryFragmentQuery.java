@@ -33,6 +33,8 @@ import android.content.Context;
 
 import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
+import org.hisp.dhis.android.sdk.controllers.realm.ROrganisationHelper;
+import org.hisp.dhis.android.sdk.controllers.realm.ROrganisationUnit;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
@@ -44,6 +46,7 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeGeneratedValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowFactory;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.autocompleterow.AutoCompleteRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.CheckBoxRow;
@@ -58,6 +61,7 @@ import org.hisp.dhis.android.sdk.utils.api.ValueType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Calendar;
 import java.util.List;
 
 class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragmentForm> {
@@ -70,6 +74,9 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
     private String incidentDate;
     private TrackedEntityInstance currentTrackedEntityInstance;
     private Enrollment currentEnrollment;
+    private List<ROrganisationUnit> orgUnitList = new ArrayList<>();
+    private List<OrganisationUnit> assignedOrganisationUnits;
+    private UserAccount userAccounts;
 
     EnrollmentDataEntryFragmentQuery(String mOrgUnitId, String mProgramId,
                                      long mTrackedEntityInstanceId,
@@ -178,8 +185,34 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
                 return trackedEntityAttributeValue;
         }
 
-        //the datavalue didnt exist for some reason. Create a new one.
         TrackedEntityAttributeValue trackedEntityAttributeValue = new TrackedEntityAttributeValue();
+
+        trackedEntityAttributeValue.setTrackedEntityAttributeId(trackedEntityAttribute);
+        //oQioOj2ECeU  Age Months
+        //g6aPl383VUZ  Age Years
+
+        if(trackedEntityAttribute.equals("GHF1cOxnBE9"))
+        {
+            assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
+            userAccounts=MetaDataController.getUserAccount();
+            String user_=userAccounts.getFirstName().substring(0,1);
+            String id=assignedOrganisationUnits.get(0).getId();
+            String val = ""+((int)(Math.random()*9000)+1000);
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            String year_=String.valueOf(year);
+
+            orgUnitList = ROrganisationHelper.getOrganisationUnitID(id);
+            String code=orgUnitList.get(0).getCode();
+            String nimhans_=user_+"-"+code+"-"+year_.toString().substring(2,4)+"-"+val;
+            trackedEntityAttributeValue.setTrackedEntityInstanceId(currentTrackedEntityInstance.getTrackedEntityInstance());
+            trackedEntityAttributeValue.setValue(nimhans_);
+            trackedEntityAttributeValues.add(trackedEntityAttributeValue);
+            return trackedEntityAttributeValue;
+        }
+
+
+
+        //the datavalue didnt exist for some reason. Create a new one.
         trackedEntityAttributeValue.setTrackedEntityAttributeId(trackedEntityAttribute);
         trackedEntityAttributeValue.setTrackedEntityInstanceId(currentTrackedEntityInstance.getTrackedEntityInstance());
         trackedEntityAttributeValue.setValue("");
@@ -190,6 +223,7 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
     public Row createDataEntryView(ProgramTrackedEntityAttribute programTrackedEntityAttribute, TrackedEntityAttribute trackedEntityAttribute, TrackedEntityAttributeValue dataValue) {
         Row row;
         String trackedEntityAttributeName = trackedEntityAttribute.getName();
+        TrackedEntityAttributeValue trackedEntityAttributeValue = new TrackedEntityAttributeValue();
         if (trackedEntityAttribute.getOptionSet() != null) {
             OptionSet optionSet = MetaDataController.getOptionSet(trackedEntityAttribute.getOptionSet());
             if (optionSet == null) {
@@ -204,21 +238,15 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
 //            MetaDataController.getLevelOrganisationUnits(dhisApi);
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.PINCODE);
         }
-
+//
         else  if(trackedEntityAttribute.getShortName().equals("nimhansid"))
         {
-
-//            MetaDataController.getLevelOrganisationUnits(dhisApi);
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.Nimhans);
         }
 
 
         else  if(trackedEntityAttribute.getShortName().equals("patient_name"))
         {
-//            String cas=MetaDataController.getCascaded();
-//            Cascading cascade=new Cascading();
-//            Log.e("cascade taluk", cascade.getTaluk());
-//            Log.e("cascade taluk", );
 
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.PATIENTNAME);
         }
@@ -226,6 +254,7 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         {
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.PHONE_NUMBER);
         }
+
 //        else  if(trackedEntityAttribute.getShortName().equals("age_months"))
 //        {
 //
