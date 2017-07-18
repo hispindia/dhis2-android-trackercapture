@@ -48,10 +48,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.events.OnTeiDownloadedEvent;
@@ -62,6 +64,7 @@ import org.hisp.dhis.android.sdk.persistence.models.BaseSerializableModel;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnTrackedEntityInstanceColumnClick;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
@@ -92,7 +95,7 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
     private SelectProgramFragmentForm mForm;
     protected TextView noRowsTextView;
     private DownloadEventSnackbar snackbar;
-
+    private List<OrganisationUnit> assignedOrganisationUnits;
     @Override
     protected TrackedEntityInstanceAdapter getAdapter(Bundle savedInstanceState) {
         return new TrackedEntityInstanceAdapter(getLayoutInflater(savedInstanceState));
@@ -132,6 +135,7 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
         mQueryTrackedEntityInstancesButton.hide();
         mLocalSearchButton.hide();
         noRowsTextView.setVisibility(View.GONE);
+        assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
         return header;
     }
 
@@ -184,7 +188,17 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register_new_event: {
-                createEnrollment();
+                assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
+                if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("apex")||assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("nimhans"))
+                {
+                    Toast.makeText(this.getContext(),"Not Allowed for Current User", Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    createEnrollment();
+                }
+
                 break;
             }
             case R.id.upcoming_events_button: {
