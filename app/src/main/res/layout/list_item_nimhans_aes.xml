@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/layout"
+        android:layout_height="match_parent"
+        android:scrollbars="horizontal|vertical"
+        android:layout_width="match_parent"
+        android:scrollbarStyle="outsideInset"
+        android:fillViewport="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalView"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal|vertical"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="5dip">
+
+            <TableLayout android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow>
+                    <TextView
+                        android:id="@+id/AES_Epid_ID_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:text="AES EPIDID: "
+                        android:textColor="@color/dark_navy_blue"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/AES_Epid_ID"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:layout_weight="1"
+                        android:paddingTop="6dip"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/NIMHANS_AES_ID_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:text="NIMHANS AESID:"
+                        android:textColor="@color/dark_navy_blue"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/NIMHANS_AES_ID"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/enroll_date"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:text="Enrollment Date:"
+                        android:textColor="@color/dark_navy_blue"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/enroll_date_"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </TableRow>     <TableRow>
+                    <TextView
+                        android:id="@+id/orgname"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:text="Organisation:"
+                        android:textColor="@color/dark_navy_blue"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/orgname_"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/name_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:text="Name:"
+                        android:textColor="@color/dark_navy_blue"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/age_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:text="Age:"
+                        android:textColor="@color/dark_navy_blue"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/age"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/gender_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:text="Gender:"
+                        android:textColor="@color/dark_navy_blue"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/gender"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/sample_r_csf"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:text="Sample Received- CSF:"
+                        android:textColor="@color/dark_navy_blue"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/sample_r_csf_"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/sample_r_serum"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:text="Sample Received- SERUM:"
+                        android:textColor="@color/dark_navy_blue"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/sample_r_serum_"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/sample_r_wholeb"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:text="Sample Received- Whole blood:"
+                        android:textColor="@color/dark_navy_blue"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/sample_r_wholeb_"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dip"
+                        android:paddingTop="6dip"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </TableRow>
+                <TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/labresults_00"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:layout_weight="1"
+                            android:text="Lab results - CSF - PRNT:"
+                            android:paddingTop="6dip"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/labresults_00_"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:layout_weight="1"
+                            android:paddingTop="6dip"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/labresults_1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:layout_weight="1"
+                            android:text="Lab results - CSF - Trioplex PCR:"
+                            android:paddingTop="6dip"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/labresults_11"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:layout_weight="1"
+                            android:paddingTop="6dip"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/labresults_2"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:layout_weight="1"
+                            android:text="Lab results - Serum - PRNT:"
+                            android:paddingTop="6dip"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/labresults_22"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+                        <TextView
+                            android:id="@+id/labresults_3"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:layout_weight="1"
+                            android:text="Lab results - Serum - Trioplex PCR:"
+                            android:paddingTop="6dip"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/labresults_33"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:layout_weight="1"
+                            android:paddingTop="6dip"
+                            android:textColor="@color/black"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/labresults_4"
+                            android:layout_width="fill_parent"
+                            android:text="Lab results - Serum - Scrub Typhus IFA"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/labresults_44"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/black"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/labresults_5"
+                            android:layout_width="fill_parent"
+                            android:text="Lab Results Whole Blood - Scrub Typhus PCR"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/labresults_55"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/black"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+                    //end
+            </TableLayout>
+        </HorizontalScrollView>
+    </ScrollView>
+</RelativeLayout>
+

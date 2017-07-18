@@ -27,7 +27,7 @@ import java.util.Map;
  * Created by Sourabh Bhardwaj on 21-05-2017.
  */
 
-public class ApexLabAmes extends AppCompatActivity {
+public class NimhansLab extends AppCompatActivity {
 
     private String TAG = LabReports.class.getSimpleName();
     private ProgressDialog pDialog;
@@ -36,8 +36,8 @@ public class ApexLabAmes extends AppCompatActivity {
     private List<OrganisationUnit> assignedOrganisationUnits;
 //  private static String url = "/sqlViews/bEOYTt4PTQg/data.json";
 
-//    private  String url = "http://apps.hispindia.org/aes_test/api/sqlViews/Orh74OlRLmg/data.json?var=orgunit:";
-    private  String url = "http://ds-india.org/aes/api/sqlViews/TNEACle8fKx/data.json?var=orgunit:";
+//    private  String url = "http://apps.hispindia.org/aes_test/api/sqlViews/GsiGUuHemvy/data.json?var=orgunit:";
+    private  String url = "http://ds-india.org/aes/api/sqlViews/FLGWuDTFkKm/data.json?var=orgunit:";
 
     private  String orguid;
     final Map<String, String> map = new HashMap<>();
@@ -49,8 +49,10 @@ public class ApexLabAmes extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_labreports);
+
         assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
         url=url+assignedOrganisationUnits.get(0).getId()+"&";
+
 //        Bundle b = getIntent().getExtras();
 //        String orgid = b.getString("orgid");
 //        String orgname = b.getString("orgname");
@@ -63,7 +65,7 @@ public class ApexLabAmes extends AppCompatActivity {
 
         new GetContacts().execute();
 //        Log.d("Spinner_values:",orgid+orgname);
-        Log.d("url:",url);
+//        Log.d("url:",url);
 
     }
 
@@ -75,7 +77,7 @@ public class ApexLabAmes extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             // Showing progress dialog
-            pDialog = new ProgressDialog(ApexLabAmes.this);
+            pDialog = new ProgressDialog(NimhansLab.this);
             pDialog.setMessage("Please wait...");
             pDialog.setCancelable(false);
             pDialog.show();
@@ -96,10 +98,7 @@ public class ApexLabAmes extends AppCompatActivity {
                     // looping through All Contacts
                     for (int i = 0; i < contacts.length()-1; i++) {
 
-
                         JSONArray c = contacts.getJSONArray(i);
-
-
                         String tei= c.get(1).toString().substring(0,10);
                         String pen= c.get(2).toString();
                         String AES_Epid_ID= c.get(3).toString();
@@ -108,67 +107,20 @@ public class ApexLabAmes extends AppCompatActivity {
                         String age= c.get(6).toString();
                         String gender= c.get(7).toString();
 
-                        String apex_result_1= c.get(8).toString();
-                        String apex_result_2= c.get(9).toString();
-                        String apex_result_3= c.get(10).toString();
-                        String apex_result_4= c.get(11).toString();
-                        String apex_result_5= c.get(12).toString();
-                        String apex_result_6= c.get(13).toString();
-                        String apex_result_7= c.get(14).toString();
-                        String apex_result_8= c.get(15).toString();
-                        String apex_result_9= c.get(16).toString();
-                        String apex_result_10= c.get(17).toString();
-                        String apex_result_11= c.get(18).toString();
-                        String apex_result_12= c.get(19).toString();
-                        String apex_result_13= c.get(21).toString();
-                        String apex_result_14= c.get(22).toString();
-                        String apex_result_15= c.get(23).toString();
+                        String sample_r_csf= c.get(8).toString();
+                        String sample_r_serum= c.get(9).toString();
+                        String sample_r_wholeb= c.get(10).toString();
+
+                        String apex_result_1= c.get(11).toString();
+                        String apex_result_2= c.get(12).toString();
+                        String apex_result_3= c.get(13).toString();
+                        String apex_result_4= c.get(14).toString();
+                        String apex_result_5= c.get(15).toString();
+                        String apex_result_6= c.get(16).toString();
 
                         String checkedMark = "\u2713";
                         String crossMark = "\u274C";
 
-//
-//                        labreport.setAesepid(AES_Epid_ID);
-//                        labreport.setNIMHANS_AES_ID(NIMHANS_AES_ID);
-//                        labreport.setPname(name);
-//                        labreport.setAge(age);
-//                        labreport.setGender(gender);
-//                        labreport.setSamplecollected_csf(samplecollected_csf);
-//                        labreport.setSamplesenttoapexlab_csf(samplesenttoapexlab_csf);
-//                        labreport.setSamplecollected_serum(samplecollected_serum);
-//                        labreport.setSamplesenttoapexlab_serum(samplesenttoapexlab_serum);
-//                        labreport.setSamplecollected_wholeblood(samplecollected_wholeblood);
-//                        labreport.setLabresult_csf_wbccount(labresult_csf_wbccount);
-//                        labreport.setLabresult_csf_jeigmcount(labresult_csf_jeigmcount);
-//                        labreport.setCsf_gulucoselevel(csf_gulucoselevel);
-//                        labreport.setCsf_proteinlevel(csf_proteinlevel);
-//                        labreport.setCsf_sample2_jeigmcount(csf_sample2_jeigmcount);
-//                        labreport.setCsf_sample2_wbc_count(csf_sample2_wbc_count);
-//                        labreport.setSerum_jeigmcount(serum_jeigmcount);
-//                        labreport.setSerum_igmden(serum_igmden);
-//                        labreport.setSerum_scrumtyphusigm(serum_scrumtyphusigm);
-//                        labreport.setLabresult_csf_jeigmcount(labresult_csf_jeigmcount);
-//                        labreport.setLabresult_csf_wbccount(labresult_csf_wbccount);
-//                        labreport.save();
-
-
-
-//
-//                        Log.d("laqqb",labreport.getName());
-
-//                        String id = c[0];
-//                        String name = c.getString("name");
-//                        String email = c.getString("email");
-//                        String address = c.getString("address");
-//                        String gender = c.getString("gender");
-
-                        // Phone node is JSON Object
-//                        JSONObject phone = c.getJSONObject("phone");
-//                        String mobile = phone.getString("mobile");
-//                        String home = phone.getString("home");
-//                        String office = phone.getString("office");
-
-                        // tmp hash map for single contact
                         HashMap<String, String> contact = new HashMap<>();
 
                         // adding each child node to HashMap key => value
@@ -186,35 +138,20 @@ public class ApexLabAmes extends AppCompatActivity {
 //                            contact.put("apex_result_1", "null");
 //                        }
 
-                        contact.put("apex_result_1", apex_result_1.toString());
+                        contact.put("apex_result_0", apex_result_1.toString());
+                        contact.put("sample_r_csf", sample_r_csf.toString());
+                        contact.put("sample_r_serum", sample_r_serum.toString());
+                        contact.put("sample_r_wholeb", sample_r_wholeb.toString());
 
-                        contact.put("apex_result_2", apex_result_2.toString());
+                        contact.put("apex_result_1", apex_result_2.toString());
 
-                        contact.put("apex_result_3", apex_result_3.toString());
+                        contact.put("apex_result_2", apex_result_3.toString());
 
-                        contact.put("apex_result_4", apex_result_4.toString());
+                        contact.put("apex_result_3", apex_result_4.toString());
 
-                        contact.put("apex_result_5", apex_result_5.toString());
+                        contact.put("apex_result_4", apex_result_5.toString());
 
-                        contact.put("apex_result_6", apex_result_6.toString());
-
-                        contact.put("apex_result_7", apex_result_7.toString());
-
-
-                        contact.put("apex_result_9", apex_result_9.toString());
-
-
-                        contact.put("apex_result_10", apex_result_10.toString());
-
-                        contact.put("apex_result_11", apex_result_11.toString());
-
-                        contact.put("apex_result_12", apex_result_12.toString());
-
-                        contact.put("apex_result_13", apex_result_13.toString());
-
-                        contact.put("apex_result_14", apex_result_14.toString());
-
-                        contact.put("apex_result_15", apex_result_15.toString());
+                        contact.put("apex_result_5", apex_result_6.toString());
 
 
 
@@ -265,10 +202,10 @@ public class ApexLabAmes extends AppCompatActivity {
 
 
             ListAdapter adapter = new SimpleAdapter(
-                    ApexLabAmes.this, contactList,
-                    R.layout.list_item_apex, new String[]{"AES_Epid_ID", "NIMHANS_AES_ID","tei","pen",
-                    "name","age","gender","apex_result_1","apex_result_2","apex_result_3","apex_result_4","apex_result_5","apex_result_6","apex_result_7","apex_result_8","apex_result_9","apex_result_9","apex_result_10","apex_result_11","apex_result_12","apex_result_13","apex_result_14","apex_result_15"}, new int[]{R.id.AES_Epid_ID,
-                    R.id.NIMHANS_AES_ID, R.id.enroll_date_, R.id.orgname_, R.id.name, R.id.age, R.id.gender, R.id.labresults_11, R.id.labresults_22, R.id.labresults_33, R.id.labresults_44, R.id.labresults_55, R.id.labresults_66, R.id.labresults_77, R.id.labresults_88, R.id.labresults_99, R.id.labresults_1010, R.id.labresults_1111, R.id.labresults_1212});
+                    NimhansLab.this, contactList,
+                    R.layout.list_item_nimhans_aes, new String[]{"AES_Epid_ID", "NIMHANS_AES_ID","tei","pen",
+                    "name","age","gender","sample_r_csf","sample_r_serum","sample_r_wholeb","apex_result_0","apex_result_1","apex_result_2","apex_result_3","apex_result_4","apex_result_5"}, new int[]{R.id.AES_Epid_ID,
+                    R.id.NIMHANS_AES_ID, R.id.enroll_date_, R.id.orgname_, R.id.name, R.id.age, R.id.gender, R.id.sample_r_csf_, R.id.sample_r_serum_, R.id.sample_r_wholeb_,R.id.labresults_00_, R.id.labresults_11, R.id.labresults_22, R.id.labresults_33, R.id.labresults_44, R.id.labresults_55});
             lv.setAdapter(adapter);
 
 

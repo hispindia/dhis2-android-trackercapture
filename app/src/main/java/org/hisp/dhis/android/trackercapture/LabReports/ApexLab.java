@@ -9,8 +9,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.LabReport;
 
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.trackercapture.R;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +34,7 @@ public class ApexLab extends AppCompatActivity {
     private ProgressDialog pDialog;
     private ListView lv;
     private String jsonStr;
+    private List<OrganisationUnit> assignedOrganisationUnits;
 //  private static String url = "/sqlViews/bEOYTt4PTQg/data.json";
 
 //    private  String url = "http://apps.hispindia.org/aes_test/api/sqlViews/GsiGUuHemvy/data.json?var=orgunit:";
@@ -46,18 +51,20 @@ public class ApexLab extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_labreports);
 
-        Bundle b = getIntent().getExtras();
-        String orgid = b.getString("orgid");
-        String orgname = b.getString("orgname");
+//        Bundle b = getIntent().getExtras();
+//        String orgid = b.getString("orgid");
+//        String orgname = b.getString("orgname");
+        assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
+        url=url+assignedOrganisationUnits.get(0).getId()+"&";
 
         contactList = new ArrayList<>();
-        url=url+orgid;
+//        url=url+orgid+"&";
         lv = (ListView) findViewById(R.id.list);
 
 
 
         new GetContacts().execute();
-        Log.d("Spinner_values:",orgid+orgname);
+//        Log.d("Spinner_values:",orgid+orgname);
         Log.d("url:",url);
 
     }
