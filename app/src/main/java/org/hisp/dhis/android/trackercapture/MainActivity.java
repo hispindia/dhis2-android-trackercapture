@@ -37,8 +37,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.DhisService;
@@ -47,6 +50,7 @@ import org.hisp.dhis.android.sdk.controllers.PeriodicSynchronizerController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.network.Session;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
@@ -54,6 +58,8 @@ import org.hisp.dhis.android.trackercapture.fragments.selectprogram.SelectProgra
 import org.hisp.dhis.client.sdk.ui.activities.AbsHomeActivity;
 import org.hisp.dhis.client.sdk.ui.fragments.InformationFragment;
 import org.hisp.dhis.client.sdk.ui.fragments.WrapperFragment;
+
+import java.util.List;
 
 public class MainActivity extends AbsHomeActivity {
     public final static String TAG = MainActivity.class.getSimpleName();
@@ -68,7 +74,8 @@ public class MainActivity extends AbsHomeActivity {
             "org.hisp.dhis.android.trackercapture";
     private static final String APPS_TRACKER_CAPTURE_REPORTS_PACKAGE =
             "org.hispindia.bidtrackerreports";
-
+    private List<OrganisationUnit> assignedOrganisationUnits;
+    private Menu menu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +87,10 @@ public class MainActivity extends AbsHomeActivity {
             return;
         }
 
+        //toDo Filter Reports based on ou level
+
+//        assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
+//        int  level=assignedOrganisationUnits.get(0).getLevel();
         LoadingController.enableLoading(this, ResourceType.ASSIGNEDPROGRAMS);
         LoadingController.enableLoading(this, ResourceType.OPTIONSETS);
         LoadingController.enableLoading(this, ResourceType.PROGRAMS);
@@ -94,6 +105,21 @@ public class MainActivity extends AbsHomeActivity {
         setUpNavigationView(savedInstanceState);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+
+        return true;
+        // inflate your menu here
+
+    }
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+
+
+
+        return true;
+    }
     private void setUpNavigationView(Bundle savedInstanceState) {
         removeMenuItem(R.id.drawer_item_profile);
         addMenuItem(11, R.drawable.ic_add, R.string.enroll);
@@ -169,6 +195,7 @@ public class MainActivity extends AbsHomeActivity {
         super.onDrawerOpened(drawerView);
         String lastSynced = DhisController.getInstance().getSyncDateWrapper().getLastSyncedString();
         setSynchronizedMessage(lastSynced);
+
     }
 
     @Override
@@ -186,35 +213,153 @@ public class MainActivity extends AbsHomeActivity {
             isSelected = openApp(APPS_TRACKER_CAPTURE_PACKAGE);
         }
 
-//        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_tracker_capture_reports) {
-//            isSelected = openApp(APPS_TRACKER_CAPTURE_REPORTS_PACKAGE);
-//        }
-
         else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_profile) {
             attachFragmentDelayed(getProfileFragment());
             isSelected = true;
-
-
         }
-        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports) {
 
-            Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.LabReports.class);
-            intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
-            MainActivity.this.startActivity(intent);
+        assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
+        if(assignedOrganisationUnits.size()!=0)
+        {
+            if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("apex"))
+            {
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_apex) {
+                    Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.ApexLab.class);
+                    intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+                    MainActivity.this.startActivity(intent);
 
-//            HolderActivity.navigateToSettingsFragment(this);
-//            isSelected = true;
+                }
+
+                else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_apex_ames) {
+                    menuItem.setVisible(true);
+                    Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.ApexLabAmes.class);
+                    intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+                    MainActivity.this.startActivity(intent);
+
+                }
+
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_labreports_nimahns) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_labreports_nimahns_ames) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_ames) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+            }
+            else if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("nimhans"))
+            {
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_labreports_nimahns) {
+
+                    Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.NimhansLab.class);
+                    intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+                    MainActivity.this.startActivity(intent);
+
+                } else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_labreports_nimahns_ames) {
+
+                    Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.NimhansLabAmes.class);
+                    intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+                    MainActivity.this.startActivity(intent);
+
+                }
+
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_apex) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_apex_ames) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_ames) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+
+
+
+            }
+            else
+            {
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports) {
+
+                    Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.LabReports.class);
+                    intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+                    MainActivity.this.startActivity(intent);
+
+
+                }
+                else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_ames) {
+
+                    Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.LabReportsAmes.class);
+                    intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
+                    MainActivity.this.startActivity(intent);
+
+
+                }
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_labreports_nimahns) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_labreports_nimahns_ames) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_ames) {
+
+                    Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
+
+
+                }
+
+
+            }
         }
-        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_ames) {
 
-            Intent intent = new Intent(MainActivity.this, org.hisp.dhis.android.trackercapture.LabReports.LabReportsAmes.class);
-            intent.putExtra(ARG_TYPE, ARG_TYPE_SETTINGSFRAGMENT);
-            MainActivity.this.startActivity(intent);
 
-//            HolderActivity.navigateToSettingsFragment(this);
-//            isSelected = true;
-        }
-        else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_settings) {
+
+
+
+
+         if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_settings) {
             HolderActivity.navigateToSettingsFragment(this);
             isSelected = true;
         } else if (menuItemId == R.id.drawer_item_information) {
