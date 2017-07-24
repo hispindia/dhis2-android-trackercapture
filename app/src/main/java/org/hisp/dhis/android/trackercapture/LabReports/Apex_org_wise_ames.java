@@ -105,10 +105,10 @@ public class Apex_org_wise_ames extends Activity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(Apex_org_wise_ames.this, ApexLabAmes.class);
-                intent.putExtra("orgid", org_id);
-                intent.putExtra("orgname", name);
-                Apex_org_wise_ames.this.startActivity(intent);
+//                Intent intent = new Intent(Apex_org_wise_ames.this, ApexLabAmes.class);
+//                intent.putExtra("orgid", org_id);
+//                intent.putExtra("orgname", name);
+//                Apex_org_wise_ames.this.startActivity(intent);
             }
 
         });

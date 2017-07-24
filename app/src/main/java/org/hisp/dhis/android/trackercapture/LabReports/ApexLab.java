@@ -99,7 +99,7 @@ public class ApexLab extends AppCompatActivity {
                     for (int i = 0; i < contacts.length()-1; i++) {
 
 
-
+                        //attributes
                         JSONArray c = contacts.getJSONArray(i);
                         String tei= c.get(1).toString().substring(0,10);
                         String pen= c.get(2).toString();
@@ -109,21 +109,78 @@ public class ApexLab extends AppCompatActivity {
                         String age= c.get(6).toString();
                         String gender= c.get(7).toString();
 
+                        //sample received
                         String apex_result_1= c.get(8).toString();
                         String apex_result_2= c.get(9).toString();
                         String apex_result_3= c.get(10).toString();
+
+                        if(apex_result_1==null||apex_result_1=="")
+                        {
+                            apex_result_1="No";
+                        }
+                        if(apex_result_2==null||apex_result_2=="")
+                        {
+                            apex_result_2="No";
+                        }
+                        if(apex_result_3==null||apex_result_3=="")
+                        {
+                            apex_result_3="No";
+                        }
+
+                        //results
+                        //JE IgM
                         String apex_result_4= c.get(11).toString();
+
+                        //Bacterial Taqman Real Time PCR for Scrub-Ty"
                         String apex_result_5= c.get(12).toString();
+
+                        //Lab results - CSF - HSV Taqman Real Time PCR
                         String apex_result_6= c.get(13).toString();
+
+                        //Lab results - CSF - Bacterial Taqman Real Time PCR for Streptoc
                         String apex_result_7= c.get(14).toString();
+
+                        //Lab results - CSF - Bacterial Taqman Real Time PCR for Hemophil
                         String apex_result_8= c.get(15).toString();
+
+                        //Lab results - CSF - Bacterial Taqman Real Time PCR for Neisseri
                         String apex_result_9= c.get(16).toString();
+
+                        //Lab results - CSF - Enterovirus Taqman Real Time PCR
                         String apex_result_10= c.get(17).toString();
+
+                        //Lab results - CSF - Leptospira DNA PCR
                         String apex_result_11= c.get(18).toString();
+
+                        //Lab results - CSF - Trioplex PCR
                         String apex_result_12= c.get(19).toString();
-                        String apex_result_13= c.get(21).toString();
-                        String apex_result_14= c.get(22).toString();
-                        String apex_result_15= c.get(23).toString();
+
+                        //Lab results - Serum - JE IgM
+                        String apex_result_13= c.get(20).toString();
+
+                        //Lab results - Serum - Scrub typhus IgM ELISA
+                        String apex_result_14= c.get(21).toString();
+
+                        //Lab results - Serum - Dengue IgM ELISA
+                        String apex_result_15= c.get(22).toString();
+
+                        //Lab results - Serum - Dengue NS1 Antigen ELISA
+                        String apex_result_16= c.get(23).toString();
+
+                        //Lab results - Serum - Chikungunya IgM ELISA
+                        String apex_result_17= c.get(24).toString();
+
+                        //Lab results - Serum - West Nile Virus IgM ELISA
+                        String apex_result_18= c.get(25).toString();
+
+                        //Lab results - Serum- Leptospira IgM ELISA
+                        String apex_result_19= c.get(26).toString();
+
+                        //Lab results - Serum- Trioplex PCR
+                        String apex_result_20= c.get(27).toString();
+
+                        //Lab results - Whole blood - Scrub Typhus PCR
+                        String apex_result_21= c.get(28).toString();
 
                         String checkedMark = "\u2713";
                         String crossMark = "\u274C";
@@ -176,6 +233,12 @@ public class ApexLab extends AppCompatActivity {
                         contact.put("apex_result_14", apex_result_14.toString());
 
                         contact.put("apex_result_15", apex_result_15.toString());
+                        contact.put("apex_result_16", apex_result_16.toString());
+                        contact.put("apex_result_17", apex_result_17.toString());
+                        contact.put("apex_result_18", apex_result_18.toString());
+                        contact.put("apex_result_19", apex_result_19.toString());
+                        contact.put("apex_result_20", apex_result_20.toString());
+                        contact.put("apex_result_21", apex_result_21.toString());
 
 
 
@@ -228,8 +291,9 @@ public class ApexLab extends AppCompatActivity {
             ListAdapter adapter = new SimpleAdapter(
                     ApexLab.this, contactList,
                     R.layout.list_item_apex, new String[]{"AES_Epid_ID", "NIMHANS_AES_ID","tei","pen",
-                    "name","age","gender","apex_result_1","apex_result_2","apex_result_3","apex_result_4","apex_result_5","apex_result_6","apex_result_7","apex_result_8","apex_result_9","apex_result_10","apex_result_11","apex_result_12","apex_result_13","apex_result_14","apex_result_15"}, new int[]{R.id.AES_Epid_ID,
-                    R.id.NIMHANS_AES_ID, R.id.enroll_date_, R.id.orgname_, R.id.name, R.id.age, R.id.gender, R.id.sample_r_csf_, R.id.sample_r_serum_, R.id.sample_r_wholeb_, R.id.labresults_11, R.id.labresults_22, R.id.labresults_33, R.id.labresults_44, R.id.labresults_55, R.id.labresults_66, R.id.labresults_77, R.id.labresults_88, R.id.labresults_99, R.id.labresults_1010, R.id.labresults_1111, R.id.labresults_1212});
+                    "name","age","gender","apex_result_1","apex_result_2","apex_result_3","apex_result_4","apex_result_5","apex_result_6","apex_result_7","apex_result_8","apex_result_9","apex_result_10","apex_result_11","apex_result_12","apex_result_13","apex_result_14","apex_result_15","apex_result_16","apex_result_17","apex_result_18","apex_result_19","apex_result_20","apex_result_21"}, new int[]{R.id.AES_Epid_ID,
+                    R.id.NIMHANS_AES_ID, R.id.enroll_date_, R.id.orgname_, R.id.name, R.id.age, R.id.gender, R.id.sample_r_csf_, R.id.sample_r_serum_, R.id.sample_r_wholeb_, R.id.apex_result_4_id, R.id.apex_result_5_id, R.id.apex_result_6_id, R.id.apex_result_7_id, R.id.apex_result_8_id, R.id.apex_result_9_id,R.id.apex_result_10_id,R.id.apex_result_11_id ,R.id.apex_result_12_id, R.id.apex_result_13_id, R.id.apex_result_14_id, R.id.apex_result_15_id, R.id.apex_result_16_id, R.id.apex_result_17_id,R.id.apex_result_18_id,
+                        R.id.apex_result_19_id,R.id.apex_result_20_id,R.id.apex_result_21_id});
             lv.setAdapter(adapter);
 
 
