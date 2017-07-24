@@ -335,18 +335,15 @@ public class MainActivity extends AbsHomeActivity {
 
                     Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
 
-
                 }
-                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports) {
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_apex) {
 
                     Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
 
-
                 }
-                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_ames) {
+                if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_lab_reports_apex_ames) {
 
                     Toast.makeText(MainActivity.this, "User not allowed to  View", Toast.LENGTH_SHORT).show();
-
 
                 }
 

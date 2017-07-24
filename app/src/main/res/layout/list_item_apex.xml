@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="2dip"
                         android:paddingTop="6dip"
-                        android:text="Enrollment Date:"
+                        android:text="Registration Date:"
                         android:textColor="@color/dark_navy_blue"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -95,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="2dip"
                         android:paddingTop="6dip"
-                        android:text="Organisation:"
+                        android:text="Registering unit:"
                         android:textColor="@color/dark_navy_blue"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -243,14 +243,14 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
                             android:layout_weight="1"
-                            android:text="Lab results - CSF - JE IgM:"
+                            android:text="Lab results-CSF-JE IgM:"
                             android:paddingTop="6dip"
                             android:textColor="@color/dark_navy_blue"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/labresults_2424"
+                            android:id="@+id/apex_result_4_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -266,14 +266,14 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
                             android:layout_weight="1"
-                            android:text="Lab results - CSF - Bacterial Taqman Real Time PCR for Scrub-Ty:"
+                            android:text="Lab results - CSF-PCR-Scrub typhus:"
                             android:paddingTop="6dip"
                             android:textColor="@color/dark_navy_blue"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/labresults_11"
+                            android:id="@+id/apex_result_5_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -289,13 +289,13 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
                             android:layout_weight="1"
-                            android:text="Lab results - CSF - HSV Taqman Real Time PCR:"
+                            android:text="Lab results -CSF-PCR-HSV:"
                             android:paddingTop="6dip"
                             android:textColor="@color/dark_navy_blue"
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_22"
+                            android:id="@+id/apex_result_6_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -311,13 +311,13 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
                             android:layout_weight="1"
-                            android:text="Lab results - CSF - Bacterial Taqman Real Time PCR for Streptoc:"
+                            android:text="Lab results -CSF-PCR-Streptococcus pneumoniae:"
                             android:paddingTop="6dip"
                             android:textColor="@color/dark_navy_blue"
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_33"
+                            android:id="@+id/apex_result_7_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -331,7 +331,7 @@
                         <TextView
                             android:id="@+id/labresults_4"
                             android:layout_width="fill_parent"
-                            android:text="Lab results - CSF - Bacterial Taqman Real Time PCR for Hemophil"
+                            android:text="Lab results - CSF-PCR-Hemophilus Influenzae"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
                             android:paddingTop="6dip"
@@ -340,7 +340,7 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_44"
+                            android:id="@+id/apex_result_8_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -354,7 +354,7 @@
                         <TextView
                             android:id="@+id/labresults_5"
                             android:layout_width="fill_parent"
-                            android:text="Lab results - CSF - Bacterial Taqman Real Time PCR for Neisseri"
+                            android:text="Lab results -CSF-PCR-Neisseria meningitis:"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
                             android:paddingTop="6dip"
@@ -363,7 +363,7 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_55"
+                            android:id="@+id/apex_result_9_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -377,7 +377,7 @@
                         <TextView
                             android:id="@+id/labresults_6"
                             android:layout_width="fill_parent"
-                            android:text="Lab results - CSF - Enterovirus Taqman Real Time PCR:"
+                            android:text="Lab results -CSF-PCR-Enterovirus"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
                             android:paddingTop="6dip"
@@ -386,7 +386,7 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_66"
+                            android:id="@+id/apex_result_10_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -396,6 +396,53 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                     </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/labresults_06"
+                            android:layout_width="fill_parent"
+                            android:text="Lab results -CSF-Leptospira DNA PCR"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/apex_result_11_id"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:layout_weight="1"
+                            android:paddingTop="6dip"
+                            android:textColor="@color/black"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/labresults_006"
+                            android:layout_width="fill_parent"
+                            android:text="Lab results -CSF-Trioplex PCR"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/apex_result_12_id"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:layout_weight="1"
+                            android:paddingTop="6dip"
+                            android:textColor="@color/black"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+
                     <TableRow>
                         <TextView
                             android:id="@+id/labresults_7"
@@ -409,7 +456,7 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_77"
+                            android:id="@+id/apex_result_13_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -432,7 +479,7 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_88"
+                            android:id="@+id/apex_result_14_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -444,7 +491,7 @@
                     </TableRow>
                     <TableRow>
                         <TextView
-                            android:id="@+id/labresults_9"
+                            android:id="@+id/labresults_9_"
                             android:layout_width="fill_parent"
                             android:text="Lab results - Serum - Dengue IgM ELISA:"
                             android:layout_height="wrap_content"
@@ -455,7 +502,7 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_99"
+                            android:id="@+id/apex_result_15_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -465,6 +512,55 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                     </TableRow>
+//to do
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/labresults_9"
+                            android:layout_width="fill_parent"
+                            android:text="Lab results - Serum - Dengue NS1 Antigen ELISA:"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/apex_result_16_id"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/black"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/labresults_10_"
+                            android:layout_width="fill_parent"
+                            android:text="Lab results - Serum - Chikungunya IgM ELISA:"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/apex_result_17_id"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/black"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+
                     <TableRow>
                         <TextView
                             android:id="@+id/labresults_10"
@@ -478,7 +574,7 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_1010"
+                            android:id="@+id/apex_result_18_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -501,7 +597,31 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_1111"
+                            android:id="@+id/apex_result_19_id"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/black"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:id="@+id/labresults_12_"
+                            android:layout_width="fill_parent"
+                            android:text="Lab results - Serum- Trioplex PCR:"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="2dip"
+                            android:paddingTop="6dip"
+                            android:layout_weight="1"
+                            android:textColor="@color/dark_navy_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/apex_result_20_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"
@@ -524,7 +644,7 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
                         <TextView
-                            android:id="@+id/labresults_1212"
+                            android:id="@+id/apex_result_21_id"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:paddingBottom="2dip"

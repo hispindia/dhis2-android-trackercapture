@@ -191,7 +191,7 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
                 assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
                 if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("apex")||assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("nimhans"))
                 {
-                    Toast.makeText(this.getContext(),"Not Allowed for Current User", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.getContext(),"Registration allowed at District only", Toast.LENGTH_SHORT).show();
 
                 }
                 else

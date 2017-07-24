@@ -30,6 +30,7 @@
 package org.hisp.dhis.android.trackercapture.fragments.enrollment;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
@@ -210,6 +211,19 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             return trackedEntityAttributeValue;
         }
 
+         //@sou To Do Age year/month
+//        if(trackedEntityAttribute.equals("g6aPl383VUZ"))
+//        {
+//            trackedEntityAttributeValue.getValue();
+//            Log.d("g6aPl383VUZ",trackedEntityAttributeValue.getValue());
+//        }
+//
+//        if(trackedEntityAttribute.equals("oQioOj2ECeU"))
+//        {
+//            trackedEntityAttributeValue.getValue();
+//            Log.d("oQioOj2ECeU",trackedEntityAttributeValue.getValue());
+//        }
+
 
 
         //the datavalue didnt exist for some reason. Create a new one.
@@ -255,29 +269,29 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.PHONE_NUMBER);
         }
 
-//        else  if(trackedEntityAttribute.getShortName().equals("age_months"))
-//        {
-//
-//            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
-//        }
-//        else  if(trackedEntityAttribute.getShortName().equals("age_years"))
-//        {
-//
-//            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
-//        }
+        else  if(trackedEntityAttribute.getShortName().equals("age_months"))
+        {
 
-        else  if(trackedEntityAttribute.getShortName().equals("Age"))
+            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE_MONTHS);
+        }
+        else  if(trackedEntityAttribute.getShortName().equals("age_years"))
         {
 
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
         }
 
-// TO disable Age months
-        else  if(trackedEntityAttribute.getShortName().equals("age_in_months"))
-        {
+//        else  if(trackedEntityAttribute.getShortName().equals("Age"))
+//        {
+//
+//            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
+//        }
 
-            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE_MONTHS);
-        }
+// TO disable Age months
+//        else  if(trackedEntityAttribute.getShortName().equals("age_in_months"))
+//        {
+//
+//            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
+//        }
 
         else  if(trackedEntityAttribute.getShortName().equals("State") ||trackedEntityAttribute.getShortName().equals("District") || trackedEntityAttribute.getShortName().equals("block_taluk")||trackedEntityAttribute.getShortName().equals("Village"))
         {
