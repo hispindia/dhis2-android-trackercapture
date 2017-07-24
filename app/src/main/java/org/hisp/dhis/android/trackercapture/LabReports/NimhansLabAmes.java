@@ -104,10 +104,22 @@ public class NimhansLabAmes extends AppCompatActivity {
                         String age= c.get(6).toString();
                         String gender= c.get(7).toString();
 
-                        String sample_r_csf= c.get(8).toString();
-                        String sample_r_serum= c.get(9).toString();
-                        String sample_r_wholeb= c.get(10).toString();
 
+                        String sample_r_csf= c.get(8).toString();
+                        if(sample_r_csf==null||sample_r_csf=="")
+                        {
+                            sample_r_csf="No";
+                        }
+                        String sample_r_serum= c.get(9).toString();
+                        if(sample_r_serum==null||sample_r_serum=="")
+                        {
+                            sample_r_serum="No";
+                        }
+                        String sample_r_wholeb= c.get(10).toString();
+                        if(sample_r_wholeb==null||sample_r_wholeb=="")
+                        {
+                            sample_r_wholeb="No";
+                        }
                         String apex_result_1= c.get(11).toString();
                         String apex_result_2= c.get(12).toString();
                         String apex_result_3= c.get(13).toString();
