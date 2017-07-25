@@ -37,6 +37,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
@@ -156,7 +157,9 @@ public class TrackedEntityInstanceProfileFragment extends DataEntryFragment<Trac
             if (editableDataEntryRows) {
                 setEditableDataEntryRows(false);
             } else {
-                setEditableDataEntryRows(true);
+                //@sou_disable profile edit
+                Toast.makeText(this.getContext(),"User not allowed to edit profile", Toast.LENGTH_LONG).show();
+                setEditableDataEntryRows(false);
             }
             editableDataEntryRows = !editableDataEntryRows;
             proceed();
