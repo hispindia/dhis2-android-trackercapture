@@ -118,6 +118,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+//@sou_ enrollment/relatiionship disable
 public class ProgramOverviewFragment extends AbsProgramRuleFragment implements View.OnClickListener,
         AdapterView.OnItemClickListener,
         ProgramDialogFragment.OnOptionSelectedListener,
@@ -156,25 +157,25 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private FloatingActionButton newEnrollmentButton;
 
     private CardView profileCardView;
-    private CardView enrollmentCardview;
+//    private CardView enrollmentCardview;
 
     private CardView programIndicatorCardView;
 
     private ImageButton followupButton;
     private ImageButton profileButton;
     private ImageView enrollmentServerStatus;
-    private Button completeButton;
+//    private Button completeButton;
     private Button reOpenButton;
-    private Button terminateButton;
+//    private Button terminateButton;
 
     private TextView attribute1Label;
     private TextView attribute1Value;
     private TextView attribute2Label;
     private TextView attribute2Value;
 
-    private LinearLayout relationshipsLinearLayout;
-    private Button newRelationshipButton;
-    private Button refreshRelationshipButton;
+//    private LinearLayout relationshipsLinearLayout;
+//    private Button newRelationshipButton;
+//    private Button refreshRelationshipButton;
 
     private ProgramOverviewFragmentState mState;
     private ProgramOverviewFragmentForm mForm;
@@ -263,13 +264,13 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 org.hisp.dhis.android.sdk.R.color.Blue, org.hisp.dhis.android.sdk.R.color.orange);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        relationshipsLinearLayout = (LinearLayout) header.findViewById(
-                R.id.relationships_linearlayout);
-
-        refreshRelationshipButton = (Button) header.findViewById(R.id.pullrelationshipbutton);
-        refreshRelationshipButton.setOnClickListener(this);
-        newRelationshipButton = (Button) header.findViewById(R.id.addrelationshipbutton);
-        newRelationshipButton.setOnClickListener(this);
+//        relationshipsLinearLayout = (LinearLayout) header.findViewById(
+//                R.id.relationships_linearlayout);
+//
+//        refreshRelationshipButton = (Button) header.findViewById(R.id.pullrelationshipbutton);
+//        refreshRelationshipButton.setOnClickListener(this);
+//        newRelationshipButton = (Button) header.findViewById(R.id.addrelationshipbutton);
+//        newRelationshipButton.setOnClickListener(this);
 
         mProgressBar = (ProgressBar) header.findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.GONE);
@@ -279,31 +280,31 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
-        enrollmentServerStatus = (ImageView) header.findViewById(R.id.enrollmentstatus);
-        enrollmentLayout = (LinearLayout) header.findViewById(R.id.enrollmentLayout);
-        enrollmentDateLabel = (TextView) header.findViewById(R.id.dateOfEnrollmentLabel);
-        enrollmentDateValue = (TextView) header.findViewById(R.id.dateOfEnrollmentValue);
-        incidentDateLabel = (TextView) header.findViewById(R.id.dateOfIncidentLabel);
-        incidentDateValue = (TextView) header.findViewById(R.id.dateOfIncidentValue);
+//        enrollmentServerStatus = (ImageView) header.findViewById(R.id.enrollmentstatus);
+//        enrollmentLayout = (LinearLayout) header.findViewById(R.id.enrollmentLayout);
+//        enrollmentDateLabel = (TextView) header.findViewById(R.id.dateOfEnrollmentLabel);
+//        enrollmentDateValue = (TextView) header.findViewById(R.id.dateOfEnrollmentValue);
+//        incidentDateLabel = (TextView) header.findViewById(R.id.dateOfIncidentLabel);
+//        incidentDateValue = (TextView) header.findViewById(R.id.dateOfIncidentValue);
         profileCardView = (CardView) header.findViewById(R.id.profile_cardview);
-        enrollmentCardview = (CardView) header.findViewById(R.id.enrollment_cardview);
+//        enrollmentCardview = (CardView) header.findViewById(R.id.enrollment_cardview);
         noActiveEnrollment = (TextView) header.findViewById(R.id.noactiveenrollment);
         programIndicatorCardView = (CardView) header.findViewById(R.id.programindicators_cardview);
 
-        completeButton = (Button) header.findViewById(R.id.complete);
+//        completeButton = (Button) header.findViewById(R.id.complete);
         reOpenButton = (Button) header.findViewById(R.id.re_open);
-        terminateButton = (Button) header.findViewById(R.id.terminate);
-        followupButton = (ImageButton) header.findViewById(R.id.followupButton);
+//        terminateButton = (Button) header.findViewById(R.id.terminate);
+//        followupButton = (ImageButton) header.findViewById(R.id.followupButton);
         profileButton = (ImageButton) header.findViewById(R.id.profile_button);
-        completeButton.setOnClickListener(this);
+//        completeButton.setOnClickListener(this);
         reOpenButton.setOnClickListener(this);
-        terminateButton.setOnClickListener(this);
-        followupButton.setOnClickListener(this);
-        followupButton.setVisibility(View.GONE);
+//        terminateButton.setOnClickListener(this);
+//        followupButton.setOnClickListener(this);
+//        followupButton.setVisibility(View.GONE);
         profileButton.setOnClickListener(this);
         profileCardView.setOnClickListener(this);
-        enrollmentServerStatus.setOnClickListener(this);
-        enrollmentLayout.setOnClickListener(this);
+//        enrollmentServerStatus.setOnClickListener(this);
+//        enrollmentLayout.setOnClickListener(this);
 
         missingEnrollmentLayout = (LinearLayout) header.findViewById(R.id.missingenrollmentlayout);
         newEnrollmentButton = (FloatingActionButton) header.findViewById(R.id.newenrollmentbutton);
@@ -499,19 +500,19 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 showNoActiveEnrollment(mForm);
                 return;
             } else {
-                enrollmentLayout.setVisibility(View.VISIBLE);
+//                enrollmentLayout.setVisibility(View.VISIBLE);
                 missingEnrollmentLayout.setVisibility(View.GONE);
                 profileCardView.setClickable(
                         true); //is set to false when TEI doesn't have an applicable enrollment.
                 // todo why?
                 profileButton.setClickable(true);
             }
-            enrollmentDateLabel.setText(data.getDateOfEnrollmentLabel());
-            enrollmentDateValue.setText(data.getDateOfEnrollmentValue());
+//            enrollmentDateLabel.setText(data.getDateOfEnrollmentLabel());
+//            enrollmentDateValue.setText(data.getDateOfEnrollmentValue());
 
             if (!(data.getProgram().getDisplayIncidentDate())) {
-                incidentDateValue.setVisibility(View.GONE);
-                incidentDateLabel.setVisibility(View.GONE);
+//                incidentDateValue.setVisibility(View.GONE);
+//                incidentDateLabel.setVisibility(View.GONE);
             } else {
                 incidentDateLabel.setText(data.getIncidentDateLabel());
                 incidentDateValue.setText(data.getIncidentDateValue());
@@ -520,14 +521,14 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     mForm.getEnrollment().getLocalId());
 
             if (failedItem != null && failedItem.getHttpStatusCode() >= 0) {
-                enrollmentServerStatus.setImageResource(R.drawable.ic_event_error);
+//                enrollmentServerStatus.setImageResource(R.drawable.ic_event_error);
             } else if (!mForm.getEnrollment().isFromServer()) {
-                enrollmentServerStatus.setImageResource(R.drawable.ic_legacy_offline);
+//                enrollmentServerStatus.setImageResource(R.drawable.ic_legacy_offline);
             } else {
-                enrollmentServerStatus.setImageResource(R.drawable.ic_from_server);
+//                enrollmentServerStatus.setImageResource(R.drawable.ic_from_server);
             }
 
-            refreshRelationshipButton.setEnabled(mForm.getEnrollment().isFromServer());
+//            refreshRelationshipButton.setEnabled(mForm.getEnrollment().isFromServer());
 
             if (mForm.getEnrollment().getStatus().equals(Enrollment.CANCELLED)) {
                 setTerminated();
@@ -619,7 +620,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
      * inside another listview
      */
     public void setRelationships(LayoutInflater inflater) {
-        relationshipsLinearLayout.removeAllViews();
+//        relationshipsLinearLayout.removeAllViews();
         if (mForm.getTrackedEntityInstance() != null
                 && mForm.getTrackedEntityInstance().getRelationships() != null) {
             ListIterator<Relationship> it =
@@ -686,14 +687,14 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                             }
                         }
                     });
-                    relationshipsLinearLayout.addView(ll);
+//                    relationshipsLinearLayout.addView(ll);
                     if (it.hasNext()) {
                         View view = new View(getActivity());
                         view.setLayoutParams(
                                 new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                         1));
                         view.setBackgroundColor(getResources().getColor(R.color.light_grey));
-                        relationshipsLinearLayout.addView(view);
+//                        relationshipsLinearLayout.addView(view);
                     }
                 }
             }
@@ -799,7 +800,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     }
 
     public void showNoActiveEnrollment(ProgramOverviewFragmentForm mForm) {
-        enrollmentLayout.setVisibility(View.GONE);
+//        enrollmentLayout.setVisibility(View.GONE);
 
         //start values
         reOpenButton.setVisibility(View.VISIBLE);
@@ -1018,25 +1019,25 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 break;
             }
 
-            case R.id.terminate: {
-                UiUtils.showConfirmDialog(getActivity(),
-                        getString(R.string.terminate),
-                        getString(R.string.confirm_terminate_enrollment),
-                        getString(R.string.yes),
-                        getString(R.string.no),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                terminateEnrollment();
-                            }
-                        });
-                break;
-            }
+//            case R.id.terminate: {
+//                UiUtils.showConfirmDialog(getActivity(),
+//                        getString(R.string.terminate),
+//                        getString(R.string.confirm_terminate_enrollment),
+//                        getString(R.string.yes),
+//                        getString(R.string.no),
+//                        new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                terminateEnrollment();
+//                            }
+//                        });
+//                break;
+//            }
 
-            case R.id.followupButton: {
-                toggleFollowup();
-                break;
-            }
+//            case R.id.followupButton: {
+//                toggleFollowup();
+//                break;
+//            }
 
             case R.id.newenrollmentbutton: {
                 createEnrollment();
@@ -1051,23 +1052,23 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 editTrackedEntityInstanceProfile();
                 break;
             }
-            case R.id.enrollmentstatus: {
-                if (mForm != null && mForm.getEnrollment() != null) {
-                    showStatusDialog(mForm.getEnrollment());
-                }
-                break;
-            }
-            case R.id.pullrelationshipbutton: {
-                refreshRelationships();
-                break;
-            }
-            case R.id.addrelationshipbutton: {
-                showAddRelationshipFragment();
-                break;
-            }
-            case R.id.enrollmentLayout: {
-                editEnrollmentDates();
-            }
+//            case R.id.enrollmentstatus: {
+//                if (mForm != null && mForm.getEnrollment() != null) {
+//                    showStatusDialog(mForm.getEnrollment());
+//                }
+//                break;
+//            }
+//            case R.id.pullrelationshipbutton: {
+//                refreshRelationships();
+//                break;
+//            }
+//            case R.id.addrelationshipbutton: {
+//                showAddRelationshipFragment();
+//                break;
+//            }
+//            case R.id.enrollmentLayout: {
+//                editEnrollmentDates();
+//            }
         }
     }
 

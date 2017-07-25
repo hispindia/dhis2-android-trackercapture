@@ -26,7 +26,7 @@
   ~  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   ~  */
   -->
-
+<!--//@sou_ enrollment/relatiionship disable-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -87,120 +87,120 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/enrollmentLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="6dp">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/enrollmentLayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:padding="6dp">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/enrollment"
-                    android:textSize="@dimen/medium_text_size" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/enrollment"-->
+                    <!--android:textSize="@dimen/medium_text_size" />-->
 
-                <ImageView
-                    android:id="@+id/enrollmentstatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:src="@drawable/ic_offline" />
+                <!--<ImageView-->
+                    <!--android:id="@+id/enrollmentstatus"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:src="@drawable/ic_offline" />-->
 
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/light_grey" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/dateOfEnrollmentLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textSize="@dimen/small_text_size" />
-
-                <TextView
-                    android:id="@+id/dateOfEnrollmentValue"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textSize="@dimen/small_text_size" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/dateOfIncidentLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textSize="@dimen/small_text_size" />
-
-                <TextView
-                    android:id="@+id/dateOfIncidentValue"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textSize="@dimen/small_text_size" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/complete"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rounded_imagebutton_orange"
-                    android:text="@string/complete" />
-
-                <Button
-                    android:id="@+id/terminate"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rounded_imagebutton_red"
-                    android:text="@string/terminate" />
-
-                <ImageButton
-                    android:id="@+id/followupButton"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="0.4"
-                    android:background="@drawable/rounded_imagebutton_gray"
-                    android:src="@drawable/ic_dialog_alert_holo_light" />
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
 
-        </LinearLayout>
+            <!--<View-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/light_grey" />-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/dateOfEnrollmentLabel"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text=""-->
+                    <!--android:textSize="@dimen/small_text_size" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/dateOfEnrollmentValue"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text=""-->
+                    <!--android:textSize="@dimen/small_text_size" />-->
+
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/dateOfIncidentLabel"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text=""-->
+                    <!--android:textSize="@dimen/small_text_size" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/dateOfIncidentValue"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text=""-->
+                    <!--android:textSize="@dimen/small_text_size" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<Button-->
+                    <!--android:id="@+id/complete"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_margin="5dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:background="@drawable/rounded_imagebutton_orange"-->
+                    <!--android:text="@string/complete" />-->
+
+                <!--<Button-->
+                    <!--android:id="@+id/terminate"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_margin="5dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:background="@drawable/rounded_imagebutton_red"-->
+                    <!--android:text="@string/terminate" />-->
+
+                <!--<ImageButton-->
+                    <!--android:id="@+id/followupButton"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_margin="5dp"-->
+                    <!--android:layout_weight="0.4"-->
+                    <!--android:background="@drawable/rounded_imagebutton_gray"-->
+                    <!--android:src="@drawable/ic_dialog_alert_holo_light" />-->
+            <!--</LinearLayout>-->
+
+
+        <!--</LinearLayout>-->
 
     </android.support.v7.widget.CardView>
 
@@ -292,68 +292,68 @@
 
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/relationships_cardview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+    <!--<android.support.v7.widget.CardView-->
+        <!--android:id="@+id/relationships_cardview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="4dp">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:orientation="vertical"
-            android:padding="6dp">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/transparent"-->
+            <!--android:orientation="vertical"-->
+            <!--android:padding="6dp">-->
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/transparent"-->
+                <!--android:orientation="horizontal">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/relationships"
-                    android:textSize="@dimen/medium_text_size" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/relationships"-->
+                    <!--android:textSize="@dimen/medium_text_size" />-->
 
-                <Button
-                    android:id="@+id/pullrelationshipbutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_gravity="right"
-                    android:background="@drawable/transparent_selector"
-                    android:text="@string/refresh_string" />
+                <!--<Button-->
+                    <!--android:id="@+id/pullrelationshipbutton"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:background="@drawable/transparent_selector"-->
+                    <!--android:text="@string/refresh_string" />-->
 
-                <Button
-                    android:id="@+id/addrelationshipbutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_gravity="right"
-                    android:background="@drawable/transparent_selector"
-                    android:text="@string/new_string" />
+                <!--<Button-->
+                    <!--android:id="@+id/addrelationshipbutton"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:background="@drawable/transparent_selector"-->
+                    <!--android:text="@string/new_string" />-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/light_grey" />
+            <!--<View-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/light_grey" />-->
 
-            <LinearLayout
-                android:id="@+id/relationships_linearlayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="6dp">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/relationships_linearlayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:padding="6dp">-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-    </android.support.v7.widget.CardView>
+    <!--</android.support.v7.widget.CardView>-->
 
     <android.support.v7.widget.CardView
         android:id="@+id/programindicators_cardview"
