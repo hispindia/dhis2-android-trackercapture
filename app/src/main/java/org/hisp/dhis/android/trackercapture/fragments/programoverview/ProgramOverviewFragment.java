@@ -136,7 +136,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private static final String ORG_UNIT_ID = "extra:orgUnitId";
     private static final String PROGRAM_ID = "extra:ProgramId";
     private static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
-
+    private List<OrganisationUnit> assignedOrganisationUnits;
     private ListView listView;
     private ProgressBar mProgressBar;
     private ProgramStageAdapter adapter;
@@ -555,7 +555,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             }
 
             final Map<Long, FailedItem> failedEvents = getFailedEvents();
-
+            assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
             for (ProgramStageRow row : data.getProgramStageRows()) {
                 if (row instanceof ProgramStageLabelRow) {
                     ProgramStageLabelRow stageRow = (ProgramStageLabelRow) row;
@@ -565,10 +565,58 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                         if (stageRow.getEventRows().size()
                                 < 1) { // if stage is not autogen and not repeatable, allow user
                             // to create exactly one event
-                            stageRow.setButtonListener(this);
+                            //@sou block event stage creation for apex/nimhans
+                            if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("apex")) {
+
+                                if(stageRow.getProgramStage().getDescription()!=null)
+                                {
+                                    if (stageRow.getProgramStage().getDescription().toLowerCase().contains("apex") || stageRow.getProgramStage().getDescription().toLowerCase().contains("district")) {
+                                        stageRow.setButtonListener(this);
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+
+
+                            }
+                            if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("district")) {
+
+                                if(stageRow.getProgramStage().getDescription()!=null)
+                                {
+                                    if (stageRow.getProgramStage().getDescription().toLowerCase().contains("district")) {
+                                        stageRow.setButtonListener(this);
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+
+
+                            }
+                            if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("nimhans")) {
+                                stageRow.setButtonListener(this);
+//                                if(stageRow.getProgramStage().getDescription()!=null)
+//                                {
+//                                    if (stageRow.getProgramStage().getDescription().toLowerCase().contains("district")) {
+//                                        stageRow.setButtonListener(this);
+//                                    }
+//                                    else
+//                                    {
+//
+//                                    }
+//                                }
+
+
+                            }
+
+
+
                         }
                         if (stageRow.getProgramStage().getAllowGenerateNextVisit()) {
-                            stageRow.setButtonListener(this);
+//                            stageRow.setButtonListener(this);
                         }
                     }
 
