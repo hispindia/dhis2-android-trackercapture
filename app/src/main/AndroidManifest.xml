@@ -28,7 +28,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.hisp.dhis.android.trackercapture">
+    package="org.hiaes.dhis.android.trackercapture">
 
     <uses-sdk android:targetSdkVersion="21" />
 
@@ -42,7 +42,7 @@
     <application
         android:name="org.hisp.dhis.android.trackercapture.TrackerCaptureApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/logo_front"
         android:label="@string/app_name"
         android:theme="@style/AppTheme.Base">
         <activity
@@ -123,12 +123,12 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name="org.hisp.dhis.android.trackercapture.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_main"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name=".activities.HolderActivity"
+            android:name="org.hisp.dhis.android.trackercapture.activities.HolderActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustPan|stateHidden">
 

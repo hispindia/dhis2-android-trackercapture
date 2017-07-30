@@ -35,7 +35,7 @@ import android.widget.DatePicker;
 
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.views.CustomDatePickerDialog;
-import org.hisp.dhis.android.trackercapture.R;
+import org.hiaes.dhis.android.trackercapture.R;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 

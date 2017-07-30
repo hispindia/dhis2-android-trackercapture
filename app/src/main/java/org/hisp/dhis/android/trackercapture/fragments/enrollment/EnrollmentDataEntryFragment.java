@@ -210,7 +210,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
                 }
                 UiUtils.showErrorDialog(getActivity(),
                         getString(R.string.error_message),
-                        getString(org.hisp.dhis.android.trackercapture.R.string.out_of_generated_ids),
+                        getString(org.hiaes.dhis.android.trackercapture.R.string.out_of_generated_ids),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

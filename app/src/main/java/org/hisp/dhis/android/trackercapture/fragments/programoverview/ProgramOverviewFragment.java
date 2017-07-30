@@ -95,7 +95,7 @@ import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 import org.hisp.dhis.android.sdk.utils.comparators.EnrollmentDateComparator;
 import org.hisp.dhis.android.sdk.utils.services.ProgramRuleService;
-import org.hisp.dhis.android.trackercapture.R;
+import org.hiaes.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
 import org.hisp.dhis.android.trackercapture.fragments.programoverview
         .registerrelationshipdialogfragment.RegisterRelationshipDialogFragment;
@@ -562,15 +562,18 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     if (stageRow.getProgramStage().getRepeatable()) {
                         stageRow.setButtonListener(this);
                     } else {
+
                         if (stageRow.getEventRows().size()
                                 < 1) { // if stage is not autogen and not repeatable, allow user
                             // to create exactly one event
                             //@sou block event stage creation for apex/nimhans
+//                            stageRow.setButtonListener(this);
+
                             if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("apex")) {
 
                                 if(stageRow.getProgramStage().getDescription()!=null)
                                 {
-                                    if (stageRow.getProgramStage().getDescription().toLowerCase().contains("apex") || stageRow.getProgramStage().getDescription().toLowerCase().contains("district")) {
+                                    if (stageRow.getProgramStage().getDescription().toLowerCase().contains("apex") ) {
                                         stageRow.setButtonListener(this);
                                     }
                                     else
@@ -581,7 +584,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
 
                             }
-                            if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("district")) {
+                            else if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("district")) {
 
                                 if(stageRow.getProgramStage().getDescription()!=null)
                                 {
@@ -596,21 +599,19 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
 
                             }
-                            if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("nimhans")) {
+                           else if(assignedOrganisationUnits.get(0).getLabel().toLowerCase().contains("nimhans")) {
                                 stageRow.setButtonListener(this);
-//                                if(stageRow.getProgramStage().getDescription()!=null)
-//                                {
-//                                    if (stageRow.getProgramStage().getDescription().toLowerCase().contains("district")) {
-//                                        stageRow.setButtonListener(this);
-//                                    }
-//                                    else
-//                                    {
-//
-//                                    }
-//                                }
+                                if(stageRow.getProgramStage().getDescription()!=null)
+                                {
+                                    if (stageRow.getProgramStage().getDescription().toLowerCase().contains("nimhans"))
+                                        stageRow.setButtonListener(this);
+                                    }
 
+                                    else
+                                    {
 
-                            }
+                                    }
+                                }
 
 
 

@@ -101,7 +101,7 @@ public class SelectProgramDialogFragment extends DialogFragment
                              ViewGroup container, Bundle savedInstanceState) {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        return inflater.inflate(org.hisp.dhis.android.trackercapture.R.layout.dialog_fragment_selection_program, container, false);
+        return inflater.inflate(org.hiaes.dhis.android.trackercapture.R.layout.dialog_fragment_selection_program, container, false);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class SelectProgramDialogFragment extends DialogFragment
         mPrefs = new SelectProgramFragmentPreferences(
                 getActivity().getApplicationContext());
         searchAndDownloadButton  = (FloatingActionButton) view
-                .findViewById(org.hisp.dhis.android.trackercapture.R.id.search_and_download_button);
+                .findViewById(org.hiaes.dhis.android.trackercapture.R.id.search_and_download_button);
         searchAndDownloadButton.setOnClickListener(this);
 
         ImageView closeDialogButton = (ImageView) view
@@ -117,7 +117,7 @@ public class SelectProgramDialogFragment extends DialogFragment
         closeDialogButton.setOnClickListener(this);
         mDialogLabel = (TextView) view
                 .findViewById(R.id.dialog_label);
-        setDialogLabel(org.hisp.dhis.android.trackercapture.R.string.download_entities_title);
+        setDialogLabel(org.hiaes.dhis.android.trackercapture.R.string.download_entities_title);
 
         setOUAndProgramButtons(view);
 
@@ -204,13 +204,13 @@ public class SelectProgramDialogFragment extends DialogFragment
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == org.hisp.dhis.android.trackercapture.R.id.relationshiptypebutton ) {
+        if(v.getId() == org.hiaes.dhis.android.trackercapture.R.id.relationshiptypebutton ) {
             RelationshipTypesDialogFragment fragment = RelationshipTypesDialogFragment
                     .newInstance(this);
             fragment.show(getChildFragmentManager());
         } else if(v.getId() == R.id.close_dialog_button) {
             dismiss();
-        } else if(v.getId() == org.hisp.dhis.android.trackercapture.R.id.search_and_download_button){
+        } else if(v.getId() == org.hiaes.dhis.android.trackercapture.R.id.search_and_download_button){
             HolderActivity.navigateToOnlineSearchFragment(getActivity(), mState.getProgramId(), mState.getOrgUnitId(), true, mCallBack);
             dismiss();
         }

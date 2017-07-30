@@ -48,7 +48,7 @@ import org.hisp.dhis.android.sdk.ui.dialogs.QueryTrackedEntityInstancesResultDia
 import org.hisp.dhis.android.sdk.ui.fragments.progressdialog.ProgressDialogFragment;
 import org.hisp.dhis.android.sdk.ui.views.FontEditText;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
-import org.hisp.dhis.android.trackercapture.R;
+import org.hiaes.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
 
 import java.io.Serializable;

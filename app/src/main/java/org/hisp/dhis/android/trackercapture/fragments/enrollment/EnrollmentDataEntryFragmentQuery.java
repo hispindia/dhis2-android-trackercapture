@@ -31,7 +31,6 @@ package org.hisp.dhis.android.trackercapture.fragments.enrollment;
 
 import android.content.Context;
 import android.util.Log;
-
 import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.realm.ROrganisationHelper;
@@ -198,13 +197,13 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             userAccounts=MetaDataController.getUserAccount();
             String user_=userAccounts.getFirstName().substring(0,1);
             String id=assignedOrganisationUnits.get(0).getId();
-            String val = ""+((int)(Math.random()*9000)+1000);
+            String val = ""+((int)(Math.random()*900)+100);
             int year = Calendar.getInstance().get(Calendar.YEAR);
             String year_=String.valueOf(year);
 
             orgUnitList = ROrganisationHelper.getOrganisationUnitID(id);
             String code=orgUnitList.get(0).getCode();
-            String nimhans_=user_+"-"+code+"-"+year_.toString().substring(2,4)+"-"+val;
+            String nimhans_=user_.toUpperCase()+"-"+code+"-"+year_.toString().substring(2,4)+"-"+val;
             trackedEntityAttributeValue.setTrackedEntityInstanceId(currentTrackedEntityInstance.getTrackedEntityInstance());
             trackedEntityAttributeValue.setValue(nimhans_);
             trackedEntityAttributeValues.add(trackedEntityAttributeValue);
@@ -269,7 +268,7 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.PHONE_NUMBER);
         }
 
-        else  if(trackedEntityAttribute.getShortName().equals("age_months"))
+        else  if(trackedEntityAttribute.getShortName().equals("age_in_months"))
         {
 
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE_MONTHS);

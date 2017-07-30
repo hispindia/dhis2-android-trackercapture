@@ -12,13 +12,13 @@ import android.widget.Spinner;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
-import org.hisp.dhis.android.trackercapture.R;
+import org.hiaes.dhis.android.trackercapture.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.hisp.dhis.android.trackercapture.R.id.spinner;
+import static org.hiaes.dhis.android.trackercapture.R.id.spinner;
 
 /**
  * Created by Sourabh Bhardwaj on 21-05-2017.

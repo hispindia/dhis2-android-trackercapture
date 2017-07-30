@@ -131,14 +131,14 @@ public class RegisterRelationshipDialogFragment extends DialogFragment
                              ViewGroup container, Bundle savedInstanceState) {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        return inflater.inflate(org.hisp.dhis.android.trackercapture.R.layout.dialog_fragment_registerrelationship, container, false);
+        return inflater.inflate(org.hiaes.dhis.android.trackercapture.R.layout.dialog_fragment_registerrelationship, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mListView = (ListView) view
                 .findViewById(R.id.simple_listview);
-        mRelationshipTypeButton = (CardTextViewButton) view.findViewById(org.hisp.dhis.android.trackercapture.R.id.relationshiptypebutton);
+        mRelationshipTypeButton = (CardTextViewButton) view.findViewById(org.hiaes.dhis.android.trackercapture.R.id.relationshiptypebutton);
         mRelationshipTypeButton.setOnClickListener(this);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
@@ -146,11 +146,11 @@ public class RegisterRelationshipDialogFragment extends DialogFragment
                // .findViewById(R.id.load_dialog_button);
         ImageView closeDialogButton = (ImageView) view
                 .findViewById(R.id.close_dialog_button);
-        mTrackedEntityInstanceLabel = (FontTextView) view.findViewById(org.hisp.dhis.android.trackercapture.R.id.tei_label);
+        mTrackedEntityInstanceLabel = (FontTextView) view.findViewById(org.hiaes.dhis.android.trackercapture.R.id.tei_label);
         mFilter = (EditText) view
                 .findViewById(R.id.filter_options);
         searchAndDownloadButton  = (FloatingActionButton) view
-                .findViewById(org.hisp.dhis.android.trackercapture.R.id.search_and_download_button);
+                .findViewById(org.hiaes.dhis.android.trackercapture.R.id.search_and_download_button);
         searchAndDownloadButton.setOnClickListener(this);
         mDialogLabel = (TextView) view
                 .findViewById(R.id.dialog_label);
@@ -169,7 +169,7 @@ public class RegisterRelationshipDialogFragment extends DialogFragment
             }
         });
 
-        mSpinner = (Spinner) view.findViewById(org.hisp.dhis.android.trackercapture.R.id.spinner);
+        mSpinner = (Spinner) view.findViewById(org.hiaes.dhis.android.trackercapture.R.id.spinner);
         mSpinnerAdapter = new RelationshipTypeAdapter(getLayoutInflater(savedInstanceState));
         mSpinner.setAdapter(mSpinnerAdapter);
 
@@ -178,7 +178,7 @@ public class RegisterRelationshipDialogFragment extends DialogFragment
         //registerDialogButton.setOnClickListener(this);
         //registerDialogButton.setVisibility(View.GONE);
 
-        setDialogLabel(org.hisp.dhis.android.trackercapture.R.string.register_relationship);
+        setDialogLabel(org.hiaes.dhis.android.trackercapture.R.string.register_relationship);
     }
 
     @Override
@@ -298,13 +298,13 @@ public class RegisterRelationshipDialogFragment extends DialogFragment
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == org.hisp.dhis.android.trackercapture.R.id.relationshiptypebutton ) {
+        if(v.getId() == org.hiaes.dhis.android.trackercapture.R.id.relationshiptypebutton ) {
             RelationshipTypesDialogFragment fragment = RelationshipTypesDialogFragment
                     .newInstance(this);
             fragment.show(getChildFragmentManager());
         } else if(v.getId() == R.id.close_dialog_button) {
             dismiss();
-        } else if(v.getId() == org.hisp.dhis.android.trackercapture.R.id.search_and_download_button){
+        } else if(v.getId() == org.hiaes.dhis.android.trackercapture.R.id.search_and_download_button){
             showSelectionProgramFragment(new CallBack() {
                 @Override
                 public void onSuccess() {

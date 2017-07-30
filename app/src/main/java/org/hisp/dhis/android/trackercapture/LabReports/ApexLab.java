@@ -14,7 +14,7 @@ import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.LabReport;
 
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
-import org.hisp.dhis.android.trackercapture.R;
+import org.hiaes.dhis.android.trackercapture.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,7 +88,10 @@ public class ApexLab extends AppCompatActivity {
         protected Void doInBackground(Void... arg0) {
             Httphandler1 sh = new Httphandler1();
             jsonStr = sh.makeServiceCall(url);
+//            String jsonStr1 = sh.makeServiceCall("http://bulksms.mysmsmantra.com:8080/WebSMS/SMSAPI.jsp?username=hispindia&password=hisp1234&sendername=HSSPIN&mobileno=9643274071&message=test");
+
             Log.e(TAG, "Response from url: " + jsonStr);
+//            Log.e(TAG, "Response from sms url: " + jsonStr1);
 
             if (jsonStr != null) {
                 try {

@@ -37,12 +37,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.hiaes.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.DhisService;
 import org.hisp.dhis.android.sdk.controllers.LoadingController;
@@ -88,7 +88,6 @@ public class MainActivity extends AbsHomeActivity {
         }
 
         //toDo Filter Reports based on ou level
-
 //        assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
 //        int  level=assignedOrganisationUnits.get(0).getLevel();
         LoadingController.enableLoading(this, ResourceType.ASSIGNEDPROGRAMS);
@@ -113,13 +112,11 @@ public class MainActivity extends AbsHomeActivity {
         // inflate your menu here
 
     }
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-
-
-
-        return true;
-    }
+//    public boolean onPrepareOptionsMenu(Menu menu)
+//    {
+//
+//        return true;
+//    }
     private void setUpNavigationView(Bundle savedInstanceState) {
         removeMenuItem(R.id.drawer_item_profile);
         addMenuItem(11, R.drawable.ic_add, R.string.enroll);
@@ -202,7 +199,6 @@ public class MainActivity extends AbsHomeActivity {
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         boolean isSelected = false;
         int menuItemId = menuItem.getItemId();
-
         if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_dashboard) {
             isSelected = openApp(APPS_DASHBOARD_PACKAGE);
         } else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_data_capture) {

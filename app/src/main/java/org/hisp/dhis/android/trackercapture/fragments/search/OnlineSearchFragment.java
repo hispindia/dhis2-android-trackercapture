@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 
+import org.hiaes.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.job.JobExecutor;
@@ -41,7 +42,6 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.StatusRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnDetailedInfoButtonClick;
 import org.hisp.dhis.android.sdk.ui.views.FloatingActionButton;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
-import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
 
 import java.util.ArrayList;
@@ -137,7 +137,7 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
                 .findViewById(org.hisp.dhis.android.sdk.R.id.simple_listview);
 
         View header = getLayoutInflater(savedInstanceState).inflate(
-                org.hisp.dhis.android.trackercapture.R.layout.fragmentdialog_querytei_header, mListView, false
+                R.layout.fragmentdialog_querytei_header, mListView, false
         );
 
         if (getActivity() instanceof AppCompatActivity) {
@@ -146,7 +146,7 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
             getActionBar().setHomeButtonEnabled(true);
         }
 
-        FloatingActionButton detailedSearchButton = (FloatingActionButton) header.findViewById(org.hisp.dhis.android.trackercapture.R.id.detailed_search_button);
+        FloatingActionButton detailedSearchButton = (FloatingActionButton) header.findViewById(R.id.detailed_search_button);
         detailedSearchButton.setOnClickListener(this);
         mListView.addHeaderView(header, TAG, false);
 
@@ -265,7 +265,7 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
             button.setImageResource(org.hisp.dhis.android.sdk.R.drawable.ic_new);
             mAdapter.swapData(null);
         } else {
-            button.setImageResource(org.hisp.dhis.android.trackercapture.R.drawable.ic_close_dialog);
+            button.setImageResource(R.drawable.ic_close_dialog);
 
             if (mForm != null && mForm.getDataEntryRows() != null) {
                 mAdapter.swapData(mForm.getDataEntryRows());
@@ -313,7 +313,7 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
 
-        if (v.getId() == org.hisp.dhis.android.trackercapture.R.id.detailed_search_button) {
+        if (v.getId() == R.id.detailed_search_button) {
             toggleDetailedSearch(v);
         }
     }

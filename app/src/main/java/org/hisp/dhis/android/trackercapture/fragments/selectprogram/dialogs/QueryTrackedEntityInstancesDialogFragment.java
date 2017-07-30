@@ -36,7 +36,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -78,7 +77,6 @@ import org.hisp.dhis.android.sdk.ui.dialogs.QueryTrackedEntityInstancesResultDia
 import org.hisp.dhis.android.sdk.ui.views.FloatingActionButton;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -155,9 +153,9 @@ public class QueryTrackedEntityInstancesDialogFragment extends DialogFragment
                 .findViewById(R.id.simple_listview);
 
         View header = getLayoutInflater(savedInstanceState).inflate(
-                org.hisp.dhis.android.trackercapture.R.layout.fragmentdialog_querytei_header, mListView, false
+                org.hiaes.dhis.android.trackercapture.R.layout.fragmentdialog_querytei_header, mListView, false
         );
-        FloatingActionButton detailedSearchButton = (FloatingActionButton) header.findViewById(org.hisp.dhis.android.trackercapture.R.id.detailed_search_button);
+        FloatingActionButton detailedSearchButton = (FloatingActionButton) header.findViewById(org.hiaes.dhis.android.trackercapture.R.id.detailed_search_button);
         detailedSearchButton.setOnClickListener(this);
         mListView.addHeaderView(header, TAG, false);
 
@@ -329,7 +327,7 @@ public class QueryTrackedEntityInstancesDialogFragment extends DialogFragment
           //  dismiss();
             //runQuery();
         //} else
-            if (v.getId() == org.hisp.dhis.android.trackercapture.R.id.detailed_search_button) {
+            if (v.getId() == org.hiaes.dhis.android.trackercapture.R.id.detailed_search_button) {
             toggleDetailedSearch(v);
         }
     }

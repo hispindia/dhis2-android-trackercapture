@@ -13,7 +13,7 @@ import android.widget.Toast;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.LabReport;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
-import org.hisp.dhis.android.trackercapture.R;
+import org.hiaes.dhis.android.trackercapture.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,7 +88,10 @@ public class NimhansLab extends AppCompatActivity {
         protected Void doInBackground(Void... arg0) {
             Httphandler1 sh = new Httphandler1();
             jsonStr = sh.makeServiceCall(url);
+
+
             Log.e(TAG, "Response from url: " + jsonStr);
+
 
             if (jsonStr != null) {
                 try {

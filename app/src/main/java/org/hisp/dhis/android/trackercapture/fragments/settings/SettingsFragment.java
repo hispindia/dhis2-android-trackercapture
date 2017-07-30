@@ -15,7 +15,7 @@ import org.hisp.dhis.android.sdk.events.LoadingMessageEvent;
 import org.hisp.dhis.android.sdk.events.UiEvent;
 import org.hisp.dhis.android.sdk.ui.views.FontButton;
 import org.hisp.dhis.android.sdk.ui.views.FontCheckBox;
-import org.hisp.dhis.android.trackercapture.R;
+import org.hiaes.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.export.ExportData;
 
 import java.io.IOException;

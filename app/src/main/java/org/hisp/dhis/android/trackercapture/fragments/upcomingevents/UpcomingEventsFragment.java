@@ -56,19 +56,17 @@ import org.hisp.dhis.android.sdk.ui.dialogs.OrgUnitDialogFragment;
 import org.hisp.dhis.android.sdk.ui.dialogs.ProgramDialogFragment;
 import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragment;
 import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentForm;
-import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentState;
 import org.hisp.dhis.android.sdk.ui.views.CardTextViewButton;
 import org.hisp.dhis.android.sdk.ui.views.FloatingActionButton;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 import org.hisp.dhis.android.sdk.utils.support.DateUtils;
-import org.hisp.dhis.android.trackercapture.R;
+import org.hiaes.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
 import org.hisp.dhis.android.trackercapture.ui.adapters.UpcomingEventAdapter;
 import org.hisp.dhis.android.sdk.ui.dialogs.UpcomingEventsDialogFilter;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
