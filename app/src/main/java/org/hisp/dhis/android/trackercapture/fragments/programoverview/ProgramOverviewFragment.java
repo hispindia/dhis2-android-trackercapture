@@ -818,25 +818,17 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     }
 
     public void showNoActiveEnrollment(ProgramOverviewFragmentForm mForm) {
-        enrollmentLayout.setVisibility(View.GONE);
-
-        //start values
         reOpenButton.setVisibility(View.VISIBLE);
         newEnrollmentButton.setVisibility(View.VISIBLE);
         noActiveEnrollment.setText(R.string.no_active_enrollment);
 
         missingEnrollmentLayout.setVisibility(View.VISIBLE);
-        Enrollment lastEnrollment = TrackerController.getLastEnrollment(mForm.getProgram().getUid(),
+        List<Enrollment> enrollments = TrackerController.getEnrollments(mForm.getProgram().getUid(),
                 mForm.getTrackedEntityInstance());
-        if(lastEnrollment!=null) {
+        if(enrollments!=null && enrollments.size()>0) {
             if (mForm.getProgram() != null && mForm.getProgram().getOnlyEnrollOnce()) {
-                if(lastEnrollment.getStatus().equals(Enrollment.CANCELLED)) {
-                    newEnrollmentButton.setVisibility(View.VISIBLE);
-                    noActiveEnrollment.setText(R.string.enrollment_cancelled);
-                }else{
-                    newEnrollmentButton.setVisibility(View.GONE);
-                    noActiveEnrollment.setText(R.string.enrollment_complete);
-                }
+                newEnrollmentButton.setVisibility(View.GONE);
+//                noActiveEnrollment.setText(R.string.enrollemnt_complete);
             }
         }
         if(getLastEnrollmentForTrackedEntityInstance()==null){
@@ -850,21 +842,18 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                         trackedEntityInstance.getLocalId());
         {
             //update profile view
-            if (trackedEntityAttributeValues != null && trackedEntityAttributeValues.size()>0) {
+            if (trackedEntityAttributeValues != null) {
                 TrackedEntityAttribute attribute = MetaDataController.getTrackedEntityAttribute(
                         trackedEntityAttributeValues.get(0).getTrackedEntityAttributeId());
                 if (attribute != null) {
                     attribute1Label.setText(attribute.getName());
                     attribute1Value.setText(trackedEntityAttributeValues.get(0).getValue());
                 }
-
-                if (trackedEntityAttributeValues.size()>1) {
-                    attribute = MetaDataController.getTrackedEntityAttribute(
-                            trackedEntityAttributeValues.get(1).getTrackedEntityAttributeId());
-                    if (attribute != null) {
-                        attribute2Label.setText(attribute.getName());
-                        attribute2Value.setText(trackedEntityAttributeValues.get(1).getValue());
-                    }
+                attribute = MetaDataController.getTrackedEntityAttribute(
+                        trackedEntityAttributeValues.get(1).getTrackedEntityAttributeId());
+                if (attribute != null) {
+                    attribute2Label.setText(attribute.getName());
+                    attribute2Value.setText(trackedEntityAttributeValues.get(1).getValue());
                 }
             }
 
@@ -1113,8 +1102,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     private Enrollment getLastEnrollmentForTrackedEntityInstance() {
         List<Enrollment> enrollments = TrackerController.getEnrollments(
-                mForm.getTrackedEntityInstance(), mForm.getProgram().getUid(), mForm.getTrackedEntityInstance().getOrgUnit());
-         if(enrollments==null || enrollments.size()==0) {
+                mForm.getTrackedEntityInstance());
+        if(enrollments==null || enrollments.size()==0) {
             return null;
         }
         EnrollmentDateComparator comparator = new EnrollmentDateComparator();
