@@ -184,10 +184,7 @@ public class OnlineSearchResultFragment extends Fragment implements AdapterView.
             programTrackedEntityAttributeMap = getProgramTrackedEntityAttributes(selectedProgram);
         } else {
         }
-
-        mAdapter = new QueryTrackedEntityInstancesResultDialogAdapter(
-                LayoutInflater.from(getActivity()), getSelectedTrackedEntityInstances(),
-                programTrackedEntityAttributeMap, getContext());
+        mAdapter = new QueryTrackedEntityInstancesResultDialogAdapter(LayoutInflater.from(getActivity()), getSelectedTrackedEntityInstances(), programTrackedEntityAttributeMap);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
