@@ -605,12 +605,12 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             LinearLayout displayTextLayout = (LinearLayout) programIndicatorCardView.findViewById(
                     R.id.textlayout);
             displayTextLayout.removeAllViews();
+
             for (IndicatorRow indicatorRow : mForm.getProgramIndicatorRows().values()) {
                 View view = indicatorRow.getView(getChildFragmentManager(),
                         getLayoutInflater(getArguments()), null, programIndicatorLayout);
                 programIndicatorLayout.addView(view);
             }
-
             evaluateAndApplyProgramRules();
             adapter.swapData(data.getProgramStageRows());
         }
@@ -818,62 +818,74 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     }
 
     public void showNoActiveEnrollment(ProgramOverviewFragmentForm mForm) {
-        reOpenButton.setVisibility(View.VISIBLE);
-        newEnrollmentButton.setVisibility(View.VISIBLE);
-        noActiveEnrollment.setText(R.string.no_active_enrollment);
+        enrollmentLayout.setVisibility(View.GONE);
 
-        missingEnrollmentLayout.setVisibility(View.VISIBLE);
-        List<Enrollment> enrollments = TrackerController.getEnrollments(mForm.getProgram().getUid(),
-                mForm.getTrackedEntityInstance());
-        if(enrollments!=null && enrollments.size()>0) {
-            if (mForm.getProgram() != null && mForm.getProgram().getOnlyEnrollOnce()) {
-                newEnrollmentButton.setVisibility(View.GONE);
-//                noActiveEnrollment.setText(R.string.enrollemnt_complete);
-            }
-        }
-        if(getLastEnrollmentForTrackedEntityInstance()==null){
-            reOpenButton.setVisibility(View.GONE);
+        if (mForm.getProgram() != null && !mForm.getProgram().getOnlyEnrollOnce()) {
+            missingEnrollmentLayout.setVisibility(View.VISIBLE);
+        } else {
+            missingEnrollmentLayout.setVisibility(View.GONE);
         }
 
-        TrackedEntityInstance trackedEntityInstance = TrackerController.getTrackedEntityInstance(
-                mForm.getTrackedEntityInstance().getTrackedEntityInstance());
-        List<TrackedEntityAttributeValue> trackedEntityAttributeValues =
-                TrackerController.getVisibleTrackedEntityAttributeValues(
-                        trackedEntityInstance.getLocalId());
-        {
-            //update profile view
-            if (trackedEntityAttributeValues != null) {
-                TrackedEntityAttribute attribute = MetaDataController.getTrackedEntityAttribute(
-                        trackedEntityAttributeValues.get(0).getTrackedEntityAttributeId());
-                if (attribute != null) {
-                    attribute1Label.setText(attribute.getName());
-                    attribute1Value.setText(trackedEntityAttributeValues.get(0).getValue());
-                }
-                attribute = MetaDataController.getTrackedEntityAttribute(
-                        trackedEntityAttributeValues.get(1).getTrackedEntityAttributeId());
-                if (attribute != null) {
-                    attribute2Label.setText(attribute.getName());
-                    attribute2Value.setText(trackedEntityAttributeValues.get(1).getValue());
-                }
-            }
+        //update profile view
+        List<Enrollment> enrollmentsForTEI = TrackerController.getEnrollments(TrackerController.getTrackedEntityInstance(mState.getTrackedEntityInstanceId()));
+        for (Enrollment enrollment : enrollmentsForTEI) {
+            Program selectedProgram = (Program) mSpinner.getSelectedItem();
 
-            List<Enrollment> enrollmentsForTEI = TrackerController.getEnrollments(
-                    TrackerController.getTrackedEntityInstance(
-                            mState.getTrackedEntityInstanceId()));
-            for (Enrollment enrollment : enrollmentsForTEI) {
-                Program selectedProgram = (Program) mSpinner.getSelectedItem();
+            if (selectedProgram.getUid().equals(enrollment.getProgram().getUid())) {
+                profileCardView.setClickable(false); // Enrollment attributes is applicable.
+                profileButton.setClickable(false);
+                TrackedEntityInstance trackedEntityInstance = TrackerController.getTrackedEntityInstance(enrollment.getLocalTrackedEntityInstanceId());
 
-                if (selectedProgram.getUid().equals(enrollment.getProgram().getUid())) {
-                    profileCardView.setClickable(false); // Enrollment attributes is applicable.
-                    profileButton.setClickable(false);
-                    break;
+                int numberOfProgramTrackedEntityAttributes = selectedProgram.getProgramTrackedEntityAttributes().size();
+                int numberOfTrackedEntityAttributeValues = trackedEntityInstance.getAttributes().size();
+
+                if (numberOfProgramTrackedEntityAttributes > 0 && numberOfTrackedEntityAttributeValues > 0) {
+                    TrackedEntityAttribute attribute1 = selectedProgram.getProgramTrackedEntityAttributes().get(0).getTrackedEntityAttribute();
+                    attribute1Label.setText(attribute1.getName());
+                    TrackedEntityAttributeValue attribute1Val = TrackerController.getTrackedEntityAttributeValue(attribute1.getUid(), trackedEntityInstance.getLocalId());
+                    if (attribute1Val != null) {
+                        attribute1Value.setText(attribute1Val.getValue());
+                    } else {
+                        attribute1Value.setText("");
+                    }
                 } else {
-                    profileCardView.setClickable(
-                            false); // Enrollment attributes not applicable. Clickable(false) to
-                    // prevent crash
-
-                    profileButton.setClickable(false);
+                    attribute1Label.setText("");
+                    attribute1Value.setText("");
                 }
+
+                if (numberOfProgramTrackedEntityAttributes > 1 && numberOfTrackedEntityAttributeValues > 1) {
+                    TrackedEntityAttribute attribute2 = selectedProgram.getProgramTrackedEntityAttributes().get(1).getTrackedEntityAttribute();
+                    TrackedEntityAttributeValue attribute2Val = TrackerController.getTrackedEntityAttributeValue(attribute2.getUid(), trackedEntityInstance.getLocalId());
+
+                    attribute2Label.setText(attribute2.getName());
+                    if (attribute2Val != null) {
+                        attribute2Value.setText(attribute2Val.getValue());
+                    } else {
+                        attribute2Value.setText("");
+                    }
+                } else {
+                    attribute2Label.setText("");
+                    attribute2Value.setText("");
+                }
+
+                break;
+            } else {
+                profileCardView.setClickable(false); // Enrollment attributes not applicable. Clickable(false) to prevent crash
+                profileButton.setClickable(false);
+                int numberOfProgramTrackedEntityAttributes = selectedProgram.getProgramTrackedEntityAttributes().size();
+
+                if (numberOfProgramTrackedEntityAttributes > 0)
+                    attribute1Label.setText(selectedProgram.getProgramTrackedEntityAttributes().get(0).getTrackedEntityAttribute().getName());
+                else
+                    attribute1Label.setText("");
+
+                if (numberOfProgramTrackedEntityAttributes > 1)
+                    attribute2Label.setText(selectedProgram.getProgramTrackedEntityAttributes().get(1).getTrackedEntityAttribute().getName());
+                else
+                    attribute2Label.setText("");
+
+                attribute1Value.setText("");
+                attribute2Value.setText("");
             }
         }
     }
