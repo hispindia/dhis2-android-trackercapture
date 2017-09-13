@@ -30,6 +30,8 @@
 package org.hisp.dhis.android.trackercapture.fragments.enrollment;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.EditText;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
@@ -121,7 +123,6 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         dataEntryRows.add(
                 new EnrollmentDatePickerRow(currentEnrollment.getProgram().getEnrollmentDateLabel(),
                         currentEnrollment));
-
         if (currentEnrollment.getProgram().getDisplayIncidentDate()) {
             dataEntryRows.add(
                     new IncidentDatePickerRow(currentEnrollment.getProgram().getIncidentDateLabel(),
@@ -210,9 +211,6 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         TrackedEntityAttributeValue trackedEntityAttributeValue = new TrackedEntityAttributeValue();
 
         trackedEntityAttributeValue.setTrackedEntityAttributeId(trackedEntityAttribute);
-        //oQioOj2ECeU  Age Months
-        //g6aPl383VUZ  Age Years
-
         //@sou DOH ID Auto Sequential
         if(trackedEntityAttribute.equals("yeI6AOQjrqg"))
         {
@@ -222,19 +220,21 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             List<OrganisationUnit> org=null;
             List<TrackedEntityInstance> tei_list= MetaDataController.getTrackedEntityInstancesFromLocal();
             int count=tei_list.size();
-            String seq_count = String.format ("%04d", count+1);
+            String seq_count = String.format ("%05d", count+1);
             assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
             userAccounts=MetaDataController.getUserAccount();
             org=MetaDataController.getOrganisationUnit_list();
             code=org.get(0).getCode();
             int year = Calendar.getInstance().get(Calendar.YEAR);
             String year_=String.valueOf(year);
-            String nimhans_=code+"-"+year_.toString().substring(2,4)+"-"+seq_count;
+            String nimhans_=code+"-"+year_.toString()+"-"+seq_count;
             trackedEntityAttributeValue.setTrackedEntityInstanceId(currentTrackedEntityInstance.getTrackedEntityInstance());
             trackedEntityAttributeValue.setValue(nimhans_);
             trackedEntityAttributeValues.add(trackedEntityAttributeValue);
             return trackedEntityAttributeValue;
         }
+
+
         //the datavalue didnt exist for some reason. Create a new one.
         trackedEntityAttributeValue.setTrackedEntityAttributeId(trackedEntityAttribute);
         trackedEntityAttributeValue.setTrackedEntityInstanceId(
@@ -266,6 +266,8 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         {
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.DOH_ID_NO);
         }
+
+        //@sou_ Todo DOB Age Relation
 
 
         else if (trackedEntityAttribute.getValueType().equals(ValueType.TEXT)) {
