@@ -192,17 +192,26 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
 
                 List<OrganisationUnit> org=null;
                 org=MetaDataController.getOrganisationUnit_list();
-                int level=org.get(0).getLevel();
-                if(level==5)
+                for(int i=0;i<org.size();i++)
                 {
-                    createEnrollment();
+                    if(org.get(i).getId().equals(mState.getOrgUnitId()))
+                    {
+                        if(org.get(i).getLevel()==5)
+                        {
+                            createEnrollment();
+                            break;
+                        }
+                        else
+                        {
+                            Toast.makeText(this.getContext(),"Registration allowed at Level 5 only", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    }
                 }
-                else
-                {
-                     Toast.makeText(this.getContext(),"Registration allowed at Level 5 only", Toast.LENGTH_SHORT).show();
 
-                }
+
                 break;
+
             }
             case R.id.upcoming_events_button: {
                 HolderActivity.navigateToUpcomingEventsFragment(getActivity());
