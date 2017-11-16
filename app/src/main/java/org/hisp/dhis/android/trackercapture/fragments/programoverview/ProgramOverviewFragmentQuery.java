@@ -30,6 +30,7 @@
 package org.hisp.dhis.android.trackercapture.fragments.programoverview;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
@@ -45,12 +46,15 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
 import org.hisp.dhis.android.sdk.utils.Utils;
 import org.hisp.dhis.android.sdk.utils.comparators.EventDateComparator;
 import org.hisp.dhis.android.sdk.utils.services.ProgramIndicatorService;
+import org.hisp.dhis.android.sdk.utils.support.DateUtils;
 import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStageEventRow;
 import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStageLabelRow;
 import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStageRow;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -118,11 +122,30 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
         List<ProgramIndicator> programIndicators = programOverviewFragmentForm.getProgram().getProgramIndicators();
         programOverviewFragmentForm.setProgramIndicatorRows(new HashMap<ProgramIndicator, IndicatorRow>());
         if(programIndicators != null ) {
+            //limiting program indicators only to EDD for tibet
+            //to make the implementation fast
+            for(ProgramIndicator indicator :programIndicators){
+                if(indicator.getUid().equals("cg7jSue3uTF")){
+                    String dateStr = programOverviewFragmentForm.getEnrollment().getIncidentDate();
+
+                    dateStr = dateStr.substring(0,dateStr.indexOf("T"));
+                    Date date = DateUtils.getMediumDate(dateStr);
+                    date = DateUtils.getDateAfterAddition(date,280);
+                    SimpleDateFormat format = new SimpleDateFormat(DateUtils.DEFAULT_DATE_FORMAT);
+
+                    Log.i(" EDD Date",format.format(date));
+                    String value = format.format(date);;
+                    IndicatorRow indicatorRow = new IndicatorRow(indicator,value);
+                    programOverviewFragmentForm.getProgramIndicatorRows().put(indicator,indicatorRow);
+                }
+            }
+
+            /* the code which added all the program Indicators removed by ifhaam for above mentioned reason
             for(ProgramIndicator programIndicator : programIndicators) {
                 String value = ProgramIndicatorService.getProgramIndicatorValue(programOverviewFragmentForm.getEnrollment(), programIndicator);
                 IndicatorRow indicatorRow = new IndicatorRow(programIndicator, value);
                 programOverviewFragmentForm.getProgramIndicatorRows().put(programIndicator, indicatorRow);
-            }
+            }*/
         }
         return programOverviewFragmentForm;
     }

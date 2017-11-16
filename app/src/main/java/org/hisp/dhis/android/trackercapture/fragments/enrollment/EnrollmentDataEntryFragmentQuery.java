@@ -37,6 +37,7 @@ import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
+import org.hisp.dhis.android.sdk.persistence.models.Constant;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.OptionSet;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
@@ -46,6 +47,7 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeGeneratedValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowFactory;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.autocompleterow.AutoCompleteRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.CheckBoxRow;
@@ -71,16 +73,17 @@ import java.util.List;
 class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragmentForm> {
     public static final String CLASS_TAG = EnrollmentDataEntryFragmentQuery.class.getSimpleName();
     private static String appliedValue;
-
-
     private final String mOrgUnitId;
     private final String mProgramId;
     private final long mTrackedEntityInstanceId;
     private final String enrollmentDate;
     private String incidentDate;
+    private String  DOHID="yeI6AOQjrqg";
+    private String  SETTLEMENTID="iRJYMHN0Rel";
     private TrackedEntityInstance currentTrackedEntityInstance;
     private Enrollment currentEnrollment;
-
+    private List<OrganisationUnit> assignedOrganisationUnits;
+    private UserAccount userAccounts;
     EnrollmentDataEntryFragmentQuery(String mOrgUnitId, String mProgramId,
                                      long mTrackedEntityInstanceId,
                                      String enrollmentDate, String incidentDate) {
@@ -156,6 +159,7 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         int paddingForIndex = dataEntryRows.size();
         int ageRowIndex = -1;//added to manupulate or dynamicly change the row value based on user input for the other
         int dobRowIndex = -1;//added to manupulate or dynamicly change the row value based on user input for the other
+        int settlementRowIndex = -1;//added to manupulate or dynamicly change the row value based on user input for the other
         for (int i = 0; i < programTrackedEntityAttributes.size(); i++) {
             boolean editable = true;
             boolean shouldNeverBeEdited = false;
@@ -173,6 +177,7 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
                             getTrackedEntityAttribute().getUid(), trackedEntityAttributeValues),
                     programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getValueType(),
                     editable, shouldNeverBeEdited);
+
             if(row.getmLabel().equalsIgnoreCase("DOB")){
                 dobRowIndex = i;
             }else if(row.getmLabel().contains("Age")){
@@ -192,8 +197,10 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         final DatePickerRow dobRow = (DatePickerRow) dataEntryRows.get(paddingForIndex+dobRowIndex);
 
 
+
         final String ageRowTrackedEntityAttributeUID =programTrackedEntityAttributes.get(ageRowIndex).getTrackedEntityAttribute().getUid();
         final String dobRowTrackedEntityAttribureUID = programTrackedEntityAttributes.get(dobRowIndex).getTrackedEntityAttribute().getUid();
+
 
 
 
@@ -209,14 +216,11 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         }catch (Exception ex){
             ex.printStackTrace();
         }
-
-
         Dhis2Application.getEventBus().register(new DobAgeSync(){
             @Override
             @com.squareup.otto.Subscribe
             public void eventHandler(RowValueChangedEvent event){
                 // Log.i(" Called ",event.getBaseValue().getValue()+"");
-
                 if(event.getId()!=null && event.getId().equals(ageRowTrackedEntityAttributeUID)){
                     Row row = event.getRow();
                     if(appliedValue==null || !appliedValue.equals(ageRow.getValue().getValue()) ){
@@ -248,8 +252,6 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
                             ex.printStackTrace();
 
                         }
-
-
                     }
 
 
@@ -297,6 +299,7 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
      */
     public String getTheDOB(String in){
         int indexOfPeriod = in.indexOf(".");
+
         int year = Integer.parseInt(in.substring(0,indexOfPeriod));
         int month = Integer.parseInt(in.substring(indexOfPeriod+1));
 
@@ -316,8 +319,37 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
                 return trackedEntityAttributeValue;
         }
 
-        //the datavalue didnt exist for some reason. Create a new one.
+        //for Doh id:
+
         TrackedEntityAttributeValue trackedEntityAttributeValue = new TrackedEntityAttributeValue();
+
+        trackedEntityAttributeValue.setTrackedEntityAttributeId(trackedEntityAttribute);
+        //@sou DOH ID Auto Sequential
+        if(trackedEntityAttribute.equals(DOHID))
+        {
+            String code="";
+            OrganisationUnit mOrgUnit = MetaDataController.getOrganisationUnit(mOrgUnitId);
+            List<TrackedEntityInstance> tei_list= MetaDataController.getTrackedEntityInstancesFromLocal();
+            int count=tei_list.size();
+            String seq_count = String.format ("%05d", count+1);
+            code=mOrgUnit.getCode();
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            String year_=String.valueOf(year);
+            String nimhans_=code+"-"+year_.toString()+"-"+seq_count;
+            trackedEntityAttributeValue.setTrackedEntityInstanceId(currentTrackedEntityInstance.getTrackedEntityInstance());
+            trackedEntityAttributeValue.setValue(nimhans_);
+            trackedEntityAttributeValues.add(trackedEntityAttributeValue);
+            return trackedEntityAttributeValue;
+        }
+
+        if(trackedEntityAttribute.equals(SETTLEMENTID))
+        {
+            OrganisationUnit mOrgUnit = MetaDataController.getOrganisationUnit(mOrgUnitId);
+            trackedEntityAttributeValue.setValue(mOrgUnit.getLabel());
+            trackedEntityAttributeValues.add(trackedEntityAttributeValue);
+            return trackedEntityAttributeValue;
+        }
+        //the datavalue didnt exist for some reason. Create a new one.
         trackedEntityAttributeValue.setTrackedEntityAttributeId(trackedEntityAttribute);
         trackedEntityAttributeValue.setTrackedEntityInstanceId(currentTrackedEntityInstance.getTrackedEntityInstance());
         trackedEntityAttributeValue.setValue("");

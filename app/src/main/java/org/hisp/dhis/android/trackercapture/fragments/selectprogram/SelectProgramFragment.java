@@ -48,10 +48,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.events.OnTeiDownloadedEvent;
@@ -62,6 +64,7 @@ import org.hisp.dhis.android.sdk.persistence.models.BaseSerializableModel;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnTrackedEntityInstanceColumnClick;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
@@ -193,7 +196,17 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register_new_event: {
-                createEnrollment();
+                OrganisationUnit ou= MetaDataController.getOrganisationUnit(mState.getOrgUnitId());
+          if(ou.getLevel()==5)
+          {
+              createEnrollment();
+
+          }
+          else
+          {
+              Toast.makeText(this.getContext(),"Registration allowed at Level 5 only", Toast.LENGTH_SHORT).show();
+
+          }
                 break;
             }
             case R.id.upcoming_events_button: {
@@ -233,7 +246,6 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
             HolderActivity.navigateToEnrollmentDataEntryFragment(getActivity(), mState.getOrgUnitId(), mState.getProgramId(), trackedEntityInstance.getLocalId(), enrollmentDateString, incidentDateString);
 
         }
-
     }
 
     private static final void showQueryTrackedEntityInstancesDialog(FragmentManager fragmentManager, String orgUnit, String program) {

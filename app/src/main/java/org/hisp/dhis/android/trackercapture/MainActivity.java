@@ -84,9 +84,11 @@ public class MainActivity extends AbsHomeActivity {
         LoadingController.enableLoading(this, ResourceType.PROGRAMS);
         LoadingController.enableLoading(this, ResourceType.CONSTANTS);
         LoadingController.enableLoading(this, ResourceType.PROGRAMRULES);
+        LoadingController.enableLoading(this,ResourceType.PROGRAMINDICATORS);
         LoadingController.enableLoading(this, ResourceType.PROGRAMRULEVARIABLES);
         LoadingController.enableLoading(this, ResourceType.PROGRAMRULEACTIONS);
         LoadingController.enableLoading(this, ResourceType.RELATIONSHIPTYPES);
+
         Dhis2Application.bus.register(this);
 
         PeriodicSynchronizerController.activatePeriodicSynchronizer(this);
