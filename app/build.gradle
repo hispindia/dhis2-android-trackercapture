@@ -29,18 +29,9 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'jacoco-android'
 
 android {
-//    compileSdkVersion rootProject.ext.configuration.compileSdkVersion
-//    buildToolsVersion rootProject.ext.configuration.buildToolsVersion
-//
-//    defaultConfig {
-//        applicationId "org.hisp.dhis.android.trackercapture"
-//        minSdkVersion 15
-//        targetSdkVersion 21
-//        versionCode 22
-//        versionName "0.3.4-2.22"
-//    }
 
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -50,6 +41,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+        applicationId rootProject.ext.configuration.applicationId
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -57,10 +50,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled true
+        }
     }
 
     lintOptions {
         disable 'RtlSymmetry', 'RtlHardcoded'
+        abortOnError false
     }
 
     packagingOptions {
@@ -80,7 +77,11 @@ android {
 dependencies {
     compile project(':core')
     compile project(':ui')
+
+
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
+
+    compile 'com.android.support:multidex:1.0.2'
 }

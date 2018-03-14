@@ -2,7 +2,6 @@ package org.hisp.dhis.android.trackercapture.fragments.search;
 
 import android.content.Context;
 
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.sql.queriable.StringQuery;
 
@@ -21,8 +20,9 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue$
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance$Table;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.EventRow;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceColumnNamesRow;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceDynamicColumnRows;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
+import org.hisp.dhis.android.sdk.utils.ScreenSizeConfigurator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,27 +57,23 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
 
         List<String> attributesToShow = new ArrayList<>();
         Map<String, TrackedEntityAttribute> attributesToShowMap = new HashMap<>();
-        TrackedEntityInstanceColumnNamesRow columnNames = new TrackedEntityInstanceColumnNamesRow();
-
+        TrackedEntityInstanceDynamicColumnRows attributeNames = new TrackedEntityInstanceDynamicColumnRows();
+        TrackedEntityInstanceDynamicColumnRows
+                row = new TrackedEntityInstanceDynamicColumnRows();
+        int numberOfColumns = ScreenSizeConfigurator.getInstance().getFields();
          for (ProgramTrackedEntityAttribute attribute : attributes) {
-            if (attribute.getDisplayInList() && attributesToShow.size() < 3) {
+            if (attribute.getDisplayInList() && attributesToShow.size() < numberOfColumns) {
                 attributesToShow.add(attribute.getTrackedEntityAttributeId());
                 attributesToShowMap.put(attribute.getTrackedEntityAttributeId(), attribute.getTrackedEntityAttribute());
                 if (attribute.getTrackedEntityAttribute() != null) {
                     String name = attribute.getTrackedEntityAttribute().getName();
-                    if (attributesToShow.size() == 1) {
-                        columnNames.setFirstItem(name);
-                    } else if (attributesToShow.size() == 2) {
-                        columnNames.setSecondItem(name);
-                    } else if (attributesToShow.size() == 3) {
-                        columnNames.setThirdItem(name);
-                    }
-
+                    row.addColumn(name);
+                    attributeNames.addColumn(attribute.getTrackedEntityAttribute().getShortName());
                 }
             }
         }
 
-        eventRows.add(columnNames);
+        eventRows.add(row);
 
         HashMap<String, String> attributesWithValuesMap = new HashMap<>();
 
@@ -134,11 +130,12 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
         }
 
         form.setEventRowList(eventRows);
-        form.setColumnNames(columnNames);
+
+        form.setColumnNames(attributeNames);
 
         if(selectedProgram.getTrackedEntity() != null) {
-            columnNames.setTrackedEntity(selectedProgram.getTrackedEntity().getName());
-            columnNames.setTitle(selectedProgram.getTrackedEntity().getName() + " (" + ( eventRows.size() - 1 ) + ")") ;
+            row.setTrackedEntity(selectedProgram.getTrackedEntity().getName());
+            row.setTitle(selectedProgram.getTrackedEntity().getName() + " (" + ( eventRows.size() - 1 ) + ")") ;
         }
 
         return form;
@@ -162,9 +159,7 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
 
         Map<String, TrackedEntityAttributeValue> trackedEntityAttributeValueMapForTrackedEntityInstance = cachedTrackedEntityAttributeValuesForTrackedEntityInstances.get(trackedEntityInstance.getLocalId());
         for (int i = 0; i < attributesToShow.size(); i++) {
-            if (i > attributesToShow.size()) {
-                break;
-            }
+            String value = " ";
 
             String attributeUid = attributesToShow.get(i);
             if (attributeUid != null) {
@@ -176,10 +171,11 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
 
                 TrackedEntityAttribute trackedEntityAttribute = trackedEntityAttributeMap.get(attributeUid);
                 if (teav == null || trackedEntityAttribute == null) {
+                    trackedEntityInstanceItemRow.addColumn(value);
                     continue;
                 }
 
-                String value = teav.getValue();
+                value = teav.getValue();
 
                 if (trackedEntityAttribute.isOptionSetValue()) {
                     if (trackedEntityAttribute.getOptionSet() == null) {
@@ -189,6 +185,7 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
                     String optionSetId = trackedEntityAttribute.getOptionSet();
                     Map<String, Option> optionsMap = optionsForOptionSetMap.get(optionSetId);
                     if(optionsMap == null) {
+                        trackedEntityInstanceItemRow.addColumn(value);
                         continue;
                     }
                     Option optionWithMatchingValue = optionsMap.get(value);
@@ -197,15 +194,8 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
                     }
 
                 }
-
-                if (i == 0) {
-                    trackedEntityInstanceItemRow.setFirstItem(value);
-                } else if (i == 1) {
-                    trackedEntityInstanceItemRow.setSecondItem(value);
-                } else if (i == 2) {
-                    trackedEntityInstanceItemRow.setThirdItem(value);
-                }
             }
+            trackedEntityInstanceItemRow.addColumn(value);
         }
         return trackedEntityInstanceItemRow;
     }
@@ -305,8 +295,11 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
         if(attributesIdsUsedInQueryIterator.hasNext()) {
             firstId = attributesIdsUsedInQueryIterator.next();
         } else {
-            //no values have been used in the query
-            return null;
+            //no values have been used in the query show with no filter
+            return "SELECT * FROM " + TrackedEntityInstance.class.getSimpleName() + " WHERE "
+                    + TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE + " IN (SELECT " +
+                    TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID + " FROM " +
+                    TrackedEntityAttributeValue.class.getSimpleName() + ")";
         }
         String firstValue;
         TrackedEntityAttribute firstTrackedEntityAttribute = trackedEntityAttributeMap.get(firstId);
@@ -323,33 +316,29 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
                 + TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE + " IN (SELECT " +
                 TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID + " FROM " +
                 TrackedEntityAttributeValue.class.getSimpleName() + " WHERE " + TrackedEntityAttributeValue$Table.TRACKEDENTITYATTRIBUTEID +
-                " IS '" + firstId + "' AND " + TrackedEntityAttributeValue$Table.VALUE + ' ' + firstCompareOperator +' ' + "'" + firstValue + "'";
-
-        int closingParenthesis = 1;
+                " IS '" + firstId + "' AND " + TrackedEntityAttributeValue$Table.VALUE + ' ' + firstCompareOperator +' ' + "'" + firstValue + "')";
 
         while (attributesIdsUsedInQueryIterator.hasNext()) {
             String attributeId = attributesIdsUsedInQueryIterator.next();
             String attributeValue;
-            TrackedEntityAttribute trackedEntityAttribute = trackedEntityAttributeMap.get(attributeId);
+            TrackedEntityAttribute trackedEntityAttribute = trackedEntityAttributeMap.get(
+                    attributeId);
             String compareOperator;
-            if(trackedEntityAttribute.getOptionSet() != null) {
+            if (trackedEntityAttribute.getOptionSet() != null) {
                 compareOperator = "IS";
                 attributeValue = attributesWithValuesMap.get(attributeId);
             } else {
                 compareOperator = "LIKE";
                 attributeValue = '%' + attributesWithValuesMap.get(attributeId) + '%';
             }
-
-            String queryToAppend = " AND " + TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID +
-                    " IN ( SELECT " + TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID +
-                    " FROM " + TrackedEntityAttributeValue.class.getSimpleName() + " WHERE " + TrackedEntityAttributeValue$Table.TRACKEDENTITYATTRIBUTEID +
-                    " IS '" + attributeId + "' AND " + TrackedEntityAttributeValue$Table.VALUE + ' ' + compareOperator +' ' + "'" + attributeValue + "'";
-            query += queryToAppend;
-            closingParenthesis++;
-        }
-
-        for(int i = 0; i<closingParenthesis; i++) {
-            query += ')';
+            query += "INTERSECT SELECT * FROM " + TrackedEntityInstance.class.getSimpleName()
+                    + " WHERE "
+                    + TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE + " IN (SELECT " +
+                    TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID + " FROM " +
+                    TrackedEntityAttributeValue.class.getSimpleName() + " WHERE "
+                    + TrackedEntityAttributeValue$Table.TRACKEDENTITYATTRIBUTEID +" "+ compareOperator
+                    +" '"+ attributeId + "' AND " + TrackedEntityAttributeValue$Table.VALUE + ' '
+                    + compareOperator + ' ' + "'" + attributeValue + "')";
         }
         query += ';';
         return query;

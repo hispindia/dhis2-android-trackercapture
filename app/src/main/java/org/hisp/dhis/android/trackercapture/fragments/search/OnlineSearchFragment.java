@@ -35,7 +35,7 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.adapters.DataValueAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.AbsTextWatcher;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.CoordinatesRow;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventCoordinatesRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.StatusRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnDetailedInfoButtonClick;
@@ -59,11 +59,13 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
     private ListView mListView;
     private int mDialogId;
     private View progressBar;
+    private boolean backNavigation;
 
     public static final String EXTRA_PROGRAM = "extra:trackedEntityAttributes";
     public static final String EXTRA_ORGUNIT = "extra:orgUnit";
     public static final String EXTRA_DETAILED = "extra:detailed";
     public static final String EXTRA_ARGUMENTS = "extra:Arguments";
+    public static final String EXTRA_NAVIGATION = "extra:Navigation";
     public static final String EXTRA_SAVED_INSTANCE_STATE = "extra:savedInstanceState";
 
     public static OnlineSearchFragment newInstance(String program, String orgUnit) {
@@ -155,7 +157,8 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
                 .findViewById(org.hisp.dhis.android.sdk.R.id.dialog_label);
         UiUtils.hideKeyboard(getActivity());
 
-        mAdapter = new DataValueAdapter(getChildFragmentManager(), getActivity().getLayoutInflater());
+        mAdapter = new DataValueAdapter(getChildFragmentManager(),
+                getActivity().getLayoutInflater(), mListView, getContext());
         mListView.setAdapter(mAdapter);
 
         mFilter.addTextChangedListener(new AbsTextWatcher() {
@@ -186,6 +189,7 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
         argumentsBundle.putBundle(EXTRA_ARGUMENTS, getArguments());
         argumentsBundle.putBundle(EXTRA_SAVED_INSTANCE_STATE, savedInstanceState);
         getLoaderManager().initLoader(LOADER_ID, argumentsBundle, this);
+        getActionBar().setTitle(getString(R.string.download_entities_title));
     }
 
     @Override
@@ -198,6 +202,7 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
             Bundle fragmentArguments = args.getBundle(EXTRA_ARGUMENTS);
             String programId = fragmentArguments.getString(EXTRA_PROGRAM);
             String orgUnitId = fragmentArguments.getString(EXTRA_ORGUNIT);
+            backNavigation = fragmentArguments.getBoolean(EXTRA_NAVIGATION);
 
             return new DbLoader<>(
                     getActivity().getBaseContext(), modelsToTrack, new OnlineSearchFragmentQuery(
@@ -234,7 +239,7 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
     {
         String message = "";
 
-        if (eventClick.getRow() instanceof CoordinatesRow)
+        if (eventClick.getRow() instanceof EventCoordinatesRow)
             message = getResources().getString(org.hisp.dhis.android.sdk.R.string.detailed_info_coordinate_row);
         else if (eventClick.getRow() instanceof StatusRow)
             message = getResources().getString(org.hisp.dhis.android.sdk.R.string.detailed_info_status_row);
@@ -342,7 +347,7 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
 
     private void showQueryError() {
         progressBar.setVisibility(View.INVISIBLE);
-        Toast.makeText(getContext(), "Error. Please retry", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getContext().getString(R.string.search_error), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -369,19 +374,19 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
                 }
 
                 // showTrackedEntityInstanceQueryResultDialog(fragmentManager, trackedEntityInstancesQueryResult, orgUnit);
-                showOnlineSearchResultFragment(trackedEntityInstancesQueryResult, orgUnit, program);
+                showOnlineSearchResultFragment(trackedEntityInstancesQueryResult, orgUnit, program, backNavigation);
                 return new Object();
             }
         });
     }
 
-    public void showOnlineSearchResultFragment(final List<TrackedEntityInstance> trackedEntityInstances, final String orgUnit, final String programId) {
+    public void showOnlineSearchResultFragment(final List<TrackedEntityInstance> trackedEntityInstances, final String orgUnit, final String programId, final boolean backNavigation) {
         if (getActivity() != null && isAdded()) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     progressBar.setVisibility(View.INVISIBLE);
-                    HolderActivity.navigateToOnlineSearchResultFragment(getActivity(), trackedEntityInstances, orgUnit, programId);
+                    HolderActivity.navigateToOnlineSearchResultFragment(getActivity(), trackedEntityInstances, orgUnit, programId, backNavigation);
                 }
             });
         }

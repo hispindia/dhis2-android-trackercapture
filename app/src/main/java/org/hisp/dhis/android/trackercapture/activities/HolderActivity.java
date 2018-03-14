@@ -12,8 +12,9 @@ import android.widget.Toast;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.activities.OnBackPressedListener;
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment;
-import org.hisp.dhis.android.sdk.ui.fragments.settings.SettingsFragment;
 import org.hisp.dhis.android.trackercapture.R;
+import org.hisp.dhis.android.trackercapture.fragments.trackedentityinstance
+        .TrackedEntityInstanceDataEntryFragment;
 import org.hisp.dhis.android.trackercapture.fragments.enrollment.EnrollmentDataEntryFragment;
 import org.hisp.dhis.android.trackercapture.fragments.enrollmentdate.EnrollmentDateFragment;
 import org.hisp.dhis.android.trackercapture.fragments.programoverview.ProgramOverviewFragment;
@@ -22,6 +23,7 @@ import org.hisp.dhis.android.trackercapture.fragments.search.LocalSearchResultFr
 import org.hisp.dhis.android.trackercapture.fragments.search.OnlineSearchFragment;
 import org.hisp.dhis.android.trackercapture.fragments.search.OnlineSearchResultFragment;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.SelectProgramFragment;
+import org.hisp.dhis.android.trackercapture.fragments.settings.SettingsFragment;
 import org.hisp.dhis.android.trackercapture.fragments.trackedentityinstanceprofile.TrackedEntityInstanceProfileFragment;
 import org.hisp.dhis.android.trackercapture.fragments.upcomingevents.UpcomingEventsFragment;
 import org.hisp.dhis.client.sdk.ui.activities.AbsHomeActivity;
@@ -41,12 +43,13 @@ public class HolderActivity extends AbsHomeActivity {
     public static final String ARG_TYPE_TRACKEDENTITYINSTANCEPROFILE = "arg:TrackedEntityInstanceProfile";
     public static final String ARG_TYPE_ENROLLMENTDATEFRAGMENT = "arg:EnrollmentDateFragment";
     public static final String ARG_TYPE_LOCALSEARCHFRAGMENT = "arg:LocalSearchFragment";
+    public static final String ARG_TYPE_TRACKEDENTITYINSTANCEDATAENTRYFRAGMENT = "arg:TrackedEntityInstanceDataEntryFragment";
     public static final String ARG_TYPE_LOCALSEARCHRESULTFRAGMENT = "arg:LocalSearchResultFragment";
     public static final String ARG_TYPE_ONLINESEARCHFRAGMENT = "arg:OnlineSearchFragment";
     public static final String ARG_TYPE_ONLINESEARCHRESULTFRAGMENT = "arg:OnlineSearchResultFragment";
     private static final String ARG_TYPE_UPCOMINGEVENTSFRAGMENT = "arg:UpcomingEventsFragment";
     OnBackPressedListener onBackPressedListener;
-
+    public static OnlineSearchResultFragment.CallBack mCallBack;
 
     @Override
     public void onBackPressed() {
@@ -109,6 +112,13 @@ public class HolderActivity extends AbsHomeActivity {
                 onBackPressedListener = trackedEntityInstanceProfileFragment;
                 trackedEntityInstanceProfileFragment.setArguments(getIntent().getExtras());
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, trackedEntityInstanceProfileFragment).commit();
+                break;
+            }
+            case ARG_TYPE_TRACKEDENTITYINSTANCEDATAENTRYFRAGMENT: {
+                TrackedEntityInstanceDataEntryFragment trackedEntityInstanceDataEntryFragment = new TrackedEntityInstanceDataEntryFragment();
+                onBackPressedListener = trackedEntityInstanceDataEntryFragment;
+                trackedEntityInstanceDataEntryFragment.setArguments(getIntent().getExtras());
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, trackedEntityInstanceDataEntryFragment).commit();
                 break;
             }
             case ARG_TYPE_ENROLLMENTDATEFRAGMENT: {
@@ -250,12 +260,11 @@ public class HolderActivity extends AbsHomeActivity {
         activity.startActivity(intent);
     }
 
-    public static void navigateToTrackedEntityInstanceProfileFragment(Activity activity, long trackedEntityInstanceId, String programId, long enrollmentId) {
+    public static void navigateToTrackedEntityInstanceProfileFragment(Activity activity, long trackedEntityInstanceId, String programId) {
         Intent intent = new Intent(activity, HolderActivity.class);
         intent.putExtra(TrackedEntityInstanceProfileFragment.TRACKEDENTITYINSTANCE_ID, trackedEntityInstanceId);
-        intent.putExtra(EventDataEntryFragment.PROGRAM_ID, programId);
+        intent.putExtra(TrackedEntityInstanceProfileFragment.PROGRAM_ID, programId);
         intent.putExtra(ARG_TYPE, ARG_TYPE_TRACKEDENTITYINSTANCEPROFILE);
-        intent.putExtra(TrackedEntityInstanceProfileFragment.ENROLLMENT_ID, enrollmentId);
         activity.startActivity(intent);
     }
 
@@ -275,16 +284,20 @@ public class HolderActivity extends AbsHomeActivity {
         activity.startActivity(intent);
     }
 
-    public static void navigateToOnlineSearchFragment(Activity activity, String programId, String orgUnitId) {
+    public static void navigateToOnlineSearchFragment(Activity activity, String programId,
+            String orgUnitId, boolean backNavigation,
+            OnlineSearchResultFragment.CallBack callBack) {
+        mCallBack = callBack;
         Intent intent = new Intent(activity, HolderActivity.class);
         intent.putExtra(OnlineSearchFragment.EXTRA_PROGRAM, programId);
         intent.putExtra(OnlineSearchFragment.EXTRA_ORGUNIT, orgUnitId);
+        intent.putExtra(OnlineSearchFragment.EXTRA_NAVIGATION, backNavigation);
         intent.putExtra(ARG_TYPE, ARG_TYPE_ONLINESEARCHFRAGMENT);
         intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY); // we don't want to keep it to backstack
         activity.startActivity(intent);
     }
 
-    public static void navigateToOnlineSearchResultFragment(Activity activity, List<TrackedEntityInstance> trackedEntityInstances, String orgUnit, String program) {
+    public static void navigateToOnlineSearchResultFragment(Activity activity, List<TrackedEntityInstance> trackedEntityInstances, String orgUnit, String program, boolean backNavigation) {
         try {
             Intent intent = new Intent(activity, HolderActivity.class);
 
@@ -299,6 +312,7 @@ public class HolderActivity extends AbsHomeActivity {
             intent.putExtra(OnlineSearchResultFragment.EXTRA_PROGRAM, program);
             intent.putExtra(OnlineSearchResultFragment.EXTRA_TRACKEDENTITYINSTANCESSELECTED, parameterSerializible1);
             intent.putExtra(OnlineSearchResultFragment.EXTRA_TRACKEDENTITYINSTANCESLIST, parameterSerializible2);
+            intent.putExtra(OnlineSearchResultFragment.EXTRA_NAVIGATION, backNavigation);
             intent.putExtra(ARG_TYPE, ARG_TYPE_ONLINESEARCHRESULTFRAGMENT);
             intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY); // we don't want to keep it to backstack
 
@@ -333,4 +347,16 @@ public class HolderActivity extends AbsHomeActivity {
         intent.putExtra(ARG_TYPE, ARG_TYPE_UPCOMINGEVENTSFRAGMENT);
         activity.startActivity(intent);
     }
+
+    public static void navigateToTrackedEntityInstanceDataEntryFragment(Activity activity,
+            String programId, String orgUnit, boolean navigationBack, OnlineSearchResultFragment.CallBack callBack) {
+        mCallBack = callBack;
+        Intent intent = new Intent(activity, HolderActivity.class);
+        intent.putExtra(TrackedEntityInstanceDataEntryFragment.PROGRAM_ID, programId);
+        intent.putExtra(TrackedEntityInstanceDataEntryFragment.ORG_UNIT_ID, orgUnit);
+        intent.putExtra(TrackedEntityInstanceDataEntryFragment.EXTRA_NAVIGATION, navigationBack);
+        intent.putExtra(ARG_TYPE, ARG_TYPE_TRACKEDENTITYINSTANCEDATAENTRYFRAGMENT);
+        activity.startActivity(intent);
+    }
+
 }

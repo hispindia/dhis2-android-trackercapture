@@ -30,15 +30,12 @@
 package org.hisp.dhis.android.trackercapture.fragments.enrollment;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
-import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
-import org.hisp.dhis.android.sdk.persistence.models.OptionSet;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute;
@@ -47,31 +44,17 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeGenera
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowFactory;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.autocompleterow.AutoCompleteRow;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.CheckBoxRow;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowTypes;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DatePickerRow;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EditTextRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EnrollmentDatePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IncidentDatePickerRow;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.RadioButtonsRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
-import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RefreshListViewEvent;
-import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 import org.hisp.dhis.android.sdk.utils.api.ValueType;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragmentForm> {
     public static final String CLASS_TAG = EnrollmentDataEntryFragmentQuery.class.getSimpleName();
-    private static String appliedValue;
-
 
     private final String mOrgUnitId;
     private final String mProgramId;
@@ -80,17 +63,17 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
     private String incidentDate;
     private TrackedEntityInstance currentTrackedEntityInstance;
     private Enrollment currentEnrollment;
+    private EnrollmentDataEntryFragment mFragment;
 
     EnrollmentDataEntryFragmentQuery(String mOrgUnitId, String mProgramId,
-                                     long mTrackedEntityInstanceId,
-                                     String enrollmentDate, String incidentDate) {
+            long mTrackedEntityInstanceId,
+            String enrollmentDate, String incidentDate, EnrollmentDataEntryFragment fragment) {
         this.mOrgUnitId = mOrgUnitId;
         this.mProgramId = mProgramId;
         this.mTrackedEntityInstanceId = mTrackedEntityInstanceId;
         this.enrollmentDate = enrollmentDate;
         this.incidentDate = incidentDate;
-        appliedValue =null;
-
+        mFragment = fragment;
     }
 
     @Override
@@ -106,12 +89,15 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         if (mTrackedEntityInstanceId < 0) {
             currentTrackedEntityInstance = new TrackedEntityInstance(mProgram, mOrgUnitId);
         } else {
-            currentTrackedEntityInstance = TrackerController.getTrackedEntityInstance(mTrackedEntityInstanceId);
+            currentTrackedEntityInstance = TrackerController.getTrackedEntityInstance(
+                    mTrackedEntityInstanceId);
         }
         if ("".equals(incidentDate)) {
             incidentDate = null;
         }
-        currentEnrollment = new Enrollment(mOrgUnitId, currentTrackedEntityInstance.getTrackedEntityInstance(), mProgram, enrollmentDate, incidentDate);
+        currentEnrollment = new Enrollment(mOrgUnitId,
+                currentTrackedEntityInstance.getTrackedEntityInstance(), mProgram, enrollmentDate,
+                incidentDate);
 
         mForm.setProgram(mProgram);
         mForm.setOrganisationUnit(mOrgUnit);
@@ -121,30 +107,43 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         mForm.setTrackedEntityAttributeValueMap(new HashMap<String, TrackedEntityAttributeValue>());
 
         List<TrackedEntityAttributeValue> trackedEntityAttributeValues = new ArrayList<>();
-        List<ProgramTrackedEntityAttribute> programTrackedEntityAttributes = mProgram.getProgramTrackedEntityAttributes();
+        List<ProgramTrackedEntityAttribute> programTrackedEntityAttributes =
+                mProgram.getProgramTrackedEntityAttributes();
         List<Row> dataEntryRows = new ArrayList<>();
 
-        dataEntryRows.add(new EnrollmentDatePickerRow(currentEnrollment.getProgram().getEnrollmentDateLabel(), currentEnrollment));
+        dataEntryRows.add(
+                new EnrollmentDatePickerRow(currentEnrollment.getProgram().getEnrollmentDateLabel(),
+                        currentEnrollment));
 
         if (currentEnrollment.getProgram().getDisplayIncidentDate()) {
-            dataEntryRows.add(new IncidentDatePickerRow(currentEnrollment.getProgram().getIncidentDateLabel(), currentEnrollment));
+            dataEntryRows.add(
+                    new IncidentDatePickerRow(currentEnrollment.getProgram().getIncidentDateLabel(),
+                            currentEnrollment));
         }
 
         for (ProgramTrackedEntityAttribute ptea : programTrackedEntityAttributes) {
-            TrackedEntityAttributeValue value = TrackerController.getTrackedEntityAttributeValue(ptea.getTrackedEntityAttributeId(), currentTrackedEntityInstance.getLocalId());
+            TrackedEntityAttributeValue value = TrackerController.getTrackedEntityAttributeValue(
+                    ptea.getTrackedEntityAttributeId(), currentTrackedEntityInstance.getLocalId());
             if (value != null) {
                 trackedEntityAttributeValues.add(value);
             } else {
-                TrackedEntityAttribute trackedEntityAttribute = MetaDataController.getTrackedEntityAttribute(ptea.getTrackedEntityAttributeId());
+                TrackedEntityAttribute trackedEntityAttribute =
+                        MetaDataController.getTrackedEntityAttribute(
+                                ptea.getTrackedEntityAttributeId());
                 if (trackedEntityAttribute.isGenerated()) {
                     TrackedEntityAttributeGeneratedValue trackedEntityAttributeGeneratedValue =
-                            MetaDataController.getTrackedEntityAttributeGeneratedValue(ptea.getTrackedEntityAttribute());
+                            MetaDataController.getTrackedEntityAttributeGeneratedValue(
+                                    ptea.getTrackedEntityAttribute());
 
                     if (trackedEntityAttributeGeneratedValue != null) {
-                        TrackedEntityAttributeValue trackedEntityAttributeValue = new TrackedEntityAttributeValue();
-                        trackedEntityAttributeValue.setTrackedEntityAttributeId(ptea.getTrackedEntityAttribute().getUid());
-                        trackedEntityAttributeValue.setTrackedEntityInstanceId(currentTrackedEntityInstance.getUid());
-                        trackedEntityAttributeValue.setValue(trackedEntityAttributeGeneratedValue.getValue());
+                        TrackedEntityAttributeValue trackedEntityAttributeValue =
+                                new TrackedEntityAttributeValue();
+                        trackedEntityAttributeValue.setTrackedEntityAttributeId(
+                                ptea.getTrackedEntityAttribute().getUid());
+                        trackedEntityAttributeValue.setTrackedEntityInstanceId(
+                                currentTrackedEntityInstance.getUid());
+                        trackedEntityAttributeValue.setValue(
+                                trackedEntityAttributeGeneratedValue.getValue());
                         trackedEntityAttributeValues.add(trackedEntityAttributeValue);
                     } else {
                         mForm.setOutOfTrackedEntityAttributeGeneratedValues(true);
@@ -153,194 +152,65 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             }
         }
         currentEnrollment.setAttributes(trackedEntityAttributeValues);
-        int paddingForIndex = dataEntryRows.size();
-        int ageRowIndex = -1;//added to manupulate or dynamicly change the row value based on user input for the other
-        int dobRowIndex = -1;//added to manupulate or dynamicly change the row value based on user input for the other
         for (int i = 0; i < programTrackedEntityAttributes.size(); i++) {
             boolean editable = true;
             boolean shouldNeverBeEdited = false;
-            if(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().isGenerated()) {
+            if (programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().isGenerated()) {
                 editable = false;
                 shouldNeverBeEdited = true;
+                mFragment.getListViewAdapter().disableIndex(programTrackedEntityAttributes.get(
+                        i).getTrackedEntityAttribute().getUid());
             }
-            if(ValueType.COORDINATE.equals(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getValueType())) {
+            if (ValueType.COORDINATE.equals(programTrackedEntityAttributes.get(
+                    i).getTrackedEntityAttribute().getValueType())) {
                 GpsController.activateGps(context);
             }
-            Row row = DataEntryRowFactory.createDataEntryView(programTrackedEntityAttributes.get(i).getMandatory(),
-                    programTrackedEntityAttributes.get(i).getAllowFutureDate(), programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getOptionSet(),
+            boolean isRadioButton = mProgram.getDataEntryMethod();
+            if(!isRadioButton){
+                isRadioButton = programTrackedEntityAttributes.get(
+                        i).isRenderOptionsAsRadio();
+            }
+            Row row = DataEntryRowFactory.createDataEntryView(
+                    programTrackedEntityAttributes.get(i).getMandatory(),
+                    programTrackedEntityAttributes.get(i).getAllowFutureDate(),
+                    programTrackedEntityAttributes.get(
+                            i).getTrackedEntityAttribute().getOptionSet(),
                     programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getName(),
                     getTrackedEntityDataValue(programTrackedEntityAttributes.get(i).
                             getTrackedEntityAttribute().getUid(), trackedEntityAttributeValues),
-                    programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getValueType(),
-                    editable, shouldNeverBeEdited);
-            if(row.getmLabel().equalsIgnoreCase("DOB")){
-                dobRowIndex = i;
-            }else if(row.getmLabel().contains("Age")){
-                ageRowIndex = i;
-            }
+                    programTrackedEntityAttributes.get(
+                            i).getTrackedEntityAttribute().getValueType(),
+                    editable, shouldNeverBeEdited, isRadioButton);
             dataEntryRows.add(row);
         }
-        for (TrackedEntityAttributeValue trackedEntityAttributeValue : trackedEntityAttributeValues) {
-            mForm.getTrackedEntityAttributeValueMap().put(trackedEntityAttributeValue.getTrackedEntityAttributeId(), trackedEntityAttributeValue);
+        for (TrackedEntityAttributeValue trackedEntityAttributeValue :
+                trackedEntityAttributeValues) {
+            mForm.getTrackedEntityAttributeValueMap().put(
+                    trackedEntityAttributeValue.getTrackedEntityAttributeId(),
+                    trackedEntityAttributeValue);
         }
         mForm.setDataEntryRows(dataEntryRows);
         mForm.setEnrollment(currentEnrollment);
-
-
-        // added by ifhaam 9/14/2017
-        final EditTextRow ageRow = (EditTextRow) dataEntryRows.get(paddingForIndex+ageRowIndex);
-        final DatePickerRow dobRow = (DatePickerRow) dataEntryRows.get(paddingForIndex+dobRowIndex);
-
-
-        final String ageRowTrackedEntityAttributeUID =programTrackedEntityAttributes.get(ageRowIndex).getTrackedEntityAttribute().getUid();
-        final String dobRowTrackedEntityAttribureUID = programTrackedEntityAttributes.get(dobRowIndex).getTrackedEntityAttribute().getUid();
-
-
-
-        try{
-            Dhis2Application.getEventBus().unregister(new DobAgeSync() {
-                @com.squareup.otto.Subscribe
-                @Override
-                public void eventHandler(RowValueChangedEvent event) {
-
-                }
-            });
-
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
-
-
-        Dhis2Application.getEventBus().register(new DobAgeSync(){
-            @Override
-            @com.squareup.otto.Subscribe
-            public void eventHandler(RowValueChangedEvent event){
-                // Log.i(" Called ",event.getBaseValue().getValue()+"");
-
-                if(event.getId()!=null && event.getId().equals(ageRowTrackedEntityAttributeUID)){
-                    Row row = event.getRow();
-                    if(appliedValue==null || !appliedValue.equals(ageRow.getValue().getValue()) ){
-
-                        if(row!=null) {
-                            //Log.i(" Called ",row.getValue().getValue());
-                            try {
-                                dobRow.getValue().setValue(getTheDOB(ageRow.getValue().getValue()));
-                                appliedValue = dobRow.getValue().getValue();
-
-                                EnrollmentDataEntryFragment.refreshListView();
-                            } catch (Exception ex) {
-                                Log.i("Exception ", "Converting to integer not possible");
-
-                            }
-                        }
-                    }
-
-                }else if(event.getId() !=null && event.getId().equals(dobRowTrackedEntityAttribureUID)){
-                    if(appliedValue ==null || !(appliedValue.equals(dobRow.getValue().getValue()) || appliedValue.equals(ageRow.getValue().getValue()))){
-
-                        try{
-                            ageRow.getValue().setValue(getTheDifference(dobRow.getValue().getValue()));
-                            appliedValue = dobRow.getValue().getValue();
-
-                            EnrollmentDataEntryFragment.refreshListView();
-
-                        }catch (Exception ex){
-                            ex.printStackTrace();
-
-                        }
-
-
-                    }
-
-
-                }
-
-            }
-
-        });
         return mForm;
     }
 
-
-    /**
-     * @param dateStr Pass the string value of date to the method
-     * @return Get the difference from todays date
-     */
-    private String getTheDifference(String dateStr) throws Exception{
-        Calendar today = Calendar.getInstance();
-        //Log.i(" today ",today.getTime()+"");
-        Calendar cal2 = Calendar.getInstance();
-        SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date = Calendar.getInstance().getTime();
-        date = format.parse(dateStr);
-
-        cal2.setTime(date);
-        int diffYear = today.get(Calendar.YEAR)-cal2.get(Calendar.YEAR);
-        int diffMonths = diffYear*12 + today.get(Calendar.MONTH)-cal2.get(Calendar.MONTH);
-
-        int year = diffMonths/12;
-        int month = diffMonths % 12;
-
-
-        //Log.i(" Difference ",year+"."+month);
-        return year+"."+month;
-    }
-
-    /**
-     *
-     * @param in pass the notation of age
-     * @return get the date of birth
-     * Please note since user wont provide the date difference in days
-     * we cant calculate the exact date
-     *
-     */
-    public String getTheDOB(String in){
-        int indexOfPeriod = in.indexOf(".");
-        int year = Integer.parseInt(in.substring(0,indexOfPeriod));
-        int month = Integer.parseInt(in.substring(indexOfPeriod+1));
-
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.YEAR,(-1*year));
-        cal.add(Calendar.MONTH,(-1*month));
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return simpleDateFormat.format(cal.getTime());
-
-    }
-
-
-    public TrackedEntityAttributeValue getTrackedEntityDataValue(String trackedEntityAttribute, List<TrackedEntityAttributeValue> trackedEntityAttributeValues) {
-        for (TrackedEntityAttributeValue trackedEntityAttributeValue : trackedEntityAttributeValues) {
-            if (trackedEntityAttributeValue.getTrackedEntityAttributeId().equals(trackedEntityAttribute))
+    public TrackedEntityAttributeValue getTrackedEntityDataValue(String trackedEntityAttribute,
+            List<TrackedEntityAttributeValue> trackedEntityAttributeValues) {
+        for (TrackedEntityAttributeValue trackedEntityAttributeValue :
+                trackedEntityAttributeValues) {
+            if (trackedEntityAttributeValue.getTrackedEntityAttributeId().equals(
+                    trackedEntityAttribute)) {
                 return trackedEntityAttributeValue;
+            }
         }
 
         //the datavalue didnt exist for some reason. Create a new one.
         TrackedEntityAttributeValue trackedEntityAttributeValue = new TrackedEntityAttributeValue();
         trackedEntityAttributeValue.setTrackedEntityAttributeId(trackedEntityAttribute);
-        trackedEntityAttributeValue.setTrackedEntityInstanceId(currentTrackedEntityInstance.getTrackedEntityInstance());
+        trackedEntityAttributeValue.setTrackedEntityInstanceId(
+                currentTrackedEntityInstance.getTrackedEntityInstance());
         trackedEntityAttributeValue.setValue("");
         trackedEntityAttributeValues.add(trackedEntityAttributeValue);
         return trackedEntityAttributeValue;
     }
-
-    abstract class DobAgeSync {
-
-        public abstract void eventHandler(RowValueChangedEvent event);
-
-        public boolean equals(Object obj){
-            if(obj==null) return false;
-            if(obj instanceof DobAgeSync)
-                return true;
-            else
-                return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return 143;
-        }
-    }
-
 }

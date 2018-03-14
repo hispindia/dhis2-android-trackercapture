@@ -56,6 +56,7 @@
             android:visibility="gone">
 
             <TextView
+                android:id="@+id/noactiveenrollment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -177,7 +178,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/rounded_imagebutton_orange"
-                    android:text="@string/complete" />
+                    android:text="@string/un_enroll" />
 
                 <Button
                     android:id="@+id/terminate"
@@ -319,6 +320,14 @@
                     android:textSize="@dimen/medium_text_size" />
 
                 <Button
+                    android:id="@+id/pullrelationshipbutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:background="@drawable/transparent_selector"
+                    android:text="@string/refresh_string" />
+
+                <Button
                     android:id="@+id/addrelationshipbutton"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
@@ -400,4 +409,61 @@
 
     </android.support.v7.widget.CardView>
 
-</LinearLayout>
+    <android.support.v7.widget.CardView
+        android:id="@+id/events_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:orientation="vertical"
+            android:padding="6dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/events_title"
+                    android:textSize="@dimen/medium_text_size" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/light_grey" />
+
+            <LinearLayout
+                android:id="@+id/programeventlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="6dp"></LinearLayout>
+
+            <org.hisp.dhis.android.trackercapture.fragments.programoverview.FlowLayout
+                android:id="@+id/keyvalueeventlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"></org.hisp.dhis.android.trackercapture.fragments.programoverview.FlowLayout>
+
+            <LinearLayout
+                android:id="@+id/texteventlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="6dp"></LinearLayout>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    </LinearLayout>

@@ -28,6 +28,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.hisp.dhis.android.trackercapture">
 
     <uses-sdk android:targetSdkVersion="21" />
@@ -41,7 +42,8 @@
 
     <application
         android:name="org.hisp.dhis.android.trackercapture.TrackerCaptureApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
+        tools:replace="android:allowBackup"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme.Base">
@@ -98,6 +100,15 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="a5caa46009119f5e584e4964c30a922095b1075c" />
+        <provider
+            android:name="org.hisp.dhis.android.trackercapture.export.DBProvider"
+            android:authorities="${applicationId}.export.ExportData"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
