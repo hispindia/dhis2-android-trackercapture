@@ -36,6 +36,7 @@ import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.realm.ROrganisationHelper;
 import org.hisp.dhis.android.sdk.controllers.realm.ROrganisationUnit;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
+import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.OptionSet;
@@ -57,16 +58,19 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EnrollmentDatePicker
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IncidentDatePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.RadioButtonsRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
+import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 import org.hisp.dhis.android.sdk.utils.api.ValueType;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Calendar;
 import java.util.List;
 
 class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragmentForm> {
     public static final String CLASS_TAG = EnrollmentDataEntryFragmentQuery.class.getSimpleName();
-
+    private static String appliedValue;
     private final String mOrgUnitId;
     private final String mProgramId;
     private final long mTrackedEntityInstanceId;
@@ -118,13 +122,11 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         List<TrackedEntityAttributeValue> trackedEntityAttributeValues = new ArrayList<>();
         List<ProgramTrackedEntityAttribute> programTrackedEntityAttributes = mProgram.getProgramTrackedEntityAttributes();
         List<Row> dataEntryRows = new ArrayList<>();
-
         dataEntryRows.add(new EnrollmentDatePickerRow(currentEnrollment.getProgram().getEnrollmentDateLabel(), currentEnrollment));
 
         if (currentEnrollment.getProgram().getDisplayIncidentDate()) {
             dataEntryRows.add(new IncidentDatePickerRow(currentEnrollment.getProgram().getIncidentDateLabel(), currentEnrollment));
         }
-
         for (ProgramTrackedEntityAttribute ptea : programTrackedEntityAttributes) {
             TrackedEntityAttributeValue value = TrackerController.getTrackedEntityAttributeValue(ptea.getTrackedEntityAttributeId(), currentTrackedEntityInstance.getLocalId());
             if (value != null) {
@@ -148,35 +150,95 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             }
         }
         currentEnrollment.setAttributes(trackedEntityAttributeValues);
+        int paddingForIndex = dataEntryRows.size();
+        int ageInYears = -1;//added to manupulate or dynamicly change the row value based on user input for the other
+        int ageInMonths = -1;//added to manupulate or dynamicly change the row value based on user input for the other
         for (int i = 0; i < programTrackedEntityAttributes.size(); i++) {
-//            boolean editable = true;
-//            boolean shouldNeverBeEdited = false;
-//            if(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().isGenerated()) {
-//                editable = false;
-//                shouldNeverBeEdited = true;
-//            }
-//            if(ValueType.COORDINATE.equals(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getValueType())) {
-//                GpsController.activateGps(context);
-//            }
-//            Row row = DataEntryRowFactory.createDataEntryView(programTrackedEntityAttributes.get(i).getMandatory(),
-//                    programTrackedEntityAttributes.get(i).getAllowFutureDate(), programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getOptionSet(),
-//                    programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getName(),
-//                    getTrackedEntityDataValue(programTrackedEntityAttributes.get(i).
-//                            getTrackedEntityAttribute().getUid(), trackedEntityAttributeValues),
-//                    programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getValueType(),
-//                    editable, shouldNeverBeEdited, mProgram.getDataEntryMethod());
-//            dataEntryRows.add(row);
 
             Row row = createDataEntryView(programTrackedEntityAttributes.get(i), programTrackedEntityAttributes.get(i).getTrackedEntityAttribute(),
                     getTrackedEntityDataValue(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getUid(), trackedEntityAttributeValues));
-            dataEntryRows.add(row);
+
+            //@sou_ hide Age in months attribute
+            if(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getUid().equals("oQioOj2ECeU"))
+            {
+                ageInMonths = i;
+            }
+            else if(programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getUid().equals("g6aPl383VUZ"))
+            {
+                ageInYears = i;
+            }
+
+                dataEntryRows.add(row);
+
+
         }
         for (TrackedEntityAttributeValue trackedEntityAttributeValue : trackedEntityAttributeValues) {
             mForm.getTrackedEntityAttributeValueMap().put(trackedEntityAttributeValue.getTrackedEntityAttributeId(), trackedEntityAttributeValue);
         }
         mForm.setDataEntryRows(dataEntryRows);
         mForm.setEnrollment(currentEnrollment);
+
+        final EditTextRow ageYearRow = (EditTextRow) dataEntryRows.get(paddingForIndex+ageInYears);
+        final EditTextRow ageMonthRow = (EditTextRow) dataEntryRows.get(paddingForIndex+ageInMonths);
+        final String ageYearsRowTrackedEntityAttributeUID =programTrackedEntityAttributes.get(ageInYears).getTrackedEntityAttribute().getUid();
+        final String ageMonthsRowTrackedEntityAttribureUID = programTrackedEntityAttributes.get(ageInMonths).getTrackedEntityAttribute().getUid();
+
+        Dhis2Application.getEventBus().register(new DobAgeSync(){
+            @Override
+            @com.squareup.otto.Subscribe
+            public void eventHandler(RowValueChangedEvent event){
+                // Log.i(" Called ",event.getBaseValue().getValue()+"");
+
+                if(event.getId()!=null && event.getId().equals(ageYearsRowTrackedEntityAttributeUID)){
+                    Row row = event.getRow();
+                    if(appliedValue==null || !appliedValue.equals(ageYearRow.getValue().getValue()) ){
+                        if(row!=null) {
+                            //Log.i(" Called ",row.getValue().getValue());
+                            try {
+                                ageMonthRow.getValue().setValue(getMonths(ageYearRow.getValue().getValue()));
+                                appliedValue = ageMonthRow.getValue().getValue();
+                                EnrollmentDataEntryFragment.refreshListView();
+                            }catch (Exception ex) {
+                                Log.i("Exception ", "Converting to integer not possible");
+
+                            }
+                        }
+                    }
+                }
+                else if(event.getId()!=null && event.getId().equals(ageMonthsRowTrackedEntityAttribureUID)){
+                    Row row = event.getRow();
+                    if(appliedValue==null || !appliedValue.equals(ageMonthRow.getValue().getValue()) ){
+                        if(row!=null) {
+                            //Log.i(" Called ",row.getValue().getValue());
+                            try {
+                                ageYearRow.getValue().setValue(getYears(ageMonthRow.getValue().getValue()));
+                                appliedValue = ageYearRow.getValue().getValue();
+                                EnrollmentDataEntryFragment.refreshListView();
+                            }catch (Exception ex) {
+                                Log.i("Exception ", "Converting to integer not possible");
+
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        });
         return mForm;
+    }
+    public String getYears(String in){
+        Integer x = Integer.valueOf(in);
+        int months = (x/12);
+        String mstring=String.valueOf(months);
+        return mstring ;
+    }
+
+    public String getMonths(String in){
+        Integer x = Integer.valueOf(in);
+        int months = (x*12);
+        String mstring=String.valueOf(months);
+        return mstring ;
     }
 
     public TrackedEntityAttributeValue getTrackedEntityDataValue(String trackedEntityAttribute, List<TrackedEntityAttributeValue> trackedEntityAttributeValues) {
@@ -188,9 +250,6 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         TrackedEntityAttributeValue trackedEntityAttributeValue = new TrackedEntityAttributeValue();
 
         trackedEntityAttributeValue.setTrackedEntityAttributeId(trackedEntityAttribute);
-        //oQioOj2ECeU  Age Months
-        //g6aPl383VUZ  Age Years
-
         if(trackedEntityAttribute.equals("GHF1cOxnBE9"))
         {
             assignedOrganisationUnits= MetaDataController.getAssignedOrganisationUnits();
@@ -202,28 +261,13 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             String year_=String.valueOf(year);
 
             orgUnitList = ROrganisationHelper.getOrganisationUnitID(id);
-            String code=orgUnitList.get(0).getCode();
+            String code=orgUnitList.get(0).getPhoneNumber();
             String nimhans_=user_.toUpperCase()+"-"+code+"-"+year_.toString().substring(2,4)+"-"+val;
             trackedEntityAttributeValue.setTrackedEntityInstanceId(currentTrackedEntityInstance.getTrackedEntityInstance());
             trackedEntityAttributeValue.setValue(nimhans_);
             trackedEntityAttributeValues.add(trackedEntityAttributeValue);
             return trackedEntityAttributeValue;
         }
-
-         //@sou To Do Age year/month
-//        if(trackedEntityAttribute.equals("g6aPl383VUZ"))
-//        {
-//            trackedEntityAttributeValue.getValue();
-//            Log.d("g6aPl383VUZ",trackedEntityAttributeValue.getValue());
-//        }
-//
-//        if(trackedEntityAttribute.equals("oQioOj2ECeU"))
-//        {
-//            trackedEntityAttributeValue.getValue();
-//            Log.d("oQioOj2ECeU",trackedEntityAttributeValue.getValue());
-//        }
-
-
 
         //the datavalue didnt exist for some reason. Create a new one.
         trackedEntityAttributeValue.setTrackedEntityAttributeId(trackedEntityAttribute);
@@ -268,29 +312,6 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.PHONE_NUMBER);
         }
 
-        else  if(trackedEntityAttribute.getShortName().equals("age_in_months"))
-        {
-
-            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE_MONTHS);
-        }
-        else  if(trackedEntityAttribute.getShortName().equals("age_years"))
-        {
-
-            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
-        }
-
-//        else  if(trackedEntityAttribute.getShortName().equals("Age"))
-//        {
-//
-//            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
-//        }
-
-// TO disable Age months
-//        else  if(trackedEntityAttribute.getShortName().equals("age_in_months"))
-//        {
-//
-//            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
-//        }
 
         else  if(trackedEntityAttribute.getShortName().equals("State") ||trackedEntityAttribute.getShortName().equals("District") || trackedEntityAttribute.getShortName().equals("block_taluk")||trackedEntityAttribute.getShortName().equals("Village"))
         {
@@ -298,12 +319,6 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.ORGANISATION_UNIT);
         }
 
-//        else if(trackedEntityAttribute.getShortName().equals("taluk"))
-//        {
-//
-////            MetaDataController.getLevelOrganisationUnits(dhisApi);
-//            row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.AGE);
-//        }
 
         else if (trackedEntityAttribute.getValueType().equals(ValueType.TEXT)) {
 
@@ -319,14 +334,6 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.INTEGER);
         }
 
-
-//        else if(trackedEntityAttribute.getShortName().equals("age_in_years"))
-//        {
-//            System.out.println("Short name:" + trackedEntityAttribute.getShortName());
-//
-//
-//
-//        }
 
         else if (trackedEntityAttribute.getValueType().equals(ValueType.INTEGER_ZERO_OR_POSITIVE)) {
             row = new EditTextRow(trackedEntityAttributeName, programTrackedEntityAttribute.getMandatory(), null, dataValue, DataEntryRowTypes.INTEGER_ZERO_OR_POSITIVE);
@@ -352,5 +359,22 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         }
         System.out.println("Short Names:"+trackedEntityAttribute.getShortName());
         return row;
+    }
+    abstract class DobAgeSync {
+
+        public abstract void eventHandler(RowValueChangedEvent event);
+
+        public boolean equals(Object obj){
+            if(obj==null) return false;
+            if(obj instanceof DobAgeSync)
+                return true;
+            else
+                return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return 143;
+        }
     }
 }
