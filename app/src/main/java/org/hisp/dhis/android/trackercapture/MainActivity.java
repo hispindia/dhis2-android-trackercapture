@@ -40,6 +40,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -49,14 +50,20 @@ import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.network.Session;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
+import org.hisp.dhis.android.sdk.ui.dialogs.AutoCompleteDialogFragment;
+import org.hisp.dhis.android.sdk.ui.dialogs.OrgUnitDialogFragment;
+import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentPreferences;
 import org.hisp.dhis.android.sdk.utils.ScreenSizeConfigurator;
+import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
+import org.hisp.dhis.android.trackercapture.fragments.NewCase.NewCaseFragment;
+import org.hisp.dhis.android.trackercapture.fragments.home.HomeFragment;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.SelectProgramFragment;
 import org.hisp.dhis.client.sdk.ui.activities.AbsHomeActivity;
 import org.hisp.dhis.client.sdk.ui.fragments.InformationFragment;
 import org.hisp.dhis.client.sdk.ui.fragments.WrapperFragment;
 
-public class MainActivity extends AbsHomeActivity {
+public class MainActivity extends AbsHomeActivity implements  AutoCompleteDialogFragment.OnOptionSelectedListener{
     public final static String TAG = MainActivity.class.getSimpleName();
 
     private static final String APPS_DASHBOARD_PACKAGE =
@@ -71,6 +78,8 @@ public class MainActivity extends AbsHomeActivity {
             "org.hispindia.bidtrackerreports";
     private static final int REQUEST_ACCESS_FINE_LOCATION = 1;
 
+
+    protected SelectProgramFragmentPreferences mPrefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +99,9 @@ public class MainActivity extends AbsHomeActivity {
             finish();
             return;
         }
+
+        mPrefs = new SelectProgramFragmentPreferences(this.getApplicationContext());
+
         Dhis2Application.bus.register(this);
 
         PeriodicSynchronizerController.activatePeriodicSynchronizer(this);
@@ -98,10 +110,12 @@ public class MainActivity extends AbsHomeActivity {
 
     private void setUpNavigationView(Bundle savedInstanceState) {
         removeMenuItem(R.id.drawer_item_profile);
-        addMenuItem(11, R.drawable.ic_add, R.string.enroll);
+        addMenuItem(11, R.drawable.ic_add, R.string.select_ou);
+        //change by ifhaam for IBMC on 31-3-2018
+        addMenuItem(12,R.drawable.ic_home,R.string.home); //addd menu as twelve
         if (savedInstanceState == null) {
             onNavigationItemSelected(getNavigationView().getMenu()
-                    .findItem(11));
+                    .findItem(12));//changed 12 instead of 11
         }
 
         UserAccount userAccount = MetaDataController.getUserAccount();
@@ -119,6 +133,11 @@ public class MainActivity extends AbsHomeActivity {
 
             getUsernameTextView().setText(userAccount.getDisplayName());
             getUserInfoTextView().setText(userAccount.getEmail());
+        }
+
+        if(mPrefs.getOrgUnit()!=null){
+            getUsernameTextView().setText(getUsernameTextView().getText()+" for "+mPrefs.getOrgUnit().second);
+
         }
 
         getUsernameLetterTextView().setText(name);
@@ -142,9 +161,14 @@ public class MainActivity extends AbsHomeActivity {
 
     @Override
     protected boolean onItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == 11) {
-            attachFragment(WrapperFragment.newInstance(SelectProgramFragment.class, getString(R.string.app_name)));
+        if (item.getItemId() == 12) {
+            //change for IBMC by ifhaam on 31-3-2018
+//            attachFragment(WrapperFragment.newInstance(SelectProgramFragment.class, getString(R.string.app_name)));
+            attachFragment(WrapperFragment.newInstance(HomeFragment.class, getString(R.string.app_name)));
             return true;
+        }else if(item.getItemId() ==11){
+            OrgUnitDialogFragment fragment = OrgUnitDialogFragment.newInstance(this,getProgramTypes());
+            fragment.show(getSupportFragmentManager());
         }
         return false;
     }
@@ -217,6 +241,26 @@ public class MainActivity extends AbsHomeActivity {
         return isSelected;
     }
 
+    @Override
+    public void onOptionSelected(int dialogId, int position, String id, String name) {
+        switch (dialogId) {
+            case OrgUnitDialogFragment.ID: {
+                onUnitSelected(id, name);
+                break;
+            }
+        }
+    }
+
+    public boolean onBackPressedFromFragment() {
+        // When back button is pressed from a fragment, show the first menu item
+
+        return true;
+    }
+
+    private void onUnitSelected(String id, String name) {
+        mPrefs.putOrgUnit(new Pair<String, String>(id,name));
+    }
+
     protected Fragment getInformationFragment() {
         Bundle args = new Bundle();
         Session session = DhisController.getInstance().getSession();
@@ -227,5 +271,23 @@ public class MainActivity extends AbsHomeActivity {
         return WrapperFragment.newInstance(InformationFragment.class,
                 getString(R.string.drawer_item_information),
                 args);
+    }
+
+    public void navigateToSelectProgramFragment(){
+        attachFragment(WrapperFragment.newInstance(SelectProgramFragment.class,getString(R.string.app_name)));
+    }
+
+    public void navigateToNewcaseFragment(){
+        attachFragment(WrapperFragment.newInstance(NewCaseFragment.class,getString(R.string.new_case)));
+    }
+
+    public void navigateToHomeFragment(){
+        attachFragment(WrapperFragment.newInstance(HomeFragment.class,getString(R.string.app_name)));
+    }
+
+    protected ProgramType[] getProgramTypes() {
+        return new ProgramType[]{
+                ProgramType.WITH_REGISTRATION
+        };
     }
 }

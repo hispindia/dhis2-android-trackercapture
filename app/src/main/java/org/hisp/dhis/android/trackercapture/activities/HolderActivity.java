@@ -13,6 +13,7 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.activities.OnBackPressedListener;
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment;
 import org.hisp.dhis.android.trackercapture.R;
+import org.hisp.dhis.android.trackercapture.fragments.home.HomeFragment;
 import org.hisp.dhis.android.trackercapture.fragments.trackedentityinstance
         .TrackedEntityInstanceDataEntryFragment;
 import org.hisp.dhis.android.trackercapture.fragments.enrollment.EnrollmentDataEntryFragment;
@@ -47,7 +48,9 @@ public class HolderActivity extends AbsHomeActivity {
     public static final String ARG_TYPE_LOCALSEARCHRESULTFRAGMENT = "arg:LocalSearchResultFragment";
     public static final String ARG_TYPE_ONLINESEARCHFRAGMENT = "arg:OnlineSearchFragment";
     public static final String ARG_TYPE_ONLINESEARCHRESULTFRAGMENT = "arg:OnlineSearchResultFragment";
+    public static final String ARG_TYPE_SELECT_PROGRAME_FRAGMENT = "arg:SelectProgramFragment";
     private static final String ARG_TYPE_UPCOMINGEVENTSFRAGMENT = "arg:UpcomingEventsFragment";
+
     OnBackPressedListener onBackPressedListener;
     public static OnlineSearchResultFragment.CallBack mCallBack;
 
@@ -69,10 +72,13 @@ public class HolderActivity extends AbsHomeActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        addMenuItem(11, R.drawable.ic_add, R.string.enroll);
+        //addMenuItem(11, R.drawable.ic_add, R.string.enroll);
+        //change by ifhaam for IBMC on 31-3-2018
+        addMenuItem(12, R.drawable.ic_home, R.string.home);
+
         if (savedInstanceState == null) {
             onNavigationItemSelected(getNavigationView().getMenu()
-                    .findItem(11));
+                    .findItem(12));
         }
 
         String arg = getIntent().getExtras().getString(ARG_TYPE);
@@ -98,6 +104,11 @@ public class HolderActivity extends AbsHomeActivity {
                 SettingsFragment settingsFragment = new SettingsFragment();
                 settingsFragment.setArguments(getIntent().getExtras());
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, settingsFragment).commit();
+                break;
+            }
+            case ARG_TYPE_SELECT_PROGRAME_FRAGMENT:{
+                onBackPressedListener = null;
+                attachFragment(WrapperFragment.newInstance(SelectProgramFragment.class,getString(R.string.app_name)));
                 break;
             }
             case ARG_TYPE_DATAENTRYFRAGMENT: {
@@ -182,8 +193,11 @@ public class HolderActivity extends AbsHomeActivity {
 
     @Override
     protected boolean onItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == 11) {
-            attachFragment(WrapperFragment.newInstance(SelectProgramFragment.class, getString(R.string.app_name)));
+        if (item.getItemId() == 12) {
+            //Change by ifhaam for IBMC on 31-3-2018
+            //attachFragment(WrapperFragment.newInstance(SelectProgramFragment.class, getString(R.string.app_name)));
+            attachFragment(WrapperFragment.newInstance(HomeFragment.class, getString(R.string.app_name)));
+
             return true;
         }
         return false;
@@ -356,6 +370,12 @@ public class HolderActivity extends AbsHomeActivity {
         intent.putExtra(TrackedEntityInstanceDataEntryFragment.ORG_UNIT_ID, orgUnit);
         intent.putExtra(TrackedEntityInstanceDataEntryFragment.EXTRA_NAVIGATION, navigationBack);
         intent.putExtra(ARG_TYPE, ARG_TYPE_TRACKEDENTITYINSTANCEDATAENTRYFRAGMENT);
+        activity.startActivity(intent);
+    }
+
+    public static void navigateToSelectProgrameFragment(Activity activity){
+        Intent intent = new Intent(activity,HolderActivity.class);
+        intent.putExtra(ARG_TYPE,ARG_TYPE_SELECT_PROGRAME_FRAGMENT);
         activity.startActivity(intent);
     }
 

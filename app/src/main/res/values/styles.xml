@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ibcm_launcher_button_style" parent="ButtonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+
+
+        <item name="android:padding">40dp</item>
+        <item name="android:background">@color/launcher_green_ibcm</item>
+
+
+    </style>
+    <style name="ibcm_launcher_img_style" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_width">160dp</item>
+        <item name="android:layout_height">130dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:padding">30dp</item>
+        <item name="android:adjustViewBounds">false</item>
+        <item name="android:background">@color/color_material_green_default</item>
+        <item name="android:bottomRightRadius">100dp</item>
+        <item name="android:bottomLeftRadius">100dp</item>
+        <item name="android:topLeftRadius">100dp</item>
+        <item name="android:topRightRadius">100dp</item>
+    </style>
+
+    <style name="form_button_btn_stlye" parent="ButtonStyle">
+
+        <item name="android:background">@drawable/form_button</item>
+
+
+    </style>
+</resources>

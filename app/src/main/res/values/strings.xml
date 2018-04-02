@@ -36,7 +36,6 @@
     <string name="register_relationship">Register relationship</string>
     <string name="new_event">New event</string>
     <string name="enroll">Enroll</string>
-
     <string name="is">is</string>
     <string name="please_enter">Please enter</string>
 
@@ -90,4 +89,14 @@
     <string name="overdue_events">OVERDUE EVENTS</string>
     <string name="active_events">ACTIVE EVENTS</string>
     <string name="events_title">Timeline Data Entry</string>
+
+    <!--ibmc specific changes or additions -->
+    <string name="home">Home</string>
+    <string name="select_ou">Select OrgUnit</string>
+    <string name="new_case">New Case</string>
+    <string name="begin_intake_form">Begin intake form</string>
+    <string name="begin_full_investigations">Begin full investigations</string>
+
+    <string name="intake_form_program_id">xO7WLJ8DIDK</string>
+    <string name="full_investigation_program_id">Hs1zoGOwY8B</string>
 </resources>

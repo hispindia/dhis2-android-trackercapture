@@ -39,6 +39,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -76,6 +77,7 @@ import org.hisp.dhis.android.trackercapture.fragments.selectprogram.dialogs.Item
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.dialogs.QueryTrackedEntityInstancesDialogFragment;
 import org.hisp.dhis.android.trackercapture.ui.DownloadEventSnackbar;
 import org.hisp.dhis.android.trackercapture.ui.adapters.TrackedEntityInstanceAdapter;
+import org.hisp.dhis.client.sdk.ui.activities.OnBackPressedCallback;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -105,10 +107,10 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
 
         if (getActivity() instanceof AppCompatActivity) {
             Toolbar toolbar = getParentToolbar();
-            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener(){
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view){
                     toggleNavigationDrawer();
                 }
             });
@@ -513,4 +515,11 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
         super.stateChanged();
     }
 
+
+    @Override
+    public boolean onBackPressed() {
+        super.onBackPressed();
+        getActivity().finish();
+        return true;
+    }
 }

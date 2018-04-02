@@ -29,5 +29,6 @@
   -->
 
 <resources>
-
+    <color name="launcher_green_ibcm">#004D40</color>
+    <color name="form_button_back_ibcm">#90CAF9</color>
 </resources>
