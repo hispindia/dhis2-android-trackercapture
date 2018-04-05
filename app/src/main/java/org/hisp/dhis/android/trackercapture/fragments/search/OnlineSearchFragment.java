@@ -25,6 +25,7 @@ import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 
 import org.hisp.dhis.android.sdk.controllers.DhisController;
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.job.JobExecutor;
 import org.hisp.dhis.android.sdk.job.NetworkJob;
@@ -33,6 +34,7 @@ import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.ui.adapters.DataValueAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.AbsTextWatcher;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventCoordinatesRow;
@@ -60,7 +62,8 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
     private int mDialogId;
     private View progressBar;
     private boolean backNavigation;
-
+    private static final String TZ_LANG= "sw";
+    private static final String TZ_DOWNLOAD_ENTITES= "kupakuwa taarifa";
     public static final String EXTRA_PROGRAM = "extra:trackedEntityAttributes";
     public static final String EXTRA_ORGUNIT = "extra:orgUnit";
     public static final String EXTRA_DETAILED = "extra:detailed";
@@ -189,7 +192,20 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
         argumentsBundle.putBundle(EXTRA_ARGUMENTS, getArguments());
         argumentsBundle.putBundle(EXTRA_SAVED_INSTANCE_STATE, savedInstanceState);
         getLoaderManager().initLoader(LOADER_ID, argumentsBundle, this);
-        getActionBar().setTitle(getString(R.string.download_entities_title));
+
+        //TODO
+        final UserAccount uslocal= MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
+        String localdblang=user_locallang.substring(12,14);
+        if(localdblang.equals(TZ_LANG))
+        {
+            getActionBar().setTitle(TZ_DOWNLOAD_ENTITES);
+        }
+        else
+        {
+            getActionBar().setTitle(getString(R.string.download_entities_title));
+        }
+
     }
 
     @Override
