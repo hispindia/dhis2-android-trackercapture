@@ -56,6 +56,7 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeGeneratedValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.ui.activities.OnBackPressedListener;
 import org.hisp.dhis.android.sdk.ui.adapters.SectionAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRow;
@@ -89,7 +90,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
     private EnrollmentDataEntryFragmentForm form;
     private SaveThread saveThread;
     private Map<String, List<ProgramRule>> programRulesForTrackedEntityAttributes;
-
+    private static final String TZ_LANG= "sw";
     //the enrollment before anything is changed, used to backtrack
     private Enrollment originalEnrollment;
 
@@ -504,23 +505,51 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
     }
 
     private void showConfirmDiscardDialog() {
-        UiUtils.showConfirmDialog(getActivity(),
-                getString(org.hisp.dhis.android.sdk.R.string.discard), getString(org.hisp.dhis.android.sdk.R.string.discard_confirm_changes),
-                getString(org.hisp.dhis.android.sdk.R.string.discard),
-                getString(org.hisp.dhis.android.sdk.R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //discard
-                        discardChanges();
-                        getActivity().finish();
-                    }
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //cancel
-                        dialog.dismiss();
-                    }
-                });
+        final UserAccount uslocal=MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
+        String localdblang=user_locallang.substring(12,14);
+
+        if(localdblang.equals(TZ_LANG))
+        {
+            UiUtils.showConfirmDialog(getActivity(),
+                    getString(org.hisp.dhis.android.sdk.R.string.tz_discard), getString(org.hisp.dhis.android.sdk.R.string.tz_discard_confirm_changes),
+                    getString(org.hisp.dhis.android.sdk.R.string.tz_discard),
+                    getString(org.hisp.dhis.android.sdk.R.string.tz_cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //discard
+                            discardChanges();
+                            getActivity().finish();
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //cancel
+                            dialog.dismiss();
+                        }
+                    });
+        }
+        else
+        {
+            UiUtils.showConfirmDialog(getActivity(),
+                    getString(org.hisp.dhis.android.sdk.R.string.discard), getString(org.hisp.dhis.android.sdk.R.string.discard_confirm_changes),
+                    getString(org.hisp.dhis.android.sdk.R.string.discard),
+                    getString(org.hisp.dhis.android.sdk.R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //discard
+                            discardChanges();
+                            getActivity().finish();
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //cancel
+                            dialog.dismiss();
+                        }
+                    });
+        }
+
     }
 
     /**
