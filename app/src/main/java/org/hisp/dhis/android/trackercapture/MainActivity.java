@@ -37,6 +37,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -57,8 +58,12 @@ import org.hisp.dhis.client.sdk.ui.fragments.InformationFragment;
 import org.hisp.dhis.client.sdk.ui.fragments.WrapperFragment;
 
 public class MainActivity extends AbsHomeActivity {
+    private NavigationView navigationView;
     public final static String TAG = MainActivity.class.getSimpleName();
-
+    private static final String TZ_LANG= "sw";
+    private static final String TZ_SETTINGS= "Panga/kuweka";
+    private static final String TZ_INFORMATION= "Taarifa";
+    private static final String TZ_ENROLL= "Andikisha";
     private static final String APPS_DASHBOARD_PACKAGE =
             "org.hisp.dhis.android.dashboard";
     private static final String APPS_DATA_CAPTURE_PACKAGE =
@@ -75,7 +80,17 @@ public class MainActivity extends AbsHomeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ScreenSizeConfigurator.init(getWindowManager());
+        navigationView = (NavigationView) findViewById(org.hisp.dhis.client.sdk.ui.R.id.navigation_view);
 
+        final UserAccount uslocal=MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
+
+        String localdblang=user_locallang.substring(12,14);
+        if(localdblang.equals(TZ_LANG))
+        {
+            navigationView.getMenu().findItem(org.hisp.dhis.client.sdk.ui.R.id.drawer_item_settings).setTitle(TZ_SETTINGS);
+            navigationView.getMenu().findItem(org.hisp.dhis.client.sdk.ui.R.id.drawer_item_information).setTitle(TZ_INFORMATION);
+        }
         boolean hasPermissionLocation = (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
         if (!hasPermissionLocation) {
@@ -98,7 +113,18 @@ public class MainActivity extends AbsHomeActivity {
 
     private void setUpNavigationView(Bundle savedInstanceState) {
         removeMenuItem(R.id.drawer_item_profile);
-        addMenuItem(11, R.drawable.ic_add, R.string.enroll);
+        final UserAccount uslocal=MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
+
+        String localdblang=user_locallang.substring(12,14);
+        if(localdblang.equals(TZ_LANG)) {
+            addMenuItem(11, R.drawable.ic_add, R.string.tz_enroll);
+        }
+        else
+        {
+            addMenuItem(11, R.drawable.ic_add, R.string.enroll);
+        }
+
         if (savedInstanceState == null) {
             onNavigationItemSelected(getNavigationView().getMenu()
                     .findItem(11));
@@ -177,6 +203,11 @@ public class MainActivity extends AbsHomeActivity {
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+        final UserAccount uslocal=MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
+        String localdblang=user_locallang.substring(12,14);
+
         boolean isSelected = false;
         int menuItemId = menuItem.getItemId();
 
@@ -194,6 +225,10 @@ public class MainActivity extends AbsHomeActivity {
             attachFragmentDelayed(getProfileFragment());
             isSelected = true;
         } else if (menuItemId == org.hisp.dhis.client.sdk.ui.R.id.drawer_item_settings) {
+            if(localdblang.equals(TZ_LANG))
+            {
+                menuItem.setTitle("Panga/kuweka");
+            }
             HolderActivity.navigateToSettingsFragment(this);
             isSelected = true;
         } else if (menuItemId == R.id.drawer_item_information) {
