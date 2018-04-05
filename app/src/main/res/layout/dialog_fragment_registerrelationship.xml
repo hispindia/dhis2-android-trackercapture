@@ -148,6 +148,7 @@
                 android:inputType="text"
                 android:hint="@string/search"
                 app:font="@string/light_font_name"/>
+
             <org.hisp.dhis.android.sdk.ui.views.FloatingActionButton
                 android:id="@+id/create_new_tei_button"
                 android:layout_width="28dp"
