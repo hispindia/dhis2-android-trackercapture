@@ -41,9 +41,11 @@ import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 
 import org.hisp.dhis.android.sdk.controllers.ErrorType;
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.ui.adapters.SectionAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.DataEntryFragment;
@@ -69,7 +71,8 @@ public class EnrollmentDateFragment extends DataEntryFragment<EnrollmentDateFrag
     private boolean editableRows;
     private EnrollmentDateFragmentForm mForm;
     private SaveThread saveThread;
-
+    private static final String TZ_LANG= "sw";
+    private static final String TZ_ENROLL= "Usajiri";
 
     public static EnrollmentDateFragment newInstance(long enrollmentId) {
         EnrollmentDateFragment fragment = new EnrollmentDateFragment();
@@ -104,7 +107,21 @@ public class EnrollmentDateFragment extends DataEntryFragment<EnrollmentDateFrag
         getActionBar().setDisplayShowTitleEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setTitle(R.string.enrollment);
+
+        //TODO
+        final UserAccount uslocal= MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
+
+        String localdblang=user_locallang.substring(12,14);
+        if(localdblang.equals(TZ_LANG))
+        {
+            getActionBar().setTitle(TZ_ENROLL);
+        }
+        else
+        {
+            getActionBar().setTitle(R.string.enrollment);
+        }
+
     }
 
 
