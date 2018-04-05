@@ -36,6 +36,7 @@
     <string name="register_relationship">Register relationship</string>
     <string name="new_event">New event</string>
     <string name="enroll">Enroll</string>
+    <string name="tz_enroll">Andikisha</string>
 
     <string name="is">is</string>
     <string name="please_enter">Please enter</string>
