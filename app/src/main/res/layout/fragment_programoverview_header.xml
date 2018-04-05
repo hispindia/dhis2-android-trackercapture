@@ -103,6 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:id="@+id/tz_enrollment"
                     android:text="@string/enrollment"
                     android:textSize="@dimen/medium_text_size" />
 
@@ -223,6 +224,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:id="@+id/profile_id"
                     android:layout_height="wrap_content"
                     android:text="@string/profile"
                     android:textSize="@dimen/medium_text_size" />
@@ -314,6 +316,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:id="@+id/relationship_id"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/relationships"
@@ -376,6 +379,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:id="@+id/indicators_id"
                     android:layout_height="wrap_content"
                     android:text="@string/indicators"
                     android:textSize="@dimen/medium_text_size" />
@@ -432,6 +436,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/timelinedataentry_id"
                     android:layout_weight="1"
                     android:text="@string/events_title"
                     android:textSize="@dimen/medium_text_size" />
