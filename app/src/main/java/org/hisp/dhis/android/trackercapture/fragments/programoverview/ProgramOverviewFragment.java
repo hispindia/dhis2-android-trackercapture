@@ -86,6 +86,7 @@ import org.hisp.dhis.android.sdk.persistence.models.RelationshipType;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType;
 import org.hisp.dhis.android.sdk.synchronization.data.enrollment.EnrollmentLocalDataSource;
 import org.hisp.dhis.android.sdk.synchronization.data.enrollment.EnrollmentRemoteDataSource;
@@ -132,6 +133,7 @@ import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStage
 import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStageLabelRow;
 import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStageRow;
 import org.joda.time.DateTime;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -157,6 +159,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private static final String ORG_UNIT_ID = "extra:orgUnitId";
     private static final String PROGRAM_ID = "extra:ProgramId";
     private static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
+
 
     private ListView listView;
     private ProgressBar mProgressBar;
@@ -203,6 +206,24 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private ProgramOverviewFragmentForm mForm;
 
     private OnProgramStageEventClick eventLongPressed;
+
+    private static final String TZ_PROFILE = "Wasifu";
+    private static final String TZ_RELATIONSHIPS = "Mahusiano";
+    private static final String TZ_INDICATORS = "Kiashiria";
+    private static final String TZ_TIMELINE= "Ingiza data ya wakati";
+    private static final String TZ_LANG= "sw";
+    private static final String TZ_REFRESH= "furahisha kompyuta";
+    private static final String TZ_NEW= "Mpya";
+    private static final String TZ_ENROLL= "Usajiri";
+    private static final String TZ_CANCEL= "Kufuta";
+    private static final String TZ_ENROLL_DATE= "tarehe ya Usajiri";
+    private static final String TZ_COMPLETE_BUTTON= "Kitufe cha kuhitimisha/maliza";
+
+    private TextView data_entry;
+    private TextView profile;
+    private TextView relationships;
+    private TextView indicators;
+    private TextView enrollment;
 
     public ProgramOverviewFragment() {
         setProgramRuleFragmentHelper(new ProgramOverviewRuleHelper(this));
@@ -255,6 +276,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -276,7 +298,10 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             getActionBar().setDisplayHomeAsUpEnabled(true);
             getActionBar().setHomeButtonEnabled(true);
         }
+        final UserAccount uslocal=MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
 
+        String localdblang=user_locallang.substring(12,14);
         listView = (ListView) view.findViewById(R.id.listview);
         View header = getLayoutInflater(savedInstanceState).inflate(
                 R.layout.fragment_programoverview_header, listView, false
@@ -292,9 +317,18 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 R.id.relationships_linearlayout);
 
         refreshRelationshipButton = (Button) header.findViewById(R.id.pullrelationshipbutton);
+
+        //TODO
         refreshRelationshipButton.setOnClickListener(this);
         newRelationshipButton = (Button) header.findViewById(R.id.addrelationshipbutton);
         newRelationshipButton.setOnClickListener(this);
+        data_entry=(TextView) header.findViewById(R.id.timelinedataentry_id);
+        profile=(TextView) header.findViewById(R.id.profile_id);
+        relationships=(TextView) header.findViewById(R.id.relationship_id);
+        indicators=(TextView) header.findViewById(R.id.indicators_id);
+        enrollment=(TextView) header.findViewById(R.id.tz_enrollment);
+
+
 
         mProgressBar = (ProgressBar) header.findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.GONE);
@@ -322,6 +356,20 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         terminateButton = (Button) header.findViewById(R.id.terminate);
         followupButton = (ImageButton) header.findViewById(R.id.followupButton);
         profileButton = (ImageButton) header.findViewById(R.id.profile_button);
+
+        if(localdblang.equals(TZ_LANG))
+        {
+            data_entry.setText(TZ_TIMELINE);
+            profile.setText(TZ_PROFILE);
+            relationships.setText(TZ_RELATIONSHIPS);
+            indicators.setText(TZ_INDICATORS);
+            enrollment.setText(TZ_ENROLL);
+            completeButton.setText(TZ_COMPLETE_BUTTON);
+            refreshRelationshipButton.setText(TZ_REFRESH);
+            newRelationshipButton.setText(TZ_NEW);
+            enrollmentDateLabel.setText(TZ_ENROLL_DATE);
+            terminateButton.setText(TZ_CANCEL);
+        }
         completeButton.setOnClickListener(this);
         reOpenButton.setOnClickListener(this);
         terminateButton.setOnClickListener(this);
@@ -550,7 +598,19 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                         true);
                 profileButton.setClickable(true);
             }
-            enrollmentDateLabel.setText(data.getDateOfEnrollmentLabel());
+            final UserAccount uslocal=MetaDataController.getUserLocalLang();
+            String user_locallang=uslocal.getUserSettings().toString();
+
+            String localdblang=user_locallang.substring(12,14);
+            if(localdblang.equals(TZ_LANG))
+            {
+                enrollmentDateLabel.setText(TZ_ENROLL_DATE);
+            }
+            else
+            {
+                enrollmentDateLabel.setText(data.getDateOfEnrollmentLabel());
+            }
+
             enrollmentDateValue.setText(data.getDateOfEnrollmentValue());
 
             if (!(data.getProgram().getDisplayIncidentDate())) {
