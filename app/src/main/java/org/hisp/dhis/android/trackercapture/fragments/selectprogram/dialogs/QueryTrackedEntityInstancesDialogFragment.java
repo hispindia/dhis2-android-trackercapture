@@ -58,6 +58,7 @@ import com.squareup.otto.Subscribe;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.GpsController;
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.UiEvent;
 import org.hisp.dhis.android.sdk.job.JobExecutor;
@@ -67,6 +68,7 @@ import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.ui.adapters.DataValueAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.AbsTextWatcher;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventCoordinatesRow;
@@ -75,6 +77,7 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.StatusRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnDetailedInfoButtonClick;
 import org.hisp.dhis.android.sdk.ui.dialogs.QueryTrackedEntityInstancesResultDialogFragment;
 import org.hisp.dhis.android.sdk.ui.views.FloatingActionButton;
+import org.hisp.dhis.android.sdk.ui.views.FontTextView;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 
 import java.util.ArrayList;
@@ -89,6 +92,8 @@ public class QueryTrackedEntityInstancesDialogFragment extends DialogFragment
     private QueryTrackedEntityInstancesDialogFragmentForm mForm;
     private EditText mFilter;
     private TextView mDialogLabel;
+    private static final String TZ_LANG= "sw";
+    private static final String TZ_DETAILSEARCH= "Utafutaji wa kina";
     private DataValueAdapter mAdapter;
     private ListView mListView;
     private int mDialogId;
@@ -156,6 +161,7 @@ public class QueryTrackedEntityInstancesDialogFragment extends DialogFragment
                 org.hisp.dhis.android.trackercapture.R.layout.fragmentdialog_querytei_header, mListView, false
         );
         FloatingActionButton detailedSearchButton = (FloatingActionButton) header.findViewById(org.hisp.dhis.android.trackercapture.R.id.detailed_search_button);
+        FontTextView DETAILSEARCH = (FontTextView) header.findViewById(org.hisp.dhis.android.trackercapture.R.id.tz_detailsearch);
         detailedSearchButton.setOnClickListener(this);
         mListView.addHeaderView(header, TAG, false);
 
@@ -165,6 +171,13 @@ public class QueryTrackedEntityInstancesDialogFragment extends DialogFragment
                 .findViewById(R.id.close_dialog_button);
         mFilter = (EditText) view
                 .findViewById(R.id.filter_options);
+        final UserAccount uslocal= MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
+        String localdblang=user_locallang.substring(12,14);
+        if(localdblang.equals(TZ_LANG))
+        {
+            DETAILSEARCH.setText(TZ_DETAILSEARCH);
+        }
         mDialogLabel = (TextView) view
                 .findViewById(R.id.dialog_label);
         InputMethodManager imm = (InputMethodManager)

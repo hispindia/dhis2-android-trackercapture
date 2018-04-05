@@ -53,6 +53,7 @@ import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribut
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeGeneratedValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.ui.activities.OnBackPressedListener;
 import org.hisp.dhis.android.sdk.ui.adapters.SectionAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRow;
@@ -87,7 +88,8 @@ public class TrackedEntityInstanceDataEntryFragment extends
     private TrackedEntityInstanceDataEntryFragmentForm form;
     private SaveThread saveThread;
     private Map<String, List<ProgramRule>> programRulesForTrackedEntityAttributes;
-
+    private static final String TZ_LANG= "sw";
+    private static final String TZ_REPORTDATE= "Tarehe ya Taarifa";
     //the TEI before anything is changed, used to backtrack
     private TrackedEntityInstance originalTrackedEntityInstance;
 
@@ -253,23 +255,44 @@ public class TrackedEntityInstanceDataEntryFragment extends
     @Override
     protected HashMap<ErrorType, ArrayList<String>>  getValidationErrors() {
         HashMap<ErrorType, ArrayList<String>> errors = new HashMap<>();
-
+        final UserAccount uslocal=MetaDataController.getUserLocalLang();
         if (form.getEnrollment() == null || form.getProgram() == null
                 || form.getOrganisationUnit() == null) {
             return errors;
         }
+        String user_locallang=uslocal.getUserSettings().toString();
 
-        if (isEmpty(form.getEnrollment().getEnrollmentDate())) {
-            String dateOfEnrollmentDescription =
-                    form.getProgram().getEnrollmentDateLabel() == null ?
-                            getString(R.string.report_date)
-                            : form.getProgram().getEnrollmentDateLabel();
+        String localdblang=user_locallang.substring(12,14);
 
-            if (!errors.containsKey(ErrorType.MANDATORY)) {
-                errors.put(ErrorType.MANDATORY, new ArrayList<String>());
+        if(localdblang.equals(TZ_LANG))
+        {
+            if (isEmpty(form.getEnrollment().getEnrollmentDate())) {
+                String dateOfEnrollmentDescription =
+                        form.getProgram().getEnrollmentDateLabel() == null ?
+                                 TZ_REPORTDATE
+                                : form.getProgram().getEnrollmentDateLabel();
+
+                if (!errors.containsKey(ErrorType.MANDATORY)) {
+                    errors.put(ErrorType.MANDATORY, new ArrayList<String>());
+                }
+                errors.get(ErrorType.MANDATORY).add(dateOfEnrollmentDescription);
             }
-            errors.get(ErrorType.MANDATORY).add(dateOfEnrollmentDescription);
         }
+        else
+        {
+            if (isEmpty(form.getEnrollment().getEnrollmentDate())) {
+                String dateOfEnrollmentDescription =
+                        form.getProgram().getEnrollmentDateLabel() == null ?
+                                getString(R.string.report_date)
+                                : form.getProgram().getEnrollmentDateLabel();
+
+                if (!errors.containsKey(ErrorType.MANDATORY)) {
+                    errors.put(ErrorType.MANDATORY, new ArrayList<String>());
+                }
+                errors.get(ErrorType.MANDATORY).add(dateOfEnrollmentDescription);
+            }
+        }
+
 
         Map<String, ProgramTrackedEntityAttribute> dataElements = toMap(
                 MetaDataController.getProgramTrackedEntityAttributes(form.getProgram().getUid())
@@ -461,23 +484,51 @@ public class TrackedEntityInstanceDataEntryFragment extends
     }
 
     private void showConfirmDiscardDialog() {
-        UiUtils.showConfirmDialog(getActivity(),
-                getString(R.string.discard), getString(R.string.discard_confirm_changes),
-                getString(R.string.discard),
-                getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //discard
-                        discardChanges();
-                        getActivity().finish();
-                    }
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //cancel
-                        dialog.dismiss();
-                    }
-                });
+        final UserAccount uslocal=MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
+        String localdblang=user_locallang.substring(12,14);
+
+        if(localdblang.equals(TZ_LANG))
+        {
+            UiUtils.showConfirmDialog(getActivity(),
+                    getString(R.string.tz_discard), getString(R.string.tz_discard_confirm_changes),
+                    getString(R.string.tz_discard),
+                    getString(R.string.tz_cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //discard
+                            discardChanges();
+                            getActivity().finish();
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //cancel
+                            dialog.dismiss();
+                        }
+                    });
+        }
+        else
+        {
+            UiUtils.showConfirmDialog(getActivity(),
+                    getString(R.string.discard), getString(R.string.discard_confirm_changes),
+                    getString(R.string.discard),
+                    getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //discard
+                            discardChanges();
+                            getActivity().finish();
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //cancel
+                            dialog.dismiss();
+                        }
+                    });
+        }
+
     }
 
     /**
