@@ -33,7 +33,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.DatePicker;
 
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.ui.views.CustomDatePickerDialog;
 import org.hisp.dhis.android.trackercapture.R;
 import org.joda.time.DateTime;
@@ -54,7 +56,8 @@ public class EnrollmentDateSetterHelper {
     private TrackedEntityInstance trackedEntityInstance;
     private DateTime enrollmentDate;
     private DateTime incidentDate;
-
+    private static final String TZ_LANG= "sw";
+    private static final String TZ_ENROLL_DATE= "Tafadhari Ingiza tarehe ya kuandikishwa";
     public EnrollmentDateSetterHelper(IEnroller enroller, Context context, boolean showIncidentDate,
                                       boolean enrollmentDatesInFuture, boolean incidentDatesInFuture, String enrollmentDateLabel, String incidentDateLabel) {
         this.enroller = enroller;
@@ -97,7 +100,19 @@ public class EnrollmentDateSetterHelper {
                 new CustomDatePickerDialog(context,
                         null, currentDate.getYear(),
                         currentDate.getMonthOfYear() - 1, currentDate.getDayOfMonth());
-        enrollmentDatePickerDialog.setPermanentTitle(context.getString(R.string.please_enter) + " " + enrollmentDateLabel);
+        final UserAccount uslocal= MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
+        String localdblang=user_locallang.substring(12,14);
+
+        if(localdblang.equals(TZ_LANG))
+        {
+            enrollmentDatePickerDialog.setPermanentTitle(TZ_ENROLL_DATE);
+        }
+        else
+        {
+            enrollmentDatePickerDialog.setPermanentTitle(context.getString(R.string.please_enter) + "" + enrollmentDateLabel);
+        }
+
         enrollmentDatePickerDialog.setCanceledOnTouchOutside(true);
         if(!enrollmentDatesInFuture) {
             enrollmentDatePickerDialog.getDatePicker().setMaxDate(DateTime.now().getMillis());
