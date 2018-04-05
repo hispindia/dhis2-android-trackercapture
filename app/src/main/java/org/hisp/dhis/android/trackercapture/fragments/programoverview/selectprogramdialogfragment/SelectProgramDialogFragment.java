@@ -43,6 +43,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.hisp.dhis.android.sdk.R;
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.ui.dialogs.AutoCompleteDialogFragment;
 import org.hisp.dhis.android.sdk.ui.dialogs.OrgUnitDialogFragment;
 import org.hisp.dhis.android.sdk.ui.dialogs.ProgramDialogFragment;
@@ -71,7 +73,9 @@ public class SelectProgramDialogFragment extends DialogFragment
     private FloatingActionButton searchAndDownloadButton;
     private FloatingActionButton createNewTeiButton;
     private TextView mDialogLabel;
-
+    private static final String TZ_LANG= "sw";
+    private static final String TZ_CHOOSE_ORG= "Chagua vitengo vya shirika";
+    private static final String TZ_CHOOSE_PROGRAM= "chagua programu";
     protected SelectProgramFragmentState mState;
     protected SelectProgramFragmentPreferences mPrefs;
     private static OnlineSearchResultFragment.CallBack mCallBack;
@@ -172,8 +176,19 @@ public class SelectProgramDialogFragment extends DialogFragment
     }
 
     private void setOUAndProgramButtons(View view) {
+
+        final UserAccount uslocal= MetaDataController.getUserLocalLang();
+        String user_locallang=uslocal.getUserSettings().toString();
+        String localdblang=user_locallang.substring(12,14);
+
         mOrgUnitButton = (CardTextViewButton) view.findViewById(R.id.select_organisation_unit);
         mProgramButton = (CardTextViewButton) view.findViewById(R.id.select_program);
+
+        if(localdblang.equals(TZ_LANG))
+        {
+            mOrgUnitButton.setText(TZ_CHOOSE_ORG);
+            mProgramButton.setText(TZ_CHOOSE_PROGRAM);
+        }
 
         mOrgUnitButton.setOnClickListener(new View.OnClickListener() {
             @Override
