@@ -31,8 +31,10 @@ package org.hisp.dhis.android.trackercapture.fragments.enrollment;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -50,6 +52,7 @@ import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
+import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramRule;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
@@ -68,8 +71,12 @@ import org.hisp.dhis.android.sdk.ui.fragments.dataentry.HideLoadingDialogEvent;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RefreshListViewEvent;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.SaveThread;
+import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentPreferences;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
+import org.hisp.dhis.android.trackercapture.fragments.selectprogram.EnrollmentDateSetterHelper;
+import org.hisp.dhis.android.trackercapture.fragments.selectprogram.IEnroller;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,7 +84,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDataEntryFragmentForm>
-        implements OnBackPressedListener {
+        implements OnBackPressedListener{
     public static final String TAG = EnrollmentDataEntryFragment.class.getSimpleName();
     private static final String EMPTY_FIELD = "";
     public static final String ORG_UNIT_ID = "extra:orgUnitId";
@@ -86,9 +93,12 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
     public static final String INCIDENT_DATE = "extra:incidentDate";
     public static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
     public static final String PROGRAMRULES_FORCED_TRIGGER = "forced";
-    private EnrollmentDataEntryFragmentForm form;
+    protected EnrollmentDataEntryFragmentForm form;
     private SaveThread saveThread;
     private Map<String, List<ProgramRule>> programRulesForTrackedEntityAttributes;
+
+
+
 
     //the enrollment before anything is changed, used to backtrack
     private Enrollment originalEnrollment;
@@ -103,6 +113,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
         originalEnrollment = null;
         originalTrackedEntityInstance = null;
         setProgramRuleFragmentHelper(new EnrollmentDataEntryRuleHelper(this));
+
     }
 
     public static EnrollmentDataEntryFragment newInstance(String unitId, String programId, String enrollmentDate, String incidentDate) {
@@ -175,9 +186,13 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
             String incidentDate = fragmentArguments.getString(INCIDENT_DATE);
             long trackedEntityInstance = fragmentArguments.getLong(TRACKEDENTITYINSTANCE_ID, -1);
 
+//            return new DbLoader<>(
+//                    getActivity().getBaseContext(), modelsToTrack, new EnrollmentDataEntryFragmentQuery(
+//                    orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate)
+//            );
             return new DbLoader<>(
                     getActivity().getBaseContext(), modelsToTrack, new EnrollmentDataEntryFragmentQuery(
-                    orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate)
+                    orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate,this,getString(org.hisp.dhis.android.trackercapture.R.string.intake_form_program_id))
             );
         }
         return null;
@@ -336,7 +351,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
         HolderActivity.navigateToProgramOverviewFragment(getActivity(), form.getOrganisationUnit().getId(), form.getProgram().getUid(), form.getTrackedEntityInstance().getLocalId());
     }
 
-    private boolean validate() {
+    protected boolean validate() {
         if (isMapEmpty(form.getTrackedEntityAttributeValueMap())) {
             UiUtils.showErrorDialog(getActivity(), getContext().getString(org.hisp.dhis.android.trackercapture.R.string.error_message),
                     getContext().getString(org.hisp.dhis.android.trackercapture.R.string.profile_form_empty));
@@ -503,7 +518,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
         this.programRulesForTrackedEntityAttributes = programRulesForTrackedEntityAttributes;
     }
 
-    private void showConfirmDiscardDialog() {
+    protected void showConfirmDiscardDialog() {
         UiUtils.showConfirmDialog(getActivity(),
                 getString(org.hisp.dhis.android.sdk.R.string.discard), getString(org.hisp.dhis.android.sdk.R.string.discard_confirm_changes),
                 getString(org.hisp.dhis.android.sdk.R.string.discard),
@@ -526,7 +541,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
     /**
      * confirms that we want to save changes, which flags the data to be sent to server
      */
-    private void confirmSave() {
+    protected void confirmSave() {
         if (form != null && form.getTrackedEntityInstance() != null) {
             if (form.getTrackedEntityInstance().getLocalId() < 0) {
                 //saving tei first to get auto-increment reference for enrollment
@@ -566,7 +581,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
         }
     }
 
-    private void discardChanges() {
+    protected void discardChanges() {
         if(form == null) {
             return;
         }
@@ -659,4 +674,21 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
         super.onDetach();
         GpsController.disableGps();
     }
+
+    public TrackedEntityInstance getTrackedEntityInstance() {
+        return form.getTrackedEntityInstance();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((HolderActivity)getActivity()).setOnBackPressedListener(this);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((HolderActivity)getActivity()).setOnBackPressedListener(this);
+    }
+
 }

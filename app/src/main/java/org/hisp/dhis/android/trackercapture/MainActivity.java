@@ -259,6 +259,11 @@ public class MainActivity extends AbsHomeActivity implements  AutoCompleteDialog
 
     private void onUnitSelected(String id, String name) {
         mPrefs.putOrgUnit(new Pair<String, String>(id,name));
+
+        if(mPrefs.getOrgUnit()!=null){
+            getUsernameTextView().setText(getUsernameTextView().getText()+" for "+mPrefs.getOrgUnit().second);
+
+        }
     }
 
     protected Fragment getInformationFragment() {

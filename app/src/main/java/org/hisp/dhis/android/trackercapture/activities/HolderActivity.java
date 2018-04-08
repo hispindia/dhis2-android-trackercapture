@@ -54,6 +54,10 @@ public class HolderActivity extends AbsHomeActivity {
     OnBackPressedListener onBackPressedListener;
     public static OnlineSearchResultFragment.CallBack mCallBack;
 
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+    }
+
     @Override
     public void onBackPressed() {
         if (onBackPressedListener != null) {
