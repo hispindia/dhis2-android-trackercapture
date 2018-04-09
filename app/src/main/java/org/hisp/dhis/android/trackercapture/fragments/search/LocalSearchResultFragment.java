@@ -245,13 +245,50 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     }
 
     @Subscribe
-    public void onItemClick(OnTrackerItemClick eventClick) {
-        if (eventClick.isOnDescriptionClick()) {
+    public void onItemClick(final OnTrackerItemClick eventClick) {
+        if(!eventClick.isLongClick()){
+            if (eventClick.isOnDescriptionClick()) {
 
-            HolderActivity.navigateToProgramOverviewFragment(getActivity(),orgUnitId, programId,
-                            eventClick.getItem().getLocalId());
+
+                HolderActivity.navigateToProgramOverviewFragment(getActivity(),orgUnitId, programId,
+                        eventClick.getItem().getLocalId());
+            } else {
+                showStatusDialog(eventClick.getItem());
+            }
+        }else{
+            UiUtils.showConfirmDialog(getActivity(),getActivity().getString(R.string.confirm),
+                    getActivity().getString(R.string.tracked_entity_instance_delete_dialog),
+                    getActivity().getString(R.string.delete), getActivity().getString(R.string.cancel),
+                    (R.drawable.ic_event_error),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //performSoftDeleteOfTrackedEntityInstance((TrackedEntityInstance) eventClick.getItem());
+                            deleteSelectedRow(eventClick);
+                            dialog.dismiss();
+                        }
+                    }
+                    );
+        }
+
+    }
+
+    private void deleteSelectedRow(final OnTrackerItemClick eventClick){
+        if( !eventClick.getStatus().equals(OnRowClick.ITEM_STATUS.SENT)) {
+            UiUtils.showConfirmDialog(getActivity(), getActivity().getString(R.string.confirm),
+                    getActivity().getString(R.string.warning_delete_unsent_tei),
+                    getActivity().getString(R.string.delete), getActivity().getString(R.string.cancel),
+                    (R.drawable.ic_event_error),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            performSoftDeleteOfTrackedEntityInstance((TrackedEntityInstance) eventClick.getItem());
+                            dialog.dismiss();
+                        }
+                    });
         } else {
-            showStatusDialog(eventClick.getItem());
+            //if sent to server, be able to soft delete without annoying the user
+            performSoftDeleteOfTrackedEntityInstance((TrackedEntityInstance) eventClick.getItem());
         }
     }
 
