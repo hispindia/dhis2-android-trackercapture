@@ -48,7 +48,7 @@ public class LocalSearchFragment extends Fragment implements
     private String orgUnitId;
     private String programId;
     private ListView trackedEntityAttributeListView;
-    private LocalSearchFragmentForm mForm;
+    protected LocalSearchFragmentForm mForm;
     private DataValueAdapter mAdapter;
 //    private INavigationHandler navigationHandler;
 

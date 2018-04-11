@@ -60,6 +60,8 @@ import org.hisp.dhis.android.sdk.utils.api.ValueType;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.fragments.HolderFragment;
 import org.hisp.dhis.android.trackercapture.fragments.TrackerAssociate.TrackerAssociateEnrollmentDataEntryFragment;
+import org.hisp.dhis.android.trackercapture.fragments.TrackerAssociate.TrackerAssociateSearchFragment;
+import org.hisp.dhis.android.trackercapture.fragments.search.LocalSearchFragment;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.EnrollmentDateSetterHelper;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.IEnroller;
 import org.joda.time.DateTime;
@@ -67,6 +69,9 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.hisp.dhis.android.trackercapture.activities.HolderActivity.ARG_TYPE;
+import static org.hisp.dhis.android.trackercapture.activities.HolderActivity.ARG_TYPE_LOCALSEARCHFRAGMENT;
 
 public class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragmentForm>,
         IEnroller{
@@ -236,6 +241,7 @@ public class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEnt
                         @Override
                         public void searchButtonClicked() {
                             //TODO:implement action for search button
+                            searchForTrackerAssociate(this);
                         }
 
                         @Override
@@ -292,6 +298,22 @@ public class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEnt
         mForm.setDataEntryRows(dataEntryRows);
         mForm.setEnrollment(currentEnrollment);
         return mForm;
+    }
+
+    private void searchForTrackerAssociate(TrackerAssociateRowActionListener actionListener) {
+        TrackerAssociateSearchFragment fragment = new TrackerAssociateSearchFragment();
+        fragment.setActionListener(actionListener);
+        Bundle bundle = new Bundle();
+        bundle.putString(LocalSearchFragment.EXTRA_PROGRAM,
+                activity.getString(R.string.full_investigation_program_id));
+        bundle.putString(LocalSearchFragment.EXTRA_ORGUNIT, mPrefs.getOrgUnit().first);
+        //bundle.putString(ARG_TYPE, ARG_TYPE_LOCALSEARCHFRAGMENT);
+        fragment.setArguments(bundle);
+
+        FragmentTransaction ft = fFragment.getFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame,fragment);
+        ft.addToBackStack("EN_DATA_ENTRY");
+        ft.commit();
     }
 
     public TrackedEntityAttributeValue getTrackedEntityDataValue(String trackedEntityAttribute,
@@ -355,19 +377,19 @@ public class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEnt
 
         } else {
 //            HolderActivity.navigateToEnrollmentDataEntryFragment(activity, mPrefs.getOrgUnit().first, trackerAssociateProgram.getUid(), trackedEntityInstance.getLocalId(), enrollmentDateString, incidentDateString);
-            TrackerAssociateEnrollmentDataEntryFragment fragment = new TrackerAssociateEnrollmentDataEntryFragment();
-            fragment.setActionListener(actionListener);
-            Bundle bundle = new Bundle();
-            bundle.putString(EnrollmentDataEntryFragment.ORG_UNIT_ID,  mPrefs.getOrgUnit().first);
-            bundle.putString(EnrollmentDataEntryFragment.PROGRAM_ID, trackerAssociateProgram.getUid());
-            bundle.putLong(EnrollmentDataEntryFragment.TRACKEDENTITYINSTANCE_ID, trackedEntityInstance.getLocalId());
-            bundle.putString(EnrollmentDataEntryFragment.ENROLLMENT_DATE, enrollmentDateString);
-            bundle.putString(EnrollmentDataEntryFragment.INCIDENT_DATE, incidentDateString);
-            fragment.setArguments(bundle);
-            HolderFragment fragment1 = new HolderFragment();
+//            TrackerAssociateEnrollmentDataEntryFragment fragment = new TrackerAssociateEnrollmentDataEntryFragment();
+//            fragment.setActionListener(actionListener);
+//            Bundle bundle = new Bundle();
+//            bundle.putString(EnrollmentDataEntryFragment.ORG_UNIT_ID,  mPrefs.getOrgUnit().first);
+//            bundle.putString(EnrollmentDataEntryFragment.PROGRAM_ID, trackerAssociateProgram.getUid());
+//            bundle.putLong(EnrollmentDataEntryFragment.TRACKEDENTITYINSTANCE_ID, trackedEntityInstance.getLocalId());
+//            bundle.putString(EnrollmentDataEntryFragment.ENROLLMENT_DATE, enrollmentDateString);
+//            bundle.putString(EnrollmentDataEntryFragment.INCIDENT_DATE, incidentDateString);
+//            fragment.setArguments(bundle);
+//            HolderFragment fragment1 = new HolderFragment();
 //            fragment1.attach(fragment);
 //            fragment1.show(activity.getFragmentManager(),"Holder");
-
+            //TODO:remove this condition brace
         }
 
 

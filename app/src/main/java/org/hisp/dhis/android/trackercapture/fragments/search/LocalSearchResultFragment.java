@@ -36,10 +36,12 @@ import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.activities.INavigationHandler;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.TrackerAssociateRowActionListener;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
+import org.hisp.dhis.android.trackercapture.fragments.TrackerAssociate.TrackerAssociateSearchResultFragment;
 import org.hisp.dhis.android.trackercapture.fragments.programoverview.ProgramOverviewFragment;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.dialogs.ItemStatusDialogFragment;
 import org.hisp.dhis.android.trackercapture.ui.adapters.TrackedEntityInstanceAdapter;
@@ -63,6 +65,8 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     private ProgressBar progressBar;
     private CardView cardView;
 
+
+
     public static LocalSearchResultFragment newInstance(String orgUnitId, String programId, HashMap<String,String> attributeValueMap) {
         LocalSearchResultFragment fragment = new LocalSearchResultFragment();
         Bundle args = new Bundle();
@@ -74,6 +78,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         Log.d("HashMap size", attributeValueMap.size() + "");
         return fragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -246,7 +251,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
 
     @Subscribe
     public void onItemClick(final OnTrackerItemClick eventClick) {
-        if(!eventClick.isLongClick()){
+       if(!eventClick.isLongClick()){
             if (eventClick.isOnDescriptionClick()) {
 
 
@@ -273,6 +278,8 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
 
     }
 
+
+
     private void deleteSelectedRow(final OnTrackerItemClick eventClick){
         if( !eventClick.getStatus().equals(OnRowClick.ITEM_STATUS.SENT)) {
             UiUtils.showConfirmDialog(getActivity(), getActivity().getString(R.string.confirm),
@@ -291,6 +298,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
             performSoftDeleteOfTrackedEntityInstance((TrackedEntityInstance) eventClick.getItem());
         }
     }
+
 
 
     public void showStatusDialog(BaseSerializableModel model) {
