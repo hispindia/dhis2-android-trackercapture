@@ -30,6 +30,7 @@
 package org.hisp.dhis.android.trackercapture.fragments.programoverview;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -134,6 +135,7 @@ import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStage
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -1037,14 +1039,34 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     public void showDataEntryFragment(Event event, String programStage) {
         Bundle args = getArguments();
-        if (event == null) {
-            HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
-                    args.getString(PROGRAM_ID), programStage, mForm.getEnrollment().getLocalId());
-        } else {
-            HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
-                    args.getString(PROGRAM_ID), programStage,
-                    mForm.getEnrollment().getLocalId(), event.getLocalId());
+        if(args.getString(PROGRAM_ID).equals(getString(R.string.intake_form_program_id))){
+            if(Arrays.asList(getResources()
+                    .getStringArray(R.array.enabled_program_stages_intake_program))
+                    .contains(programStage)){
+                if (event == null) {
+                    HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
+                            args.getString(PROGRAM_ID), programStage, mForm.getEnrollment().getLocalId());
+                } else {
+                    HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
+                            args.getString(PROGRAM_ID), programStage,
+                            mForm.getEnrollment().getLocalId(), event.getLocalId());
+                }
+            }else{
+                UiUtils.showErrorDialog(getActivity(),"Not Allowed","This program stage is not allowed yet");
+            }
+        }else{
+            if (event == null) {
+                HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
+                        args.getString(PROGRAM_ID), programStage, mForm.getEnrollment().getLocalId());
+            } else {
+                HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
+                        args.getString(PROGRAM_ID), programStage,
+                        mForm.getEnrollment().getLocalId(), event.getLocalId());
+            }
         }
+
+
+
     }
 
     public void completeEnrollment() {

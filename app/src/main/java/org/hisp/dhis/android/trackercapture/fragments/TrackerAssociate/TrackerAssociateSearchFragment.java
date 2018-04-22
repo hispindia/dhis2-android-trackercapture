@@ -66,7 +66,7 @@ public class TrackerAssociateSearchFragment extends LocalSearchFragment{
         Bundle bundle = new Bundle();
 
         bundle.putString(LocalSearchResultFragment.EXTRA_ORGUNIT, mForm.getOrganisationUnitId());
-        bundle.putString(LocalSearchResultFragment.EXTRA_PROGRAM, mForm.getProgram());
+        bundle.putString(LocalSearchResultFragment.EXTRA_PROGRAM, getString(R.string.intake_form_program_id));
         bundle.putSerializable(LocalSearchResultFragment.EXTRA_ATTRIBUTEVALUEMAP, mForm.getAttributeValues());
         bundle.putString(ARG_TYPE, ARG_TYPE_LOCALSEARCHRESULTFRAGMENT);
 

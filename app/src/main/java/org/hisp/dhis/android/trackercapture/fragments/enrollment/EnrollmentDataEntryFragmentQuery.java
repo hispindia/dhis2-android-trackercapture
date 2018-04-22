@@ -305,7 +305,7 @@ public class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEnt
         fragment.setActionListener(actionListener);
         Bundle bundle = new Bundle();
         bundle.putString(LocalSearchFragment.EXTRA_PROGRAM,
-                activity.getString(R.string.full_investigation_program_id));
+                activity.getString(R.string.intake_form_program_id));
         bundle.putString(LocalSearchFragment.EXTRA_ORGUNIT, mPrefs.getOrgUnit().first);
         //bundle.putString(ARG_TYPE, ARG_TYPE_LOCALSEARCHFRAGMENT);
         fragment.setArguments(bundle);
