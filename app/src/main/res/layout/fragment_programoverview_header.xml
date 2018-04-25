@@ -292,68 +292,68 @@
 
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/relationships_cardview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+    <!--<android.support.v7.widget.CardView-->
+        <!--android:id="@+id/relationships_cardview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="4dp">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:orientation="vertical"
-            android:padding="6dp">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/transparent"-->
+            <!--android:orientation="vertical"-->
+            <!--android:padding="6dp">-->
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/transparent"-->
+                <!--android:orientation="horizontal">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/relationships"
-                    android:textSize="@dimen/medium_text_size" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/relationships"-->
+                    <!--android:textSize="@dimen/medium_text_size" />-->
 
-                <Button
-                    android:id="@+id/pullrelationshipbutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_gravity="right"
-                    android:background="@drawable/transparent_selector"
-                    android:text="@string/refresh_string" />
+                <!--<Button-->
+                    <!--android:id="@+id/pullrelationshipbutton"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:background="@drawable/transparent_selector"-->
+                    <!--android:text="@string/refresh_string" />-->
 
-                <Button
-                    android:id="@+id/addrelationshipbutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_gravity="right"
-                    android:background="@drawable/transparent_selector"
-                    android:text="@string/new_string" />
+                <!--<Button-->
+                    <!--android:id="@+id/addrelationshipbutton"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:background="@drawable/transparent_selector"-->
+                    <!--android:text="@string/new_string" />-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/light_grey" />
+            <!--<View-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/light_grey" />-->
 
-            <LinearLayout
-                android:id="@+id/relationships_linearlayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="6dp">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/relationships_linearlayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:padding="6dp">-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-    </android.support.v7.widget.CardView>
+    <!--</android.support.v7.widget.CardView>-->
 
     <android.support.v7.widget.CardView
         android:id="@+id/programindicators_cardview"
@@ -380,7 +380,38 @@
                     android:text="@string/indicators"
                     android:textSize="@dimen/medium_text_size" />
             </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/addhuman"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="left"
+                android:padding="4dp"
+
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_imagebutton_orange"
+                android:text="Add Exposed Human "/>
+
+            <Button
+                android:id="@+id/addanimal"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="left"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_imagebutton_orange"
+                android:padding="4dp"
+                android:text="Add Exposed Animal " />
+        </LinearLayout>
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
