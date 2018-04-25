@@ -89,10 +89,14 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
     private static final String EMPTY_FIELD = "";
     public static final String ORG_UNIT_ID = "extra:orgUnitId";
     public static final String PROGRAM_ID = "extra:ProgramId";
+    public static final String HUMAN_ATT = "S8DQwjTgtSV";
+    public static final String ANIMAL_ATT = "S8DQwjTgtSV";
     public static final String ENROLLMENT_DATE = "extra:enrollmentDate";
     public static final String INCIDENT_DATE = "extra:incidentDate";
     public static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
     public static final String PROGRAMRULES_FORCED_TRIGGER = "forced";
+    public static final String ANIMALID_BARCODE = "extra:ANIMALID_BARCODE";
+    public static final String TRACKEDENTITYINSTANCE_SID = "extra:TrakcedEntityInstanceServerID";
     protected EnrollmentDataEntryFragmentForm form;
     private SaveThread saveThread;
     private Map<String, List<ProgramRule>> programRulesForTrackedEntityAttributes;
@@ -190,10 +194,37 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
 //                    getActivity().getBaseContext(), modelsToTrack, new EnrollmentDataEntryFragmentQuery(
 //                    orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate)
 //            );
-            return new DbLoader<>(
-                    getActivity().getBaseContext(), modelsToTrack, new EnrollmentDataEntryFragmentQuery(
-                    orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate,this,getString(org.hisp.dhis.android.trackercapture.R.string.intake_form_program_id))
-            );
+            if(programId.equals("Hs1zoGOwY8B"))
+            {
+                return new DbLoader<>(
+                        getActivity().getBaseContext(), modelsToTrack, new EnrollmentDataEntryFragmentQuery(
+                        orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate,this,getString(org.hisp.dhis.android.trackercapture.R.string.intake_form_program_id))
+                );
+            }
+
+          else  if(programId.equals("oLY6uR5jJh9"))
+            {
+                return new DbLoader<>(
+                        getActivity().getBaseContext(), modelsToTrack, new EnrollmentDataEntryFragmentQuery(
+                        orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate,this,getString(org.hisp.dhis.android.trackercapture.R.string.intake_form_program_id))
+                );
+            }
+            else if (programId.equals("xO7WLJ8DIDK"))
+            {
+                return new DbLoader<>(
+                        getActivity().getBaseContext(), modelsToTrack, new EnrollmentDataEntryFragmentQuery(
+                        orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate,this,getString(org.hisp.dhis.android.trackercapture.R.string.full_investigation_program_id))
+                );
+            }
+
+//            else if (programId.equals("oLY6uR5jJh9"))
+//            {
+//                return new DbLoader<>(
+//                        getActivity().getBaseContext(), modelsToTrack, new EnrollmentDataEntryFragmentQuery(
+//                        orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate,this,getString(org.hisp.dhis.android.trackercapture.R.string.animal_exposed))
+//                );
+//            }
+
         }
         return null;
     }
@@ -211,6 +242,19 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
             if (data.getTrackedEntityInstance().getLocalId() >= 0) {
                 originalTrackedEntityInstance = new TrackedEntityInstance(data.getTrackedEntityInstance());
             }
+            String ANIMALID_BARCODE_ = getArguments().getString(ANIMALID_BARCODE);
+            if(ANIMALID_BARCODE_ !=null){
+                if(data.getProgram().getUid().equals("Hs1zoGOwY8B"))
+                {
+                    data.getTrackedEntityAttributeValueMap().get(HUMAN_ATT).setValue(ANIMALID_BARCODE_);
+                }
+                else if(data.getProgram().getUid().equals("oLY6uR5jJh9"))
+                {
+                    data.getTrackedEntityAttributeValueMap().get(ANIMAL_ATT).setValue(ANIMALID_BARCODE_);
+                }
+
+            }
+
             if (originalTrackedEntityAttributeValueMap == null) {
                 originalTrackedEntityAttributeValueMap = new HashMap<>();
                 for (TrackedEntityAttributeValue trackedEntityAttributeValue : form.getTrackedEntityAttributeValueMap().values()) {
