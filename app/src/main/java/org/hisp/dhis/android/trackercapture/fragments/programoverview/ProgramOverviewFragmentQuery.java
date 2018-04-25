@@ -30,27 +30,34 @@
 package org.hisp.dhis.android.trackercapture.fragments.programoverview;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
+import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicator;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
+import org.hisp.dhis.android.sdk.persistence.models.ProgramStageDataElement;
+import org.hisp.dhis.android.sdk.persistence.models.ProgramStageSection;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
 import org.hisp.dhis.android.sdk.utils.Utils;
 import org.hisp.dhis.android.sdk.utils.comparators.EventDateComparator;
 import org.hisp.dhis.android.sdk.utils.services.ProgramIndicatorService;
+import org.hisp.dhis.android.sdk.utils.support.DateUtils;
 import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStageEventRow;
 import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStageLabelRow;
 import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStageRow;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,6 +78,7 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
     public ProgramOverviewFragmentForm query(Context context) {
         ProgramOverviewFragmentForm programOverviewFragmentForm = new ProgramOverviewFragmentForm();
         programOverviewFragmentForm.setProgramIndicatorRows(new LinkedHashMap<ProgramIndicator, IndicatorRow>());
+
         Program program = MetaDataController.getProgram(mProgramId);
         TrackedEntityInstance trackedEntityInstance = TrackerController.getTrackedEntityInstance(mTrackedEntityInstanceId);
 
@@ -94,7 +102,6 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
         if (activeEnrollment==null) {
             return programOverviewFragmentForm;
         }
-
         programOverviewFragmentForm.setEnrollment(activeEnrollment);
         programOverviewFragmentForm.setDateOfEnrollmentValue(Utils.removeTimeFromDateString(activeEnrollment.getEnrollmentDate()));
         programOverviewFragmentForm.setIncidentDateValue(Utils.removeTimeFromDateString(activeEnrollment.getIncidentDate()));
@@ -133,7 +140,15 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
                 programOverviewFragmentForm.getProgramIndicatorRows().put(programIndicator,
                         indicatorRow);
             }
-        }else{
+
+//ToDO Description Added for now
+            for(ProgramIndicator programIndicator : programIndicators) {
+                String value = ProgramIndicatorService.getProgramIndicatorValue(programOverviewFragmentForm.getEnrollment(), programIndicator);
+                IndicatorRow indicatorRow = new IndicatorRow(programIndicator, value,"Test");
+                programOverviewFragmentForm.getProgramIndicatorRows().put(programIndicator, indicatorRow);
+            }
+        }
+        else{
             programOverviewFragmentForm.getProgramIndicatorRows().clear();
         }
         return programOverviewFragmentForm;
@@ -143,7 +158,19 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
         List<ProgramStageRow> rows = new ArrayList<>();
         List<Event> events = enrollment.getEvents(true);
         HashMap<String, List<Event>> eventsByStage = new HashMap<>();
+
         for(Event event: events) {
+//            if(event.getProgramStageId().equals("PwGD626AbHf"))
+//            {
+//                Long event_=event.getLocalId();
+//                DataValue dv_=TrackerController.getDataValue(event.getLocalId(),"YfxxJJKM5vK");
+//                DataValue dv_1=TrackerController.getDataValue(event.getLocalId(),"YfxxJJKM5vK");
+//
+//
+//            }
+
+
+
             List<Event> eventsForStage = eventsByStage.get(event.getProgramStageId());
             if(eventsForStage==null) {
                 eventsForStage = new ArrayList<>();
@@ -152,7 +179,13 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
             eventsForStage.add(event);
         }
         Program program = MetaDataController.getProgram(mProgramId);
+
+
+
         for(ProgramStage programStage: program.getProgramStages()) {
+
+          List<ProgramStageDataElement> pg_=MetaDataController.getProgramStageDataElements(programStage);
+
             List<Event> eventsForStage = eventsByStage.get(programStage.getUid());
             ProgramStageLabelRow labelRow = new ProgramStageLabelRow(programStage);
             rows.add(labelRow);
