@@ -158,6 +158,9 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     private static final String ORG_UNIT_ID = "extra:orgUnitId";
     private static final String PROGRAM_ID = "extra:ProgramId";
+    private static  String ANIMALID_BARCODE = null;
+    private static final String HUMAN_EXPOSURE = "Hs1zoGOwY8B";
+    private static final String ANIMAL_EXPOSURE = "oLY6uR5jJh9";
     private static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
 
     private ListView listView;
@@ -203,7 +206,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     private ProgramOverviewFragmentState mState;
     private ProgramOverviewFragmentForm mForm;
-
+    private Button createNewHumanExposure;
+    private Button createNewAnimal;
     private OnProgramStageEventClick eventLongPressed;
 
     public ProgramOverviewFragment() {
@@ -290,13 +294,13 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 org.hisp.dhis.android.sdk.R.color.Blue, org.hisp.dhis.android.sdk.R.color.orange);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        relationshipsLinearLayout = (LinearLayout) header.findViewById(
-                R.id.relationships_linearlayout);
+//        relationshipsLinearLayout = (LinearLayout) header.findViewById(
+//                R.id.relationships_linearlayout);
 
-        refreshRelationshipButton = (Button) header.findViewById(R.id.pullrelationshipbutton);
-        refreshRelationshipButton.setOnClickListener(this);
-        newRelationshipButton = (Button) header.findViewById(R.id.addrelationshipbutton);
-        newRelationshipButton.setOnClickListener(this);
+//        refreshRelationshipButton = (Button) header.findViewById(R.id.pullrelationshipbutton);
+//        refreshRelationshipButton.setOnClickListener(this);
+//        newRelationshipButton = (Button) header.findViewById(R.id.addrelationshipbutton);
+//        newRelationshipButton.setOnClickListener(this);
 
         mProgressBar = (ProgressBar) header.findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.GONE);
@@ -343,6 +347,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         attribute2Label = (TextView) header.findViewById(R.id.headerItem2label);
         attribute2Value = (TextView) header.findViewById(R.id.headerItem2value);
 
+
+
         Bundle fragmentArguments = getArguments();
 
         if (savedInstanceState != null &&
@@ -355,6 +361,20 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     fragmentArguments.getString(ORG_UNIT_ID));
             Program program = MetaDataController.getProgram(
                     fragmentArguments.getString(PROGRAM_ID));
+            if(program.getUid().equals("xO7WLJ8DIDK"))
+            {
+                createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
+                createNewAnimal = (Button)header.findViewById(R.id.addanimal);
+                createNewHumanExposure.setOnClickListener(this);
+                createNewAnimal.setOnClickListener(this);
+            }
+            else if(program.getUid().equals("Hs1zoGOwY8B")||program.getUid().equals("oLY6uR5jJh9"))
+            {
+                createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
+                createNewAnimal = (Button)header.findViewById(R.id.addhuman);
+                createNewHumanExposure.setVisibility(View.GONE);
+                createNewAnimal.setVisibility(View.GONE);
+            }
             mState.setOrgUnit(ou.getId(), ou.getLabel());
             mState.setProgram(program.getUid(), program.getName());
             mState.setTrackedEntityInstance(
@@ -525,11 +545,11 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             setRefreshing(false);
 
             mSpinner.setSelection(getSpinnerIndex(mState.getProgramName()));
-
-            if(mForm!=null){
-                setRelationships(
-                        getLayoutInflater(getArguments().getBundle(EXTRA_SAVED_INSTANCE_STATE)));
-            }
+//
+//            if(mForm!=null){
+//                setRelationships(
+//                        getLayoutInflater(getArguments().getBundle(EXTRA_SAVED_INSTANCE_STATE)));
+//            }
 
             LinearLayout programEventsLayout =
                     (LinearLayout) eventsCardView.findViewById(
@@ -573,7 +593,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 enrollmentServerStatus.setImageResource(R.drawable.ic_from_server);
             }
 
-            refreshRelationshipButton.setEnabled(mForm.getEnrollment().isFromServer());
+//            refreshRelationshipButton.setEnabled(mForm.getEnrollment().isFromServer());
 
             if (mForm.getEnrollment().getStatus().equals(Enrollment.CANCELLED)) {
                 setTerminated();
@@ -688,89 +708,89 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
      * Inflates views and adds them to linear layout for relationships, sort of like a listview, but
      * inside another listview
      */
-    public void setRelationships(LayoutInflater inflater) {
-        relationshipsLinearLayout.removeAllViews();
-        if (mForm.getTrackedEntityInstance() != null
-                && mForm.getTrackedEntityInstance().getRelationships() != null) {
-            ListIterator<Relationship> it =
-                    mForm.getTrackedEntityInstance().getRelationships().listIterator();
-            while (it.hasNext()) {
-                final Relationship relationship = it.next();
-                if (relationship == null) {
-                    continue;
-                }
-                LinearLayout ll = (LinearLayout) inflater.inflate(
-                        R.layout.listview_row_relationship, null);
-                FontTextView currentTeiRelationshipLabel = (FontTextView) ll.findViewById(
-                        R.id.current_tei_relationship_label);
-                FontTextView relativeLabel = (FontTextView) ll.findViewById(
-                        R.id.relative_relationship_label);
-                Button deleteButton = (Button) ll.findViewById(R.id.delete_relationship);
-                deleteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showConfirmDeleteRelationshipDialog(relationship,
-                                mForm.getTrackedEntityInstance(), getActivity());
-                    }
-                });
-                RelationshipType relationshipType = MetaDataController.getRelationshipType(
-                        relationship.getRelationship());
-
-                if (relationshipType != null) {
-
-                    /* establishing if the relative is A or B in Relationship Type */
-                    final TrackedEntityInstance relative;
-                    if (mForm.getTrackedEntityInstance().getTrackedEntityInstance() != null &&
-                            mForm.getTrackedEntityInstance().getTrackedEntityInstance().equals(
-                                    relationship.getTrackedEntityInstanceA())) {
-
-                        currentTeiRelationshipLabel.setText(relationshipType.getaIsToB());
-                        relative = TrackerController.getTrackedEntityInstance(
-                                relationship.getTrackedEntityInstanceB());
-
-                    } else if (mForm.getTrackedEntityInstance().getTrackedEntityInstance() != null
-                            &&
-                            mForm.getTrackedEntityInstance().getTrackedEntityInstance().equals(
-                                    relationship.getTrackedEntityInstanceB())) {
-
-                        currentTeiRelationshipLabel.setText(relationshipType.getbIsToA());
-                        relative = TrackerController.getTrackedEntityInstance(
-                                relationship.getTrackedEntityInstanceA());
-                    } else {
-                        continue;
-                    }
-
-                    String relativeString = getRelativeString(relative);
-
-                    relativeLabel.setText(relativeString);
-
-                    relativeLabel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            moveToRelative(relationship);
-                        }
-                    });
-                    ll.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (relative != null) {
-                                moveToRelative(relationship);
-                            }
-                        }
-                    });
-                    relationshipsLinearLayout.addView(ll);
-                    if (it.hasNext()) {
-                        View view = new View(getActivity());
-                        view.setLayoutParams(
-                                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                        1));
-                        view.setBackgroundColor(getResources().getColor(R.color.light_grey));
-                        relationshipsLinearLayout.addView(view);
-                    }
-                }
-            }
-        }
-    }
+//    public void setRelationships(LayoutInflater inflater) {
+//        relationshipsLinearLayout.removeAllViews();
+//        if (mForm.getTrackedEntityInstance() != null
+//                && mForm.getTrackedEntityInstance().getRelationships() != null) {
+//            ListIterator<Relationship> it =
+//                    mForm.getTrackedEntityInstance().getRelationships().listIterator();
+//            while (it.hasNext()) {
+//                final Relationship relationship = it.next();
+//                if (relationship == null) {
+//                    continue;
+//                }
+//                LinearLayout ll = (LinearLayout) inflater.inflate(
+//                        R.layout.listview_row_relationship, null);
+//                FontTextView currentTeiRelationshipLabel = (FontTextView) ll.findViewById(
+//                        R.id.current_tei_relationship_label);
+//                FontTextView relativeLabel = (FontTextView) ll.findViewById(
+//                        R.id.relative_relationship_label);
+//                Button deleteButton = (Button) ll.findViewById(R.id.delete_relationship);
+//                deleteButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        showConfirmDeleteRelationshipDialog(relationship,
+//                                mForm.getTrackedEntityInstance(), getActivity());
+//                    }
+//                });
+//                RelationshipType relationshipType = MetaDataController.getRelationshipType(
+//                        relationship.getRelationship());
+//
+//                if (relationshipType != null) {
+//
+//                    /* establishing if the relative is A or B in Relationship Type */
+//                    final TrackedEntityInstance relative;
+//                    if (mForm.getTrackedEntityInstance().getTrackedEntityInstance() != null &&
+//                            mForm.getTrackedEntityInstance().getTrackedEntityInstance().equals(
+//                                    relationship.getTrackedEntityInstanceA())) {
+//
+//                        currentTeiRelationshipLabel.setText(relationshipType.getaIsToB());
+//                        relative = TrackerController.getTrackedEntityInstance(
+//                                relationship.getTrackedEntityInstanceB());
+//
+//                    } else if (mForm.getTrackedEntityInstance().getTrackedEntityInstance() != null
+//                            &&
+//                            mForm.getTrackedEntityInstance().getTrackedEntityInstance().equals(
+//                                    relationship.getTrackedEntityInstanceB())) {
+//
+//                        currentTeiRelationshipLabel.setText(relationshipType.getbIsToA());
+//                        relative = TrackerController.getTrackedEntityInstance(
+//                                relationship.getTrackedEntityInstanceA());
+//                    } else {
+//                        continue;
+//                    }
+//
+//                    String relativeString = getRelativeString(relative);
+//
+//                    relativeLabel.setText(relativeString);
+//
+//                    relativeLabel.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            moveToRelative(relationship);
+//                        }
+//                    });
+//                    ll.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            if (relative != null) {
+//                                moveToRelative(relationship);
+//                            }
+//                        }
+//                    });
+//                    relationshipsLinearLayout.addView(ll);
+//                    if (it.hasNext()) {
+//                        View view = new View(getActivity());
+//                        view.setLayoutParams(
+//                                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+//                                        1));
+//                        view.setBackgroundColor(getResources().getColor(R.color.light_grey));
+//                        relationshipsLinearLayout.addView(view);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private void moveToRelative(Relationship relationship) {
         if(!relationship.getTrackedEntityInstanceA().equals(mForm.getTrackedEntityInstance().getUid())) {
@@ -1196,6 +1216,15 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 break;
             }
 
+            case R.id.addhuman:{
+                addHuman();
+                break;
+            }
+
+            case R.id.addanimal:{
+                addAnimal();
+                break;
+            }
             case R.id.followupButton: {
                 toggleFollowup();
                 break;
@@ -1220,14 +1249,14 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 }
                 break;
             }
-            case R.id.pullrelationshipbutton: {
-                refreshRelationships();
-                break;
-            }
-            case R.id.addrelationshipbutton: {
-                showAddRelationshipFragment();
-                break;
-            }
+//            case R.id.pullrelationshipbutton: {
+//                refreshRelationships();
+//                break;
+//            }
+//            case R.id.addrelationshipbutton: {
+//                showAddRelationshipFragment();
+//                break;
+//            }
             case R.id.enrollmentLayout: {
                 editEnrollmentDates();
             }
@@ -1424,6 +1453,42 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 return new Object();
             }
         });
+    }
+
+    private void addHuman(){
+        String orgId = getArguments().getString(ORG_UNIT_ID);
+        String programId = HUMAN_EXPOSURE; //
+        String dateOfEnrollment = mForm.getDateOfEnrollmentValue();
+        String dateOfIncidend = mForm.getIncidentDateValue();
+        ANIMALID_BARCODE=mForm.getTrackedEntityInstance().getUid();
+//        for(TrackedEntityAttributeValue te:mForm.getTrackedEntityInstance().getAttributes())
+//        {
+//            if(te.getTrackedEntityAttributeId().equals("bOE4hRfxLKf"))
+//            {
+//                 ANIMALID_BARCODE = te.getValue();
+//            }
+//
+//        }
+
+
+        //TODO: This value should be picked from tei attributes
+        HolderActivity.navigateToDataEntryFragment_(getActivity(),orgId,programId,
+                dateOfEnrollment,dateOfIncidend,
+                mForm.getTrackedEntityInstance().getTrackedEntityInstance(),ANIMALID_BARCODE);
+
+    }
+
+    private void addAnimal(){
+        String orgId = getArguments().getString(ORG_UNIT_ID);
+        String programId = ANIMAL_EXPOSURE; //
+        String dateOfEnrollment = mForm.getDateOfEnrollmentValue();
+        String dateOfIncidend = mForm.getIncidentDateValue();
+        ANIMALID_BARCODE=mForm.getTrackedEntityInstance().getUid();
+        //TODO: This value should be picked from tei attributes
+        HolderActivity.navigateToDataEntryFragment_(getActivity(),orgId,programId,
+                dateOfEnrollment,dateOfIncidend,
+                mForm.getTrackedEntityInstance().getTrackedEntityInstance(),ANIMALID_BARCODE);
+
     }
 
     public ProgramOverviewFragmentForm getForm() {
