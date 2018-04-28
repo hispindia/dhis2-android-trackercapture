@@ -383,4 +383,21 @@ public class HolderActivity extends AbsHomeActivity {
         activity.startActivity(intent);
     }
 
+    public static void navigateToDataEntryFragment_(Activity activity, String orgUnitId,
+                                                    String programId,
+                                                    String dateOfEnrollment,
+                                                    String dateOfIncident,String trackedEntityInstance,
+                                                    String ANIMALID_BARCODE){
+        Intent intent = new Intent(activity, HolderActivity.class);
+        intent.putExtra(EnrollmentDataEntryFragment.ORG_UNIT_ID, orgUnitId);
+        intent.putExtra(EnrollmentDataEntryFragment.PROGRAM_ID, programId);
+        intent.putExtra(EnrollmentDataEntryFragment.ENROLLMENT_DATE, dateOfEnrollment);
+        intent.putExtra(EnrollmentDataEntryFragment.INCIDENT_DATE, dateOfIncident);
+        intent.putExtra(ARG_TYPE, ARG_TYPE_ENROLLMENTFRAGMENT);
+        intent.putExtra(EnrollmentDataEntryFragment.ANIMALID_BARCODE,ANIMALID_BARCODE);
+        intent.putExtra(EnrollmentDataEntryFragment.TRACKEDENTITYINSTANCE_SID,trackedEntityInstance);
+        activity.startActivity(intent);
+    }
+
+
 }

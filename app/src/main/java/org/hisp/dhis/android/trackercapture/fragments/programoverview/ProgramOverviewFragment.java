@@ -61,6 +61,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.raizlabs.android.dbflow.sql.queriable.StringQuery;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 
@@ -112,6 +113,7 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.PlainTextRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnDetailedInfoButtonClick;
 import org.hisp.dhis.android.sdk.ui.dialogs.ProgramDialogFragment;
 import org.hisp.dhis.android.sdk.ui.fragments.common.AbsProgramRuleFragment;
+import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentPreferences;
 import org.hisp.dhis.android.sdk.ui.views.FloatingActionButton;
 import org.hisp.dhis.android.sdk.ui.views.FontTextView;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
@@ -138,9 +140,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
+
+
+
+import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
+import org.hisp.dhis.android.sdk.persistence.models.FailedItem$Table;
+import org.hisp.dhis.android.sdk.persistence.models.Option;
+import org.hisp.dhis.android.sdk.persistence.models.OptionSet;
+import org.hisp.dhis.android.sdk.persistence.models.Program;
+import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute;
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue$Table;
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance$Table;
 
 public class ProgramOverviewFragment extends AbsProgramRuleFragment implements View.OnClickListener,
         AdapterView.OnItemClickListener,
@@ -158,10 +176,19 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     private static final String ORG_UNIT_ID = "extra:orgUnitId";
     private static final String PROGRAM_ID = "extra:ProgramId";
+
+
     private static  String ANIMALID_BARCODE = null;
     private static final String HUMAN_EXPOSURE = "Hs1zoGOwY8B";
     private static final String ANIMAL_EXPOSURE = "oLY6uR5jJh9";
     private static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
+
+    private static final String ANIMAL_EXPOSED_INDICATOR = "hE8L9tjVdSX";
+    private static final String HUMAN_EXPOSED_INDICATOR = "ZOeqJmFlsDL";
+    private static final String OTHER_INDICATOR = "other";
+
+    private static final String ANIMAL_DETAILS_ATTR_ID="S8DQwjTgtSV";
+
 
     private ListView listView;
     private ProgressBar mProgressBar;
@@ -209,6 +236,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private Button createNewHumanExposure;
     private Button createNewAnimal;
     private OnProgramStageEventClick eventLongPressed;
+
+    protected SelectProgramFragmentPreferences mPrefs;
 
     public ProgramOverviewFragment() {
         setProgramRuleFragmentHelper(new ProgramOverviewRuleHelper(this));
@@ -261,6 +290,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mPrefs = new SelectProgramFragmentPreferences(getContext());
     }
 
     @Override
@@ -361,20 +391,20 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     fragmentArguments.getString(ORG_UNIT_ID));
             Program program = MetaDataController.getProgram(
                     fragmentArguments.getString(PROGRAM_ID));
-            if(program.getUid().equals("xO7WLJ8DIDK"))
-            {
-                createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
-                createNewAnimal = (Button)header.findViewById(R.id.addanimal);
-                createNewHumanExposure.setOnClickListener(this);
-                createNewAnimal.setOnClickListener(this);
-            }
-            else if(program.getUid().equals("Hs1zoGOwY8B")||program.getUid().equals("oLY6uR5jJh9"))
-            {
+//            if(program.getUid().equals("xO7WLJ8DIDK"))
+//            {
+//                createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
+//                createNewAnimal = (Button)header.findViewById(R.id.addanimal);
+//                createNewHumanExposure.setOnClickListener(this);
+//                createNewAnimal.setOnClickListener(this);
+//            }
+//            else if(program.getUid().equals("Hs1zoGOwY8B")||program.getUid().equals("oLY6uR5jJh9"))
+//            {
                 createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
                 createNewAnimal = (Button)header.findViewById(R.id.addhuman);
                 createNewHumanExposure.setVisibility(View.GONE);
                 createNewAnimal.setVisibility(View.GONE);
-            }
+//            }
             mState.setOrgUnit(ou.getId(), ou.getLabel());
             mState.setProgram(program.getUid(), program.getName());
             mState.setTrackedEntityInstance(
@@ -621,9 +651,33 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
             final Map<Long, FailedItem> failedEvents = getFailedEvents();
 
+
             for (IndicatorRow indicatorRow : mForm.getProgramIndicatorRows().values()) {
+
                 View view = indicatorRow.getView(getChildFragmentManager(),
                         getLayoutInflater(getArguments()), null, programIndicatorLayout);
+                if(indicatorRow.getIndicator().getUid().equals(ANIMAL_EXPOSED_INDICATOR)){
+
+                    indicatorRow.setValue(getIndicatorCount(getString(R.string.animal_exposure_program))+"");
+                    view = indicatorRow.getView(getChildFragmentManager(),
+                            getLayoutInflater(getArguments()), null, programIndicatorLayout);
+                    view.setTag(R.integer.indicator_key,ANIMAL_EXPOSED_INDICATOR);
+                    view.findViewById(R.id.add_new_btn).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.add_new_btn).setOnClickListener(this);
+                    view.findViewById(R.id.add_new_btn).setTag(R.integer.indicator_key,ANIMAL_EXPOSED_INDICATOR);
+                    view.setOnClickListener(this);
+                }else if(indicatorRow.getIndicator().getUid().equals(HUMAN_EXPOSED_INDICATOR)){
+                    indicatorRow.setValue(getIndicatorCount(getString(R.string.human_exposure_program))+"");
+                    view = indicatorRow.getView(getChildFragmentManager(),
+                            getLayoutInflater(getArguments()), null, programIndicatorLayout);
+                    view.setTag(R.integer.indicator_key,HUMAN_EXPOSED_INDICATOR);
+                    view.findViewById(R.id.add_new_btn).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.add_new_btn).setOnClickListener(this);
+                    view.findViewById(R.id.add_new_btn).setTag(R.integer.indicator_key,HUMAN_EXPOSED_INDICATOR);
+                    view.setOnClickListener(this);
+                }else{
+                    view.setTag(OTHER_INDICATOR);
+                }
                 programIndicatorLayout.addView(view);
             }
 
@@ -1260,7 +1314,131 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             case R.id.enrollmentLayout: {
                 editEnrollmentDates();
             }
+
+            case R.id.add_new_btn:{
+                if(view.getTag(R.integer.indicator_key)!=null){
+                    if(view.getTag(R.integer.indicator_key).equals(ANIMAL_EXPOSED_INDICATOR)){
+                        addAnimal();
+                    }else if(view.getTag(R.integer.indicator_key).equals(HUMAN_EXPOSED_INDICATOR)){
+                        addHuman();
+                    }
+
+                }
+            }
         }
+
+        if(view.getTag(R.integer.indicator_key)!=null && view.getId()!= R.id.add_new_btn){
+            if(view.getTag(R.integer.indicator_key).equals(ANIMAL_EXPOSED_INDICATOR)){
+//                        addAnimal();
+                searchAssociates(getString(R.string.animal_exposure_program));
+                Toast.makeText(getContext(),"Animal exposure search",Toast.LENGTH_SHORT).show();
+            }else if(view.getTag(R.integer.indicator_key).equals(HUMAN_EXPOSED_INDICATOR)){
+                searchAssociates(getString(R.string.human_exposure_program));
+                Toast.makeText(getContext(),"Human exposure search",Toast.LENGTH_SHORT).show();
+//                        addHuman();
+            }
+
+        }
+
+    }
+
+    private int getIndicatorCount(String program){
+        HashMap<String,String> attributeMap = new HashMap<>();
+        attributeMap.put(ANIMAL_DETAILS_ATTR_ID,mForm.getTrackedEntityInstance().getTrackedEntityInstance());
+
+        HashMap<String, String> attributesWithValuesMap = new HashMap<>();
+
+        //map of Tracked Entity Attributes used in this query
+        Map<String, TrackedEntityAttribute> trackedEntityAttributesUsedInQueryMap = new HashMap();
+
+        for(String key : attributeMap.keySet()) {
+            String val = attributeMap.get(key);
+            if(val != null && !val.equals("")) {
+                attributesWithValuesMap.put(key, val);
+            }
+            trackedEntityAttributesUsedInQueryMap.put(key, MetaDataController.getTrackedEntityAttribute(key));
+        }
+
+        String query = getTrackedEntityInstancesQuery(attributesWithValuesMap, trackedEntityAttributesUsedInQueryMap);
+        if(query == null) {
+            return 0;
+        }
+
+
+        List<TrackedEntityInstance> resultTrackedEntityInstances = new StringQuery<>(TrackedEntityInstance.class, query).queryList();
+
+        //limit result for program filter
+        Iterator<TrackedEntityInstance> teiIterator = resultTrackedEntityInstances.iterator();
+        while (teiIterator.hasNext()){
+            TrackedEntityInstance tei = teiIterator.next();
+            if(TrackerController.getEnrollments(program,tei).size()==0){
+                teiIterator.remove();
+            }
+        }
+
+        return resultTrackedEntityInstances.size();
+    }
+
+
+    private String getTrackedEntityInstancesQuery(HashMap<String, String> attributesWithValuesMap,
+                                                  Map<String, TrackedEntityAttribute> trackedEntityAttributeMap) {
+        Set<String> attributesIdsUsedInQuery = attributesWithValuesMap.keySet();
+        Iterator<String> attributesIdsUsedInQueryIterator = attributesIdsUsedInQuery.iterator();
+        String firstId;
+        if(attributesIdsUsedInQueryIterator.hasNext()) {
+            firstId = attributesIdsUsedInQueryIterator.next();
+        } else {
+            //no values have been used in the query show with no filter
+            return "SELECT * FROM " + TrackedEntityInstance.class.getSimpleName() + " WHERE "
+                    + TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE + " IN (SELECT " +
+                    TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID + " FROM " +
+                    TrackedEntityAttributeValue.class.getSimpleName() + ")";
+        }
+        String firstValue;
+        TrackedEntityAttribute firstTrackedEntityAttribute = trackedEntityAttributeMap.get(firstId);
+        String firstCompareOperator;
+        if(firstTrackedEntityAttribute.getOptionSet() != null) {
+            firstCompareOperator = "IS";
+            firstValue = attributesWithValuesMap.get(firstId);
+        } else {
+            firstCompareOperator = "LIKE";
+            firstValue = '%' + attributesWithValuesMap.get(firstId) + '%';
+        }
+
+        String query = "SELECT * FROM " + TrackedEntityInstance.class.getSimpleName() + " WHERE "
+                + TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE + " IN (SELECT " +
+                TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID + " FROM " +
+                TrackedEntityAttributeValue.class.getSimpleName() + " WHERE " + TrackedEntityAttributeValue$Table.TRACKEDENTITYATTRIBUTEID +
+                " IS '" + firstId + "' AND " + TrackedEntityAttributeValue$Table.VALUE + ' ' + firstCompareOperator +' ' + "'" + firstValue + "'";
+
+        int closingParenthesis = 1;
+
+        while (attributesIdsUsedInQueryIterator.hasNext()) {
+            String attributeId = attributesIdsUsedInQueryIterator.next();
+            String attributeValue;
+            TrackedEntityAttribute trackedEntityAttribute = trackedEntityAttributeMap.get(attributeId);
+            String compareOperator;
+            if(trackedEntityAttribute.getOptionSet() != null) {
+                compareOperator = "IS";
+                attributeValue = attributesWithValuesMap.get(attributeId);
+            } else {
+                compareOperator = "LIKE";
+                attributeValue = '%' + attributesWithValuesMap.get(attributeId) + '%';
+            }
+
+            String queryToAppend = " AND " + TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID +
+                    " IN ( SELECT " + TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID +
+                    " FROM " + TrackedEntityAttributeValue.class.getSimpleName() + " WHERE " + TrackedEntityAttributeValue$Table.TRACKEDENTITYATTRIBUTEID +
+                    " IS '" + attributeId + "' AND " + TrackedEntityAttributeValue$Table.VALUE + ' ' + compareOperator +' ' + "'" + attributeValue + "'";
+            query += queryToAppend;
+            closingParenthesis++;
+        }
+
+        for(int i = 0; i<closingParenthesis; i++) {
+            query += ')';
+        }
+        query += ';';
+        return query;
     }
 
     private void refreshRelationships() {
@@ -1341,6 +1519,13 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         view.findViewById(R.id.text_label).setVisibility(View.GONE);
         view.findViewById(R.id.detailed_info_button_layout).setVisibility(View.GONE);
         addProgramRuleActionToView(programRuleAction, programIndicatorLayout, view);
+    }
+
+    private void searchAssociates(String programID){
+        //query build
+        HashMap<String,String> attributeMap = new HashMap<>();
+        attributeMap.put(ANIMAL_DETAILS_ATTR_ID,mForm.getTrackedEntityInstance().getTrackedEntityInstance());
+        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),mPrefs.getOrgUnit().first,programID,attributeMap);
     }
 
     private void addProgramRuleActionToView(ProgramRuleAction programRuleAction,

@@ -143,6 +143,7 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
 
 //ToDO Description Added for now
             for(ProgramIndicator programIndicator : programIndicators) {
+
                 String value = ProgramIndicatorService.getProgramIndicatorValue(programOverviewFragmentForm.getEnrollment(), programIndicator);
                 IndicatorRow indicatorRow = new IndicatorRow(programIndicator, value,"Test");
                 programOverviewFragmentForm.getProgramIndicatorRows().put(programIndicator, indicatorRow);

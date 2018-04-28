@@ -7,6 +7,7 @@ import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.sql.queriable.StringQuery;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
+import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
@@ -95,6 +96,15 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
         }
 
         List<TrackedEntityInstance> resultTrackedEntityInstances = new StringQuery<>(TrackedEntityInstance.class, query).queryList();
+
+        //limit result for program filter
+        Iterator<TrackedEntityInstance> teiIterator = resultTrackedEntityInstances.iterator();
+        while (teiIterator.hasNext()){
+            TrackedEntityInstance tei = teiIterator.next();
+            if(TrackerController.getEnrollments(programId,tei).size()==0){
+                teiIterator.remove();
+            }
+        }
 
         //caching tracked entity attributes
         List<TrackedEntityAttribute> trackedEntityAttributes = new Select().from(TrackedEntityAttribute.class).queryList();
