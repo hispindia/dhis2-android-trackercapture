@@ -1114,9 +1114,10 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     public void showDataEntryFragment(Event event, String programStage) {
         Bundle args = getArguments();
         if(args.getString(PROGRAM_ID).equals(getString(R.string.intake_form_program_id))){
-            if(Arrays.asList(getResources()
-                    .getStringArray(R.array.enabled_program_stages_intake_program))
-                    .contains(programStage)){
+            //TODO:temp desable BLOCKING OF PROGRAM STAGES
+//            if(Arrays.asList(getResources()
+//                    .getStringArray(R.array.enabled_program_stages_intake_program))
+//                    .contains(programStage)){
                 if (event == null) {
                     HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
                             args.getString(PROGRAM_ID), programStage, mForm.getEnrollment().getLocalId());
@@ -1125,9 +1126,9 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                             args.getString(PROGRAM_ID), programStage,
                             mForm.getEnrollment().getLocalId(), event.getLocalId());
                 }
-            }else{
-                UiUtils.showErrorDialog(getActivity(),"Not Allowed","This program stage is not allowed yet");
-            }
+//            }else{
+//                UiUtils.showErrorDialog(getActivity(),"Not Allowed","This program stage is not allowed yet");
+//            }
         }else{
             if (event == null) {
                 HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
@@ -1375,6 +1376,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 teiIterator.remove();
             }
         }
+
 
         return resultTrackedEntityInstances.size();
     }
