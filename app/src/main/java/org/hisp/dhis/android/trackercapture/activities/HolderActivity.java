@@ -7,10 +7,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.activities.OnBackPressedListener;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.FileResourceRow;
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.fragments.home.HomeFragment;
@@ -34,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class HolderActivity extends AbsHomeActivity {
+public class HolderActivity extends AbsHomeActivity{
 
     public static final String ARG_TYPE = "arg:FragmentType";
     public static final String ARG_TYPE_ENROLLMENTFRAGMENT = "arg:EnrollmentTypeFragment";
@@ -53,6 +55,7 @@ public class HolderActivity extends AbsHomeActivity {
 
     OnBackPressedListener onBackPressedListener;
     public static OnlineSearchResultFragment.CallBack mCallBack;
+
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
@@ -403,21 +406,8 @@ public class HolderActivity extends AbsHomeActivity {
         activity.startActivity(intent);
     }
 
-    public static void navigateToDataEntryFragment_(Activity activity, String orgUnitId,
-                                                    String programId,
-                                                    String dateOfEnrollment,
-                                                    String dateOfIncident,String trackedEntityInstance,
-                                                    String ANIMALID_BARCODE){
-        Intent intent = new Intent(activity, HolderActivity.class);
-        intent.putExtra(EnrollmentDataEntryFragment.ORG_UNIT_ID, orgUnitId);
-        intent.putExtra(EnrollmentDataEntryFragment.PROGRAM_ID, programId);
-        intent.putExtra(EnrollmentDataEntryFragment.ENROLLMENT_DATE, dateOfEnrollment);
-        intent.putExtra(EnrollmentDataEntryFragment.INCIDENT_DATE, dateOfIncident);
-        intent.putExtra(ARG_TYPE, ARG_TYPE_ENROLLMENTFRAGMENT);
-        intent.putExtra(EnrollmentDataEntryFragment.ANIMALID_BARCODE,ANIMALID_BARCODE);
-        intent.putExtra(EnrollmentDataEntryFragment.TRACKEDENTITYINSTANCE_SID,trackedEntityInstance);
-        activity.startActivity(intent);
-    }
+
+
 
 
 }
