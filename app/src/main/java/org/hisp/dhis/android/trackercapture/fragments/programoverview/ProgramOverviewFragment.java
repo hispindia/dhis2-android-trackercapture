@@ -75,12 +75,14 @@ import org.hisp.dhis.android.sdk.network.DhisApi;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.models.BaseSerializableModel;
+import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramRuleAction;
+import org.hisp.dhis.android.sdk.persistence.models.ProgramRuleVariable;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.Relationship;
@@ -120,6 +122,7 @@ import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 import org.hisp.dhis.android.sdk.utils.comparators.EnrollmentDateComparator;
 import org.hisp.dhis.android.sdk.utils.services.ProgramRuleService;
+import org.hisp.dhis.android.sdk.utils.services.VariableService;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
 import org.hisp.dhis.android.trackercapture.fragments.programoverview
@@ -184,10 +187,19 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
 
     private static final String ANIMAL_EXPOSED_INDICATOR = "hE8L9tjVdSX";
+    private static final String EVENT_NOTIFICATION = "PwGD626AbHf";
+    private   String NOTIFICATION_VALUE = "";
+    private static final String COMPLETED = "COMPLETED";
+    private  static Boolean EVENT_STATUS = false;
+    private  static Boolean RABIES = false;
     private static final String HUMAN_EXPOSED_INDICATOR = "ZOeqJmFlsDL";
     private static final String OTHER_INDICATOR = "other";
 
     private static final String ANIMAL_DETAILS_ATTR_ID="S8DQwjTgtSV";
+    private static final String RABIESASSESMENT="ww8DSCToHag";
+    private static final String QUARANTINE="IXdxLjRSFT8";
+    private static final String ANIMALSAGE_VARIABLE="R7uWYmN14HA";
+    private static  String AGE_VALUE="";
 
 
     private ListView listView;
@@ -239,12 +251,23 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     protected SelectProgramFragmentPreferences mPrefs;
 
+    //ToDo carrforward dataelements to next stage
+    private static  DataValue LACTATION_STATUS=new DataValue();
+    private static  DataValue ANIMALSAGE=new DataValue();
+    private static  DataValue ANIMALOWNED=new DataValue();
+    private static  DataValue PERSONNAME=new DataValue();
+    private static  DataValue PERSONPHONE=new DataValue();
+    private static  DataValue PERSONADDRESS=new DataValue();
+    private static  DataValue PERSONLOCATION=new DataValue();
+    private static  DataValue ANIMALVACCINATIONSTATUS=new DataValue();
+    private static  DataValue ANIMALGENDER=new DataValue();
+
     public ProgramOverviewFragment() {
         setProgramRuleFragmentHelper(new ProgramOverviewRuleHelper(this));
     }
 
     public static ProgramOverviewFragment newInstance(String orgUnitId, String programId,
-            long trackedEntityInstanceId) {
+                                                      long trackedEntityInstanceId) {
         ProgramOverviewFragment fragment = new ProgramOverviewFragment();
         Bundle args = new Bundle();
         args.putString(ORG_UNIT_ID, orgUnitId);
@@ -301,7 +324,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_programoverview, container, false);
     }
 
@@ -400,10 +423,10 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 //            }
 //            else if(program.getUid().equals("Hs1zoGOwY8B")||program.getUid().equals("oLY6uR5jJh9"))
 //            {
-                createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
-                createNewAnimal = (Button)header.findViewById(R.id.addhuman);
-                createNewHumanExposure.setVisibility(View.GONE);
-                createNewAnimal.setVisibility(View.GONE);
+//            createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
+//            createNewAnimal = (Button)header.findViewById(R.id.addhuman);
+//            createNewHumanExposure.setVisibility(View.GONE);
+//            createNewAnimal.setVisibility(View.GONE);
 //            }
             mState.setOrgUnit(ou.getId(), ou.getLabel());
             mState.setProgram(program.getUid(), program.getName());
@@ -567,7 +590,9 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     @Override
     public void onLoadFinished(Loader<ProgramOverviewFragmentForm> loader,
-            ProgramOverviewFragmentForm data) {
+                               ProgramOverviewFragmentForm data) {
+        List<ProgramRuleVariable> programRuleVariables = MetaDataController.getProgramRuleVariables();
+
         if (LOADER_ID == loader.getId()) {
             clearViews();
             mForm = data;
@@ -681,18 +706,110 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 programIndicatorLayout.addView(view);
             }
 
+            //ToDo ps view
             reloadProgramRules();
             List<ProgramStageRow> validRows = new ArrayList<>();
+            List<DataValue> datavalue_list = new ArrayList<>();
+            List<DataValue> datavalue_list_event = new ArrayList<>();
             for(ProgramStageRow programStageRow : mForm.getProgramStageRows()){
-                if(programStageRow instanceof  ProgramStageLabelRow) {
-                    if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid())){
-                        validRows.add(programStageRow);
+                    if(programStageRow instanceof  ProgramStageLabelRow) {
+                        if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid())){
+                            if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(EVENT_NOTIFICATION))
+                            {
+                                if(((ProgramStageLabelRow) programStageRow).getEventRows().get(0).getEvent().getDataValues().size()>0)
+                                {
+                                    for(DataValue dataValue:((ProgramStageLabelRow) programStageRow).getEventRows().get(0).getEvent().getDataValues())
+                                    {
+                                        if(dataValue.getDataElement().equals("KUjCOboZzvM"))
+                                        {
+                                            NOTIFICATION_VALUE= dataValue.getValue();
+                                        }
+                                        datavalue_list.add(dataValue);
+                                    }
+                                }
+                                validRows.add(programStageRow);
+
+                            }
+                            if(NOTIFICATION_VALUE!=null||NOTIFICATION_VALUE!="")
+                            {
+                                if(NOTIFICATION_VALUE.contains("Rabies"))
+                                {
+                                    if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(RABIESASSESMENT))
+                                    {
+
+                                        validRows.add(programStageRow);
+                                    }
+                                    else if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(QUARANTINE))
+                                    {
+                                        validRows.add(programStageRow);
+                                    }
+                                }
+                                else if(NOTIFICATION_VALUE.contains("Quarant"))
+                                {
+                                    if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(QUARANTINE))
+                                    {
+                                        validRows.add(programStageRow);
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+//                                Log.d("EVENT STATUS","NOT COMPLETED");
+                            }
+
+                        }
+                    }else if(programStageRow instanceof  ProgramStageEventRow) {
+                        if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId())){
+
+                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(EVENT_NOTIFICATION))
+                            {
+
+                                if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                {
+                                    for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                    {
+                                        if(dataValue.getDataElement().equals("KUjCOboZzvM"))
+                                        {
+                                            NOTIFICATION_VALUE= dataValue.getValue();
+                                        }
+                                        datavalue_list.add(dataValue);
+                                    }
+                                }
+                                validRows.add(programStageRow);
+                            }
+                            if(NOTIFICATION_VALUE!=null||NOTIFICATION_VALUE!="")
+                            {
+                                if(NOTIFICATION_VALUE.contains("Rabies"))
+                                {
+                                    if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(RABIESASSESMENT))
+                                    {
+                                        validRows.add(programStageRow);
+                                    }
+                                    else if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
+                                    {
+                                        validRows.add(programStageRow);
+                                    }
+                                }
+                                else if(NOTIFICATION_VALUE.contains("Quarant"))
+                                {
+                                    if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
+                                    {
+                                        validRows.add(programStageRow);
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+//                                Log.d("EVENT STATUS","NOT COMPLETED");
+                            }
+
+
+                        }
                     }
-                }else if(programStageRow instanceof  ProgramStageEventRow) {
-                    if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId())){
-                        validRows.add(programStageRow);
-                    }
-                }
+
+
             }
             mForm.setProgramStageRows(validRows);
             for (ProgramStageRow row : mForm.getProgramStageRows()) {
@@ -728,14 +845,16 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 }
             }
             for (ProgramStageRow programStageRow :mForm.getProgramStageRows()) {
-                    ProgramStageRow programStageEventRow = programStageRow;
-                    View view = programStageEventRow.getView(getLayoutInflater(getArguments()),
-                            null, programEventsLayout);
-                    programEventsLayout.addView(view);
+                ProgramStageRow programStageEventRow = programStageRow;
+
+                View view = programStageEventRow.getView(getLayoutInflater(getArguments()),
+                        null, programEventsLayout);
+                programEventsLayout.addView(view);
             }
         }
     }
 
+    //ToDO Event color
     private void initializeEventsViews(LinearLayout programEventsLayout) {
         programEventsLayout.removeAllViews();
         FlowLayout keyValueLayout = (FlowLayout) eventsCardView.findViewById(
@@ -886,7 +1005,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     List<ProgramTrackedEntityAttribute> programTrackedEntityAttributes =
                             program.getProgramTrackedEntityAttributes();
                     for (int i = 0; i < programTrackedEntityAttributes.size() && i < 2;
-                            i++) {
+                         i++) {
                         attributesToShow.add(programTrackedEntityAttributes.get(
                                 i).getTrackedEntityAttribute());
                     }
@@ -917,7 +1036,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     }
 
     public static void showConfirmDeleteRelationshipDialog(final Relationship relationship,
-            final TrackedEntityInstance trackedEntityInstance, Activity activity) {
+                                                           final TrackedEntityInstance trackedEntityInstance, Activity activity) {
         if (activity == null) return;
         UiUtils.showConfirmDialog(activity, activity.getString(R.string.confirm),
                 activity.getString(R.string.confirm_delete_relationship),
@@ -949,7 +1068,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
-            ContextMenu.ContextMenuInfo menuInfo) {
+                                    ContextMenu.ContextMenuInfo menuInfo) {
         new MenuInflater(this.getActivity()).inflate(R.menu.long_click_event_menu, menu);
 
     }
@@ -1093,7 +1212,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     @Override
     public void showEnrollmentFragment(TrackedEntityInstance trackedEntityInstance,
-            DateTime enrollmentDate, DateTime incidentDate) {
+                                       DateTime enrollmentDate, DateTime incidentDate) {
         String enrollmentDateString = enrollmentDate.toString();
         String incidentDateString = null;
         if (incidentDate != null) {
@@ -1118,14 +1237,14 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 //            if(Arrays.asList(getResources()
 //                    .getStringArray(R.array.enabled_program_stages_intake_program))
 //                    .contains(programStage)){
-                if (event == null) {
-                    HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
-                            args.getString(PROGRAM_ID), programStage, mForm.getEnrollment().getLocalId());
-                } else {
-                    HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
-                            args.getString(PROGRAM_ID), programStage,
-                            mForm.getEnrollment().getLocalId(), event.getLocalId());
-                }
+            if (event == null) {
+                HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
+                        args.getString(PROGRAM_ID), programStage, mForm.getEnrollment().getLocalId());
+            } else {
+                HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
+                        args.getString(PROGRAM_ID), programStage,
+                        mForm.getEnrollment().getLocalId(), event.getLocalId());
+            }
 //            }else{
 //                UiUtils.showErrorDialog(getActivity(),"Not Allowed","This program stage is not allowed yet");
 //            }
@@ -1271,15 +1390,15 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 break;
             }
 
-            case R.id.addhuman:{
-                addHuman();
-                break;
-            }
-
-            case R.id.addanimal:{
-                addAnimal();
-                break;
-            }
+//            case R.id.addhuman:{
+//                addHuman();
+//                break;
+//            }
+//
+//            case R.id.addanimal:{
+//                addAnimal();
+//                break;
+//            }
             case R.id.followupButton: {
                 toggleFollowup();
                 break;
@@ -1459,7 +1578,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private Enrollment getLastEnrollmentForTrackedEntityInstance() {
         List<Enrollment> enrollments = TrackerController.getEnrollments(
                 mForm.getTrackedEntityInstance(), mForm.getProgram().getUid(), mForm.getTrackedEntityInstance().getOrgUnit());
-         if(enrollments==null || enrollments.size()==0) {
+        if(enrollments==null || enrollments.size()==0) {
             return null;
         }
         EnrollmentDateComparator comparator = new EnrollmentDateComparator();
@@ -1487,8 +1606,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     private void editTrackedEntityInstanceProfile() {
         HolderActivity.navigateToTrackedEntityInstanceProfileFragment(getActivity(),
-                    getArguments().
-                            getLong(TRACKEDENTITYINSTANCE_ID), getArguments().getString(PROGRAM_ID));
+                getArguments().
+                        getLong(TRACKEDENTITYINSTANCE_ID), getArguments().getString(PROGRAM_ID));
     }
 
     private void showAddRelationshipFragment() {
@@ -1531,7 +1650,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     }
 
     private void addProgramRuleActionToView(ProgramRuleAction programRuleAction,
-            ViewGroup programIndicatorLayout, View view) {
+                                            ViewGroup programIndicatorLayout, View view) {
         view.setTag(programRuleAction.getUid());
         boolean isAdded = false;
         for(int i=0;i<programIndicatorLayout.getChildCount();i++){
@@ -1648,15 +1767,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         String dateOfEnrollment = mForm.getDateOfEnrollmentValue();
         String dateOfIncidend = mForm.getIncidentDateValue();
         ANIMALID_BARCODE=mForm.getTrackedEntityInstance().getUid();
-//        for(TrackedEntityAttributeValue te:mForm.getTrackedEntityInstance().getAttributes())
-//        {
-//            if(te.getTrackedEntityAttributeId().equals("bOE4hRfxLKf"))
-//            {
-//                 ANIMALID_BARCODE = te.getValue();
-//            }
-//
-//        }
-
 
         //TODO: This value should be picked from tei attributes
         HolderActivity.navigateToDataEntryFragment_(getActivity(),orgId,programId,
