@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp">
@@ -244,94 +244,273 @@
 
     <!--</GridLayout>-->
 
+        <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent">-->
+            <!--<LinearLayout-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/ibmc_jobs"-->
+
+                    <!--android:src="@mipmap/ic_jobs"-->
+
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:text="Jobs"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="match_parent" />-->
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/ibmc_review_cases"-->
+                    <!--android:src="@mipmap/ic_review_case"-->
+
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:text="Jobs"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--/>-->
+                <!--<ImageView-->
+                    <!--android:id="@+id/ibmc_statistics"-->
+                    <!--android:src="@mipmap/ic_stat"-->
+
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:text="Jobs"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--/>-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1">-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+        <!--</LinearLayout>-->
+        <!--<LinearLayout-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent">-->
+            <!--<LinearLayout-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+                <!--<ImageView-->
+                    <!--android:id="@+id/ibmc_new_case"-->
+                    <!--android:src="@mipmap/ic_new_case"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:text="Jobs"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--/>-->
+                <!--<ImageView-->
+                    <!--android:id="@+id/ibmc_upload"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@mipmap/ic_upload"-->
+
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--/>-->
+                <!--<ImageView-->
+                    <!--android:id="@+id/ibmc_notifications"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@mipmap/ic_notifications"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--/>-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1">-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:text="INTERGRATED BITE CASE MANAGEMENT"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ibmc_new_case"
+        android:layout_margin="5dp"
+        android:background="@drawable/home_button"
+        android:backgroundTint="#c10000"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:paddingLeft="10dp">
+
+        <ImageView
+
+            android:padding="10dp"
+            android:src="@drawable/ic_create_new"
+            android:gravity="left"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:text="NEW CASE"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ibmc_jobs"
+        android:layout_margin="5dp"
+        android:background="@drawable/home_button"
+        android:backgroundTint="@color/light_blue"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:paddingLeft="10dp">
+
+        <ImageView
+
+            android:padding="10dp"
+            android:src="@drawable/ic_list"
+            android:gravity="left"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent" />
+        <TextView
+            android:textColor="@color/white"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:text="CASE LIST"
+            android:gravity="center"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
         <LinearLayout
+            android:id="@+id/ibmc_review_cases"
+            android:background="@drawable/home_button"
+            android:backgroundTint="@color/dark_navy_blue"
+            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent">
-            <LinearLayout
-                android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+            <ImageView
+                android:paddingTop="5dp"
+                android:src="@drawable/ic_review"
+                android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/ibmc_jobs"
-
-                    android:src="@mipmap/ic_jobs"
-
-                    android:scaleType="centerCrop"
-                    android:text="Jobs"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent" />
-
-                <ImageView
-                    android:id="@+id/ibmc_review_cases"
-                    android:src="@mipmap/ic_review_case"
-
-                    android:scaleType="centerCrop"
-                    android:text="Jobs"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    />
-                <ImageView
-                    android:id="@+id/ibmc_statistics"
-                    android:src="@mipmap/ic_stat"
-
-                    android:scaleType="centerCrop"
-                    android:text="Jobs"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
-
-                </LinearLayout>
-            </LinearLayout>
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:textColor="@color/white"
+                android:text="Review Cases"
+                android:gravity="center_horizontal"
+                android:textSize="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_weight="1"
+            android:id="@+id/ibmc_upload"
+            android:background="@drawable/home_button"
+            android:backgroundTint="@color/dark_navy_blue"
+            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="match_parent">
-            <LinearLayout
-                android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+            <ImageView
+                android:paddingTop="5dp"
+                android:src="@drawable/ic_cloud_upload"
+                android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/ibmc_new_case"
-                    android:src="@mipmap/ic_new_case"
-                    android:scaleType="centerCrop"
-                    android:text="Jobs"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    />
-                <ImageView
-                    android:id="@+id/ibmc_upload"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_upload"
-
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    />
-                <ImageView
-                    android:id="@+id/ibmc_notifications"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_notifications"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
-
-                </LinearLayout>
-            </LinearLayout>
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:textColor="@color/white"
+                android:text="Upload"
+                android:gravity="center_horizontal"
+                android:textSize="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+        <LinearLayout
+            android:id="@+id/ibmc_statistics"
+            android:background="@drawable/home_button"
+            android:backgroundTint="@color/dark_navy_blue"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+            <ImageView
+                android:paddingTop="5dp"
+                android:src="@drawable/ic_stat"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:textColor="@color/white"
+                android:text="Statistics"
+                android:gravity="center_horizontal"
+                android:textSize="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ibmc_notifications"
+            android:background="@drawable/home_button"
+            android:backgroundTint="@color/dark_navy_blue"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+            <ImageView
+                android:paddingTop="5dp"
+                android:src="@drawable/ic_home_notification"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:textColor="@color/white"
+                android:text="Notifications"
+                android:gravity="center_horizontal"
+                android:textSize="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

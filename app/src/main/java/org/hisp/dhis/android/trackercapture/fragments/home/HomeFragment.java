@@ -104,11 +104,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,I
                 case R.id.ibmc_upload:
                     Toast.makeText(getContext(), "Upload", Toast.LENGTH_LONG).show();
                     break;
-
+//
                 case R.id.ibmc_statistics:
                     Toast.makeText(getContext(), "Statistics", Toast.LENGTH_LONG).show();
                     break;
-
+//
                 case R.id.ibmc_notifications:
                     Toast.makeText(getContext(), "Notifications", Toast.LENGTH_LONG).show();
                     break;
