@@ -40,8 +40,10 @@ import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
+import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
 import org.hisp.dhis.android.sdk.utils.Utils;
 import org.hisp.dhis.android.sdk.utils.support.DateUtils;
+import org.hisp.dhis.android.trackercapture.R;
 import org.joda.time.LocalDate;
 
 public class ProgramStageEventRow implements ProgramStageRow {
@@ -66,17 +68,21 @@ public class ProgramStageEventRow implements ProgramStageRow {
         TextView orgUnit;
         TextView eventDateTextView;
         ImageButton statusButton = null;
-
+        TextView programStageName;
+        TextView eventStatus;
         if (convertView != null && convertView.getTag() instanceof EventViewHolder) {
             view = convertView;
             holder = (EventViewHolder) view.getTag();
         } else {
-            View root = inflater.inflate(org.hisp.dhis.android.sdk.R.layout.eventlayout, container, false);
+            View root = inflater.inflate(org.hisp.dhis.android.sdk.R.layout.eventlayout_ibcm, container, false);
             orgUnit = (TextView) root.findViewById(org.hisp.dhis.android.sdk.R.id.organisationunit);
             eventDateTextView = (TextView) root.findViewById(org.hisp.dhis.android.sdk.R.id.date);
             statusButton = (ImageButton) root.findViewById(org.hisp.dhis.android.sdk.R.id.statusButton);
+            programStageName = (TextView) root.findViewById(org.hisp.dhis.android.sdk.R.id.programstagename);
+            eventStatus= (TextView) root.findViewById(org.hisp.dhis.android.sdk.R.id.event_status);
 
-            holder = new EventViewHolder(orgUnit, eventDateTextView, statusButton, new OnProgramStageEventInternalClickListener());
+            holder = new EventViewHolder(orgUnit, eventDateTextView, statusButton,
+                    new OnProgramStageEventInternalClickListener(),programStageName,eventStatus);
 
             root.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).setOnClickListener(holder.listener);
             root.findViewById(
@@ -117,6 +123,11 @@ public class ProgramStageEventRow implements ProgramStageRow {
 
         holder.listener.setEvent(getEvent());
         holder.listener.setMessage(getMessage());
+        //changes for ibcm
+        String programStageNameStr = MetaDataController.getProgramStage(event.getProgramStageId()).getDisplayName();
+        String statusStr = event.getStatus();
+        holder.programStageName.setText(programStageNameStr);
+        holder.eventStatus.setText(statusStr);
         if(event.getOrganisationUnitId()!=null) {
             OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit(event.getOrganisationUnitId());
             if(organisationUnit != null) {
@@ -143,12 +154,22 @@ public class ProgramStageEventRow implements ProgramStageRow {
         }
         LocalDate dueDate = new LocalDate(DateUtils.parseDate(event.getDueDate()));
         LocalDate now = new LocalDate(DateUtils.parseDate(DateUtils.getMediumDateString()));
-        int color = getStatusColor(eventDate, dueDate, now);
-
+//        int color = getStatusColor(eventDate, dueDate, now);
+        int color = getEventColor(programStageNameStr);
         view.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).
                 setBackgroundColor(inflater.getContext().getResources().getColor(color));
 
         return view;
+    }
+
+    private int getEventColor(String programStageNameStr) {
+        int color;
+        if(programStageNameStr.contains("Notification")){
+            color =  R.color.color_material_red_dark;
+        }else{
+            color = R.color.dark_navy_blue;
+        }
+        return color;
     }
 
     private int getStatusColor(LocalDate eventDate, LocalDate dueDate, LocalDate now) {
@@ -173,14 +194,19 @@ public class ProgramStageEventRow implements ProgramStageRow {
         public final TextView orgUnit;
         public final TextView date;
         public final ImageButton statusButton;
+        public final TextView programStageName;
+        public final TextView eventStatus;
         public final OnProgramStageEventInternalClickListener listener;
 
         private EventViewHolder(TextView orgUnit,
-                                TextView date, ImageButton statusButton, OnProgramStageEventInternalClickListener listener) {
+                                TextView date, ImageButton statusButton, OnProgramStageEventInternalClickListener listener
+                                ,TextView programStageName,TextView eventStatus) {
             this.orgUnit = orgUnit;
             this.date = date;
             this.statusButton = statusButton;
             this.listener = listener;
+            this.programStageName = programStageName;
+            this.eventStatus = eventStatus;
         }
     }
 

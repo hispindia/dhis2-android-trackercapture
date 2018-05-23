@@ -712,54 +712,56 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             List<DataValue> datavalue_list = new ArrayList<>();
             List<DataValue> datavalue_list_event = new ArrayList<>();
             for(ProgramStageRow programStageRow : mForm.getProgramStageRows()){
-                    if(programStageRow instanceof  ProgramStageLabelRow) {
-                        if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid())){
-                            if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(EVENT_NOTIFICATION))
-                            {
-                                if(((ProgramStageLabelRow) programStageRow).getEventRows().get(0).getEvent().getDataValues().size()>0)
-                                {
-                                    for(DataValue dataValue:((ProgramStageLabelRow) programStageRow).getEventRows().get(0).getEvent().getDataValues())
-                                    {
-                                        if(dataValue.getDataElement().equals("KUjCOboZzvM"))
-                                        {
-                                            NOTIFICATION_VALUE= dataValue.getValue();
-                                        }
-                                        datavalue_list.add(dataValue);
-                                    }
-                                }
-                                validRows.add(programStageRow);
 
-                            }
-                            if(NOTIFICATION_VALUE!=null||NOTIFICATION_VALUE!="")
-                            {
-                                if(NOTIFICATION_VALUE.contains("Rabies"))
-                                {
-                                    if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(RABIESASSESMENT))
-                                    {
-
-                                        validRows.add(programStageRow);
-                                    }
-                                    else if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(QUARANTINE))
-                                    {
-                                        validRows.add(programStageRow);
-                                    }
-                                }
-                                else if(NOTIFICATION_VALUE.contains("Quarant"))
-                                {
-                                    if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(QUARANTINE))
-                                    {
-                                        validRows.add(programStageRow);
-                                    }
-                                }
-
-                            }
-                            else
-                            {
-//                                Log.d("EVENT STATUS","NOT COMPLETED");
-                            }
-
-                        }
-                    }else if(programStageRow instanceof  ProgramStageEventRow) {
+//                    if(programStageRow instanceof  ProgramStageLabelRow) {
+//                        if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid())){
+//                            if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(EVENT_NOTIFICATION))
+//                            {
+//                                if(((ProgramStageLabelRow) programStageRow).getEventRows().get(0).getEvent().getDataValues().size()>0)
+//                                {
+//                                    for(DataValue dataValue:((ProgramStageLabelRow) programStageRow).getEventRows().get(0).getEvent().getDataValues())
+//                                    {
+//                                        if(dataValue.getDataElement().equals("KUjCOboZzvM"))
+//                                        {
+//                                            NOTIFICATION_VALUE= dataValue.getValue();
+//                                        }
+//                                        datavalue_list.add(dataValue);
+//                                    }
+//                                }
+//                                validRows.add(programStageRow);
+//
+//                            }
+//                            if(NOTIFICATION_VALUE!=null||NOTIFICATION_VALUE!="")
+//                            {
+//                                if(NOTIFICATION_VALUE.contains("Rabies"))
+//                                {
+//                                    if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(RABIESASSESMENT))
+//                                    {
+//
+//                                        validRows.add(programStageRow);
+//                                    }
+//                                    else if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(QUARANTINE))
+//                                    {
+//                                        validRows.add(programStageRow);
+//                                    }
+//                                }
+//                                else if(NOTIFICATION_VALUE.contains("Quarant"))
+//                                {
+//                                    if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(QUARANTINE))
+//                                    {
+//                                        validRows.add(programStageRow);
+//                                    }
+//                                }
+//
+//                            }
+//                            else
+//                            {
+////                                Log.d("EVENT STATUS","NOT COMPLETED");
+//                            }
+//
+//                        }
+//                    }else
+                        if(programStageRow instanceof  ProgramStageEventRow) {
                         if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId())){
 
                             if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(EVENT_NOTIFICATION))
