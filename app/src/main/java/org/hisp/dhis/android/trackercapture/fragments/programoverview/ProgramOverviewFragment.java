@@ -33,6 +33,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -65,6 +66,7 @@ import com.raizlabs.android.dbflow.sql.queriable.StringQuery;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 
+import org.apache.commons.jexl2.Main;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
@@ -123,6 +125,7 @@ import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 import org.hisp.dhis.android.sdk.utils.comparators.EnrollmentDateComparator;
 import org.hisp.dhis.android.sdk.utils.services.ProgramRuleService;
 import org.hisp.dhis.android.sdk.utils.services.VariableService;
+import org.hisp.dhis.android.trackercapture.MainActivity;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
 import org.hisp.dhis.android.trackercapture.fragments.programoverview
@@ -170,6 +173,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         AdapterView.OnItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, IEnroller,
         OnBackPressedListener {
 
+
     public static final String CLASS_TAG = ProgramOverviewFragment.class.getSimpleName();
     private static final String STATE = "state:UpcomingEventsFragment";
     private static final int LOADER_ID = 578922123;
@@ -180,15 +184,25 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private static final String ORG_UNIT_ID = "extra:orgUnitId";
     private static final String PROGRAM_ID = "extra:ProgramId";
 
+    private   String NOTIFICATION_VALUE = "";
+    private   String ETHUNIZEDANIMAL = "";
+    private   String TESTRESULTS = "";
+    private   String DEADANIMAL = "";
+    private   String ASSESSMENT_DECISION = "";
+    private   String FOLLOWUP = "";
+
+    private static final String ANIMAL_EXPOSED_INDICATOR = "hE8L9tjVdSX";
+    private static final String EVENT_NOTIFICATION = "PwGD626AbHf";
+    private static final String RABIES_FOLLOWUP = "MkiHGIm385w";
+    private static final String LAB_INVESTIGATION = "eSOtGji0yna";
+    private static final String REPORT_DETAILS = "bXZaSp2arEk";
+
 
     private static  String ANIMALID_BARCODE = null;
     private static final String HUMAN_EXPOSURE = "Hs1zoGOwY8B";
     private static final String ANIMAL_EXPOSURE = "oLY6uR5jJh9";
     private static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
 
-    private static final String ANIMAL_EXPOSED_INDICATOR = "hE8L9tjVdSX";
-    private static final String EVENT_NOTIFICATION = "PwGD626AbHf";
-    private   String NOTIFICATION_VALUE = "";
     private static final String COMPLETED = "COMPLETED";
     private  static Boolean EVENT_STATUS = false;
     private  static Boolean RABIES = false;
@@ -275,6 +289,13 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         args.putLong(TRACKEDENTITYINSTANCE_ID, trackedEntityInstanceId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+//        super.onBackPressed();
+        ((MainActivity)getActivity()).navigateToHomeFragment();
+        return false;
     }
 
     @Override
@@ -376,16 +397,16 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         programIndicatorCardView = (CardView) header.findViewById(R.id.programindicators_cardview);
         eventsCardView = (CardView) header.findViewById(R.id.events_cardview);
 
-        completeButton = (Button) header.findViewById(R.id.complete);
+//        completeButton = (Button) header.findViewById(R.id.complete);
         reOpenButton = (Button) header.findViewById(R.id.re_open);
-        terminateButton = (Button) header.findViewById(R.id.terminate);
-        followupButton = (ImageButton) header.findViewById(R.id.followupButton);
+//        terminateButton = (Button) header.findViewById(R.id.terminate);
+//        followupButton = (ImageButton) header.findViewById(R.id.followupButton);
         profileButton = (ImageButton) header.findViewById(R.id.profile_button);
-        completeButton.setOnClickListener(this);
+//        completeButton.setOnClickListener(this);
         reOpenButton.setOnClickListener(this);
-        terminateButton.setOnClickListener(this);
-        followupButton.setOnClickListener(this);
-        followupButton.setVisibility(View.GONE);
+//        terminateButton.setOnClickListener(this);
+//        followupButton.setOnClickListener(this);
+//        followupButton.setVisibility(View.GONE);
         profileButton.setOnClickListener(this);
         profileCardView.setOnClickListener(this);
         enrollmentServerStatus.setOnClickListener(this);
@@ -760,8 +781,11 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 //                            }
 //
 //                        }
-//                    }else
-                        if(programStageRow instanceof  ProgramStageEventRow) {
+//                    }
+//
+
+//                else
+                    if(programStageRow instanceof  ProgramStageEventRow) {
                         if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId())){
 
                             if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(EVENT_NOTIFICATION))
@@ -780,36 +804,160 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                                 }
                                 validRows.add(programStageRow);
                             }
-                            if(NOTIFICATION_VALUE!=null||NOTIFICATION_VALUE!="")
+
+//                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(LAB_INVESTIGATION)||((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(REPORT_DETAILS))
+//                            {
+//
+//                                validRows.add(programStageRow);
+//                            }
+
+                            if(NOTIFICATION_VALUE!="")
                             {
                                 if(NOTIFICATION_VALUE.contains("Rabies"))
                                 {
                                     if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(RABIESASSESMENT))
                                     {
+                                        if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                        {
+                                            for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                            {
+                                                if(dataValue.getDataElement().equals("PO7gpmxOjqA"))
+                                                {
+                                                    FOLLOWUP= dataValue.getValue();
+                                                }
+
+                                                if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+                                                {
+                                                    ETHUNIZEDANIMAL= dataValue.getValue();
+                                                }
+                                                if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+                                                {
+                                                    DEADANIMAL= dataValue.getValue();
+                                                }
+                                                if(dataValue.getDataElement().equals("LvhhEkHTEDE"))
+                                                {
+                                                    ASSESSMENT_DECISION= dataValue.getValue();
+                                                }
+                                                if(dataValue.getDataElement().equals("WrQmHGe6teV"))
+                                                {
+                                                    FOLLOWUP= dataValue.getValue();
+                                                }
+                                                datavalue_list.add(dataValue);
+                                            }
+                                        }
                                         validRows.add(programStageRow);
                                     }
-                                    else if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
-                                    {
-                                        validRows.add(programStageRow);
-                                    }
+//                                    else if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
+//                                    {
+//                                        validRows.add(programStageRow);
+//                                    }
                                 }
-                                else if(NOTIFICATION_VALUE.contains("Quarant"))
+
+                                 if(NOTIFICATION_VALUE.contains("Quarant"))
                                 {
                                     if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
                                     {
+                                        if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                        {
+                                            for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                            {
+                                                if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+                                                {
+                                                    ETHUNIZEDANIMAL= dataValue.getValue();
+                                                }
+                                                if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+                                                {
+                                                    DEADANIMAL= dataValue.getValue();
+                                                }
+                                                datavalue_list.add(dataValue);
+                                            }
+                                        }
                                         validRows.add(programStageRow);
                                     }
                                 }
-
                             }
-                            else
+                            if(FOLLOWUP.contains("Follow"))
                             {
-//                                Log.d("EVENT STATUS","NOT COMPLETED");
-                            }
 
+                                if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(RABIES_FOLLOWUP))
+                                {
+                                    if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                    {
+                                        for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                        {
+                                            if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+                                            {
+                                                ETHUNIZEDANIMAL= dataValue.getValue();
+                                            }
+                                            if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+                                            {
+                                                DEADANIMAL= dataValue.getValue();
+                                            }
+                                            if(dataValue.getDataElement().equals("Wg35B667XCW"))
+                                            {
+                                                ASSESSMENT_DECISION= dataValue.getValue();
+                                            }
+                                            datavalue_list.add(dataValue);
+                                        }
+                                    }
+                                    validRows.add(programStageRow);
+                                }
+                            }
+                            if(ASSESSMENT_DECISION.contains("Quarant"))
+                            {
+                                if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
+                                {
+                                    if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                    {
+                                        for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                        {
+                                            if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+                                            {
+                                                ETHUNIZEDANIMAL= dataValue.getValue();
+                                            }
+                                            if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+                                            {
+                                                DEADANIMAL= dataValue.getValue();
+                                            }
+                                            datavalue_list.add(dataValue);
+                                        }
+                                    }
+                                    validRows.add(programStageRow);
+                                }
+                            }
+                            if(ETHUNIZEDANIMAL!=""||DEADANIMAL!="")
+                            {
+                                if(ETHUNIZEDANIMAL.contains("true")||DEADANIMAL.contains("true"))
+                                {
+                                    if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(LAB_INVESTIGATION))
+                                    {
+                                        if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                        {
+                                            for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                            {
+                                                if(dataValue.getDataElement().equals("Bnn1wbADOjw"))
+                                                {
+                                                    TESTRESULTS= dataValue.getValue();
+                                                }
+
+                                                datavalue_list.add(dataValue);
+                                            }
+                                        }
+                                        validRows.add(programStageRow);
+                                    }
+                                }
+                            }
+                            if(TESTRESULTS!="")
+                            {
+                                if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(REPORT_DETAILS))
+                                {
+
+                                    validRows.add(programStageRow);
+                                }
+                            }
 
                         }
-                    }
+                }
 
 
             }
@@ -1377,20 +1525,20 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 break;
             }
 
-            case R.id.terminate: {
-                UiUtils.showConfirmDialog(getActivity(),
-                        getString(R.string.terminate),
-                        getString(R.string.confirm_terminate_enrollment),
-                        getString(R.string.yes),
-                        getString(R.string.no),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                terminateEnrollment();
-                            }
-                        });
-                break;
-            }
+//            case R.id.terminate: {
+//                UiUtils.showConfirmDialog(getActivity(),
+//                        getString(R.string.terminate),
+//                        getString(R.string.confirm_terminate_enrollment),
+//                        getString(R.string.yes),
+//                        getString(R.string.no),
+//                        new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                terminateEnrollment();
+//                            }
+//                        });
+//                break;
+//            }
 
 //            case R.id.addhuman:{
 //                addHuman();
@@ -1401,10 +1549,10 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 //                addAnimal();
 //                break;
 //            }
-            case R.id.followupButton: {
-                toggleFollowup();
-                break;
-            }
+//            case R.id.followupButton: {
+//                toggleFollowup();
+//                break;
+//            }
 
             case R.id.newenrollmentbutton: {
                 createEnrollment();
@@ -1648,7 +1796,9 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         //query build
         HashMap<String,String> attributeMap = new HashMap<>();
         attributeMap.put(ANIMAL_DETAILS_ATTR_ID,mForm.getTrackedEntityInstance().getTrackedEntityInstance());
-        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),mPrefs.getOrgUnit().first,programID,attributeMap);
+//        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),mPrefs.getOrgUnit().first,programID,attributeMap);
+        //Orgunit Fix
+        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),MetaDataController.getOrganisationUnit("C5pMQzJzCFw").getId(),programID,attributeMap);
     }
 
     private void addProgramRuleActionToView(ProgramRuleAction programRuleAction,
@@ -1805,9 +1955,13 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         }
     }
 
+    //Todo Shift to Home
     @Override
     public boolean doBack() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        getActivity().startActivity(intent);
         getActivity().finish();
+//        ((MainActivity)getActivity()).navigateToHomeFragment();
         return false;
     }
 
@@ -1829,4 +1983,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     public void hideProgramStage(ProgramRuleAction programRuleAction) {
     }
+
+
 }
