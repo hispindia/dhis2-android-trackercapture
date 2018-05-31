@@ -33,6 +33,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.Loader;
@@ -73,6 +74,7 @@ import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.SaveThread;
 import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentPreferences;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
+import org.hisp.dhis.android.trackercapture.MainActivity;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.EnrollmentDateSetterHelper;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.IEnroller;
@@ -571,6 +573,8 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
                     public void onClick(DialogInterface dialog, int which) {
                         //discard
                         discardChanges();
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        getActivity().startActivity(intent);
                         getActivity().finish();
                     }
                 }, new DialogInterface.OnClickListener() {
