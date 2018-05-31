@@ -29,6 +29,7 @@
 
 package org.hisp.dhis.android.trackercapture.ui.rows.programoverview;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
+import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
@@ -57,6 +59,14 @@ public class ProgramStageEventRow implements ProgramStageRow {
     private String message;
     private int status;
     private ProgramStageLabelRow labelRow;
+    private final String EVENTNOTIFICATION ="PwGD626AbHf";
+    private final String RABIESASSESMENT ="ww8DSCToHag";
+    private final String RABIESFOLLOWUP ="MkiHGIm385w";
+    private final String QUARANTINE ="IXdxLjRSFT8";
+    private final String REPORTDETAILS ="bXZaSp2arEk";
+    private final String HUMANEXPOSURE ="DbsGMk0zLxr";
+    private final String ANIMALEXPOSURE ="R8zfsjiFerK";
+    private final String LABNOTIFICATIONS ="eSOtGji0yna";
 
     public ProgramStageEventRow(Event event) {
         this.event = event;
@@ -81,7 +91,7 @@ public class ProgramStageEventRow implements ProgramStageRow {
             programStageName = (TextView) root.findViewById(org.hisp.dhis.android.sdk.R.id.programstagename);
             eventStatus= (TextView) root.findViewById(org.hisp.dhis.android.sdk.R.id.event_status);
 
-            holder = new EventViewHolder(orgUnit, eventDateTextView, statusButton,
+            holder = new EventViewHolder(orgUnit, eventDateTextView,statusButton,
                     new OnProgramStageEventInternalClickListener(),programStageName,eventStatus);
 
             root.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).setOnClickListener(holder.listener);
@@ -127,8 +137,71 @@ public class ProgramStageEventRow implements ProgramStageRow {
         String programStageNameStr = MetaDataController.getProgramStage(event.getProgramStageId()).getDisplayName();
         String statusStr = event.getStatus();
         holder.programStageName.setText(programStageNameStr);
-        holder.eventStatus.setText(statusStr);
+//        holder.eventStatus.setText(statusStr);
         if(event.getOrganisationUnitId()!=null) {
+            if(event.getProgramStageId().equals("PwGD626AbHf"))
+            {
+                for (DataValue dataValue:event.getDataValues())
+                {
+                    if(dataValue.getDataElement().equals("KUjCOboZzvM")&&dataValue.getValue()!=null)
+                    {
+                        holder.eventStatus.setText(dataValue.getValue());
+                    }
+                }
+            }
+            if(event.getProgramStageId().equals("ww8DSCToHag"))
+            {
+                for (DataValue dataValue:event.getDataValues())
+                {
+                    if (dataValue.getDataElement().equals("LvhhEkHTEDE")||dataValue.getDataElement().equals("hmu0VsNvkhm")||dataValue.getDataElement().equals("W0MoeBvwp4L"))
+                    {
+                        if(dataValue.getValue()!=null)
+                        {
+                            holder.eventStatus.setText(dataValue.getValue());
+                        }
+                    }
+                }
+            }
+            if(event.getProgramStageId().equals("MkiHGIm385w"))
+            {
+                for (DataValue dataValue:event.getDataValues())
+                {
+                    if (dataValue.getDataElement().equals("LvhhEkHTEDE")||dataValue.getDataElement().equals("hmu0VsNvkhm")||dataValue.getDataElement().equals("W0MoeBvwp4L"))
+                    {
+                        if(dataValue.getValue()!=null)
+                        {
+                            holder.eventStatus.setText(dataValue.getValue());
+                        }
+                    }
+                }
+            }
+            if(event.getProgramStageId().equals("IXdxLjRSFT8"))
+            {
+                for (DataValue dataValue:event.getDataValues())
+                {
+                    if (dataValue.getDataElement().equals("qWAQQNDarQU")||dataValue.getDataElement().equals("WrQmHGe6teV")||dataValue.getDataElement().equals("W0MoeBvwp4L"))
+                    {
+                        if(dataValue.getValue()!=null)
+                        {
+                            holder.eventStatus.setText(dataValue.getValue());
+                        }
+                    }
+                }
+            }
+            if(event.getProgramStageId().equals("eSOtGji0yna"))
+            {
+                for (DataValue dataValue:event.getDataValues())
+                {
+                    if (dataValue.getDataElement().equals("Bnn1wbADOjw"))
+                    {
+                        if(dataValue.getValue()!=null)
+                        {
+                            holder.eventStatus.setText(dataValue.getValue());
+                        }
+                    }
+                }
+            }
+
             OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit(event.getOrganisationUnitId());
             if(organisationUnit != null) {
                 holder.orgUnit.setText(organisationUnit.getLabel());
@@ -155,22 +228,61 @@ public class ProgramStageEventRow implements ProgramStageRow {
         LocalDate dueDate = new LocalDate(DateUtils.parseDate(event.getDueDate()));
         LocalDate now = new LocalDate(DateUtils.parseDate(DateUtils.getMediumDateString()));
 //        int color = getStatusColor(eventDate, dueDate, now);
-        int color = getEventColor(programStageNameStr);
-        view.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).
-                setBackgroundColor(inflater.getContext().getResources().getColor(color));
+
+        if(event.getProgramStageId().equals(EVENTNOTIFICATION))
+        {
+            view.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).
+                    setBackgroundColor(Color.parseColor("#0f8351"));
+        }
+
+        if(event.getProgramStageId().equals(RABIESASSESMENT))
+        {
+            view.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).
+                    setBackgroundColor(Color.parseColor("#F20F5A"));
+        }
+        if(event.getProgramStageId().equals(RABIESFOLLOWUP))
+        {
+            view.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).
+                    setBackgroundColor(Color.parseColor("#C1CD0B"));
+        }
+        if(event.getProgramStageId().equals(QUARANTINE))
+        {
+            view.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).
+                    setBackgroundColor(Color.parseColor("#006994"));
+        }
+        if(event.getProgramStageId().equals(LABNOTIFICATIONS))
+        {
+            view.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).
+                    setBackgroundColor(Color.parseColor("#4ABBB6"));
+        }
+        if(event.getProgramStageId().equals(REPORTDETAILS))
+        {
+            view.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).
+                    setBackgroundColor(Color.parseColor("#FFD32F2F"));
+        }
+        if(event.getProgramStageId().equals(HUMANEXPOSURE))
+        {
+            view.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).
+                    setBackgroundColor(Color.parseColor("#7798D7"));
+        }
+        if(event.getProgramStageId().equals(ANIMALEXPOSURE))
+        {
+            view.findViewById(org.hisp.dhis.android.sdk.R.id.eventbackground).
+                    setBackgroundColor(Color.parseColor("#7798D7"));
+        }
 
         return view;
     }
 
-    private int getEventColor(String programStageNameStr) {
-        int color;
-        if(programStageNameStr.contains("Notification")){
-            color =  R.color.color_material_red_dark;
-        }else{
-            color = R.color.dark_navy_blue;
-        }
-        return color;
-    }
+//    private int getEventColor(String programStageNameStr) {
+//        int color;
+//        if(programStageNameStr.contains("Notification")){
+//            color =  R.color.color_material_red_dark;
+//        }else{
+//            color = R.color.color_material_red_dark;
+//        }
+//        return color;
+//    }
 
     private int getStatusColor(LocalDate eventDate, LocalDate dueDate, LocalDate now) {
         int color;
@@ -198,9 +310,9 @@ public class ProgramStageEventRow implements ProgramStageRow {
         public final TextView eventStatus;
         public final OnProgramStageEventInternalClickListener listener;
 
-        private EventViewHolder(TextView orgUnit,
-                                TextView date, ImageButton statusButton, OnProgramStageEventInternalClickListener listener
-                                ,TextView programStageName,TextView eventStatus) {
+        private EventViewHolder(TextView orgUnit,TextView date,
+                                 ImageButton statusButton, OnProgramStageEventInternalClickListener listener
+                ,TextView programStageName,TextView eventStatus) {
             this.orgUnit = orgUnit;
             this.date = date;
             this.statusButton = statusButton;
