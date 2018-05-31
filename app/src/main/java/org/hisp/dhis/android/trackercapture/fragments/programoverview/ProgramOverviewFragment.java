@@ -1854,7 +1854,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         attributeMap.put(ANIMAL_DETAILS_ATTR_ID,mForm.getTrackedEntityInstance().getTrackedEntityInstance());
 //        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),mPrefs.getOrgUnit().first,programID,attributeMap);
         //Orgunit Fix
-        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),MetaDataController.getOrganisationUnit("C5pMQzJzCFw").getId(),programID,attributeMap);
+        List<OrganisationUnit> organisationUnits_=MetaDataController.getAssignedOrganisationUnits();
+        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),MetaDataController.getOrganisationUnit(organisationUnits_.get(0).getId()).getId(),programID,attributeMap);
     }
 
     private void addProgramRuleActionToView(ProgramRuleAction programRuleAction,

@@ -16,36 +16,30 @@ import android.widget.Toast;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
-import org.hisp.dhis.android.sdk.persistence.models.Program;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.activities.OnBackPressedListener;
 import org.hisp.dhis.android.sdk.ui.dialogs.AutoCompleteDialogFragment;
 import org.hisp.dhis.android.sdk.ui.dialogs.OrgUnitDialogFragment;
 import org.hisp.dhis.android.sdk.ui.dialogs.ProgramDialogFragment;
-import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentForm;
 import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentPreferences;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 import org.hisp.dhis.android.trackercapture.MainActivity;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
-import org.hisp.dhis.android.trackercapture.fragments.selectprogram.EnrollmentDateSetterHelper;
-import org.hisp.dhis.android.trackercapture.fragments.selectprogram.IEnroller;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.SelectProgramFragment;
 import org.hisp.dhis.client.sdk.ui.activities.BaseActivity;
 import org.hisp.dhis.client.sdk.ui.activities.OnBackPressedFromFragmentCallback;
 import org.hisp.dhis.client.sdk.ui.fragments.BaseFragment;
-import org.joda.time.DateTime;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener,IEnroller{
+import java.util.List;
+
+public class HomeFragment extends BaseFragment implements View.OnClickListener{
     protected SelectProgramFragmentPreferences mPrefs;
     private OnBackPressedFromFragmentCallback onBackPressedFromFragmentCallback;
-    protected SelectProgramFragmentForm mForm;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 //        setHasOptionsMenu(true);
         mPrefs = new SelectProgramFragmentPreferences(getActivity().getApplicationContext());
-        mForm = new SelectProgramFragmentForm();
     }
 
     @Nullable
@@ -80,40 +74,44 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,I
 
     @Override
     public void onClick(View view) {
-        if(mPrefs.getOrgUnit()==null){
-            Toast.makeText(getContext(),"Please Select and Organization unit",Toast.LENGTH_LONG).show();
-        }else {
+//        if(mPrefs.getOrgUnit()==null){
+//            Toast.makeText(getContext(),"Please Select and Organization unit",Toast.LENGTH_LONG).show();
+//        }else {
 
             switch (view.getId()) {
                 case R.id.ibmc_jobs:
-                    Toast.makeText(getContext(), "Jobs", Toast.LENGTH_LONG).show();
+//                    OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit("C5pMQzJzCFw");
+                    List<OrganisationUnit> organisationUnits_=MetaDataController.getAssignedOrganisationUnits();
+                    OrganisationUnit organisationUnit=MetaDataController.getOrganisationUnit(organisationUnits_.get(0).getId());
+//                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
+//                            mPrefs.getOrgUnit().first,getString(R.string.intake_form_program_id));
+
+                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
+                            organisationUnit.getId(),getString(R.string.intake_form_program_id));
                     break;
 
                 case R.id.ibmc_new_case:
 //                    ((MainActivity) getActivity()).navigateToSelectProgramFragment();
-                    //((MainActivity) getActivity()).navigateToNewcaseFragment();
-                    directToForms(getString(R.string.intake_form_program_id));
+                    ((MainActivity) getActivity()).navigateToNewcaseFragment();
                     break;
 
                 case R.id.ibmc_review_cases:
                     Toast.makeText(getContext(), "Review Cases", Toast.LENGTH_LONG).show();
-                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
-                            mPrefs.getOrgUnit().first,getString(R.string.intake_form_program_id));
                     break;
 
                 case R.id.ibmc_upload:
                     Toast.makeText(getContext(), "Upload", Toast.LENGTH_LONG).show();
                     break;
-//
+
                 case R.id.ibmc_statistics:
                     Toast.makeText(getContext(), "Statistics", Toast.LENGTH_LONG).show();
                     break;
-//
+
                 case R.id.ibmc_notifications:
                     Toast.makeText(getContext(), "Notifications", Toast.LENGTH_LONG).show();
                     break;
             }
-        }
+//        }
 
 
     }
@@ -147,42 +145,5 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,I
         onBackPressedFromFragmentCallback = null;
         super.onDetach();
     }
-
-    private void directToForms(String programId){
-        mPrefs = new SelectProgramFragmentPreferences(getActivity().getApplicationContext());
-        Program program = MetaDataController.getProgram(programId);
-        OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit(mPrefs.getOrgUnit().first);
-
-        mForm.setProgram(program);
-        mForm.setOrgUnit(organisationUnit);
-        createEnrollment();
-    }
-
-
-    private void createEnrollment() {
-        if (mForm != null && mForm.getProgram() != null) {
-            EnrollmentDateSetterHelper.createEnrollment(this, getActivity(), mForm.getProgram().
-                            getDisplayIncidentDate(), mForm.getProgram().getSelectEnrollmentDatesInFuture(),
-                    mForm.getProgram().getSelectIncidentDatesInFuture(), mForm.getProgram().getEnrollmentDateLabel(),
-                    mForm.getProgram().getIncidentDateLabel());
-        }
-    }
-
-    public void showEnrollmentFragment(TrackedEntityInstance trackedEntityInstance, DateTime enrollmentDate, DateTime incidentDate) {
-        String enrollmentDateString = enrollmentDate.toString();
-        String incidentDateString = null;
-        if (incidentDate != null) {
-            incidentDateString = incidentDate.toString();
-        }
-        if (trackedEntityInstance == null) {
-            HolderActivity.navigateToEnrollmentDataEntryFragment(getActivity(), mForm.getOrgUnit().getId(), mForm.getProgram().getUid(), enrollmentDateString, incidentDateString);
-
-        } else {
-            HolderActivity.navigateToEnrollmentDataEntryFragment(getActivity(), mForm.getOrgUnit().getId(), mForm.getProgram().getUid(), trackedEntityInstance.getLocalId(), enrollmentDateString, incidentDateString);
-
-        }
-
-    }
-
 
 }
