@@ -403,11 +403,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         manualidvalue = (TextView) header.findViewById(R.id.manual_id_value);
         location = (TextView) header.findViewById(R.id.location);
         locationvalue = (TextView) header.findViewById(R.id.location_value);
-
-        //ToDO attribute values
-
-
-
         incidentDateLabel = (TextView) header.findViewById(R.id.dateOfIncidentLabel);
         incidentDateValue = (TextView) header.findViewById(R.id.dateOfIncidentValue);
         profileCardView = (CardView) header.findViewById(R.id.profile_cardview);
@@ -415,14 +410,13 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         noActiveEnrollment = (TextView) header.findViewById(R.id.noactiveenrollment);
         programIndicatorCardView = (CardView) header.findViewById(R.id.programindicators_cardview);
         eventsCardView = (CardView) header.findViewById(R.id.events_cardview);
-
 //        completeButton = (Button) header.findViewById(R.id.complete);
-        reOpenButton = (Button) header.findViewById(R.id.re_open);
+          reOpenButton = (Button) header.findViewById(R.id.re_open);
 //        terminateButton = (Button) header.findViewById(R.id.terminate);
 //        followupButton = (ImageButton) header.findViewById(R.id.followupButton);
-        profileButton = (ImageButton) header.findViewById(R.id.profile_button);
+          profileButton = (ImageButton) header.findViewById(R.id.profile_button);
 //        completeButton.setOnClickListener(this);
-        reOpenButton.setOnClickListener(this);
+          reOpenButton.setOnClickListener(this);
 //        terminateButton.setOnClickListener(this);
 //        followupButton.setOnClickListener(this);
 //        followupButton.setVisibility(View.GONE);
@@ -439,11 +433,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         attribute1Value = (TextView) header.findViewById(R.id.headerItem1value);
         attribute2Label = (TextView) header.findViewById(R.id.headerItem2label);
         attribute2Value = (TextView) header.findViewById(R.id.headerItem2value);
-
-
-
         Bundle fragmentArguments = getArguments();
-
         if (savedInstanceState != null &&
                 savedInstanceState.getParcelable(STATE) != null) {
             mState = savedInstanceState.getParcelable(STATE);
@@ -454,20 +444,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     fragmentArguments.getString(ORG_UNIT_ID));
             Program program = MetaDataController.getProgram(
                     fragmentArguments.getString(PROGRAM_ID));
-//            if(program.getUid().equals("xO7WLJ8DIDK"))
-//            {
-//                createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
-//                createNewAnimal = (Button)header.findViewById(R.id.addanimal);
-//                createNewHumanExposure.setOnClickListener(this);
-//                createNewAnimal.setOnClickListener(this);
-//            }
-//            else if(program.getUid().equals("Hs1zoGOwY8B")||program.getUid().equals("oLY6uR5jJh9"))
-//            {
-//            createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
-//            createNewAnimal = (Button)header.findViewById(R.id.addhuman);
-//            createNewHumanExposure.setVisibility(View.GONE);
-//            createNewAnimal.setVisibility(View.GONE);
-//            }
             mState.setOrgUnit(ou.getId(), ou.getLabel());
             mState.setProgram(program.getUid(), program.getName());
             mState.setTrackedEntityInstance(
@@ -665,12 +641,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                         true);
                 profileButton.setClickable(true);
             }
-
-//            enrollmentDateLabel.setText(data.getDateOfEnrollmentLabel());
             enrollmentDateValue.setText(data.getDateOfEnrollmentValue());
-//            manualidvalue.setText(data.getDateOfEnrollmentValue());
-//            locationvalue.setText(data.getDateOfEnrollmentValue());
-
             TrackedEntityInstance trackedEntityInstance = TrackerController.getTrackedEntityInstance(
                     mForm.getTrackedEntityInstance().getTrackedEntityInstance());
             List<TrackedEntityAttributeValue> trackedEntityAttributeValues =
@@ -683,9 +654,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 {
                     TrackedEntityAttribute attribute = MetaDataController.getTrackedEntityAttribute(
                             trackedEntityAttributeValues.get(i).getTrackedEntityAttributeId());
-                    Log.d("program--",i+"--"+mForm.getProgram().getUid());
-                    Log.d("attributes--",i+"--"+attribute.getUid());
-                    //For Case Registration
+                    //Enrollment Attributes
                     if (attribute != null &&attribute.getUid().equals("pzhgH5qicsf")) {
                         manualid.setText("ID");
                         manualidvalue.setText(trackedEntityAttributeValues.get(1).getValue());
