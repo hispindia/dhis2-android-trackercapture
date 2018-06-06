@@ -349,7 +349,7 @@
     <LinearLayout
         android:id="@+id/ibmc_new_case"
         android:layout_margin="5dp"
-        android:background="@drawable/home_button"
+        android:background="@drawable/home_big_red_button"
         android:backgroundTint="#c10000"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -359,7 +359,7 @@
         <ImageView
 
             android:padding="10dp"
-            android:src="@drawable/ic_create_new"
+            app:srcCompat="@drawable/ic_create_new"
             android:gravity="left"
             android:layout_width="0dp"
             android:layout_weight="2"
@@ -377,7 +377,7 @@
     <LinearLayout
         android:id="@+id/ibmc_jobs"
         android:layout_margin="5dp"
-        android:background="@drawable/home_button"
+        android:background="@drawable/home_big_light_blue_button"
         android:backgroundTint="@color/light_blue"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -387,7 +387,7 @@
         <ImageView
 
             android:padding="10dp"
-            android:src="@drawable/ic_list"
+            app:srcCompat="@drawable/ic_list"
             android:gravity="left"
             android:layout_width="0dp"
             android:layout_weight="2"
@@ -418,7 +418,7 @@
             android:layout_margin="10dp">
             <ImageView
                 android:paddingTop="5dp"
-                android:src="@drawable/ic_review"
+                app:srcCompat="@drawable/ic_review"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -443,7 +443,7 @@
             android:layout_margin="10dp">
             <ImageView
                 android:paddingTop="5dp"
-                android:src="@drawable/ic_cloud_upload"
+                app:srcCompat="@drawable/ic_cloud_upload"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -473,7 +473,7 @@
             android:layout_margin="10dp">
             <ImageView
                 android:paddingTop="5dp"
-                android:src="@drawable/ic_stat"
+                app:srcCompat="@drawable/ic_stat"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -498,7 +498,7 @@
             android:layout_margin="10dp">
             <ImageView
                 android:paddingTop="5dp"
-                android:src="@drawable/ic_home_notification"
+                app:srcCompat="@drawable/ic_home_notification"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
