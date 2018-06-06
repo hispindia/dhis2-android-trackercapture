@@ -34,6 +34,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -201,6 +202,10 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private static  String ANIMALID_BARCODE = null;
     private static final String HUMAN_EXPOSURE = "Hs1zoGOwY8B";
     private static final String ANIMAL_EXPOSURE = "oLY6uR5jJh9";
+
+    private static final String HUMAN_EXPOSURE_STAGE = "DbsGMk0zLxr";
+    private static final String ANIMAL_EXPOSURE_STAGE = "R8zfsjiFerK";
+
     private static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
 
     private static final String COMPLETED = "COMPLETED";
@@ -227,7 +232,11 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     private LinearLayout enrollmentLayout;
     private TextView enrollmentDateLabel;
+    private TextView manualid;
+    private TextView location;
     private TextView enrollmentDateValue;
+    private TextView manualidvalue;
+    private TextView locationvalue;
     private TextView incidentDateLabel;
     private TextView incidentDateValue;
     private TextView noActiveEnrollment;
@@ -389,6 +398,11 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         enrollmentLayout = (LinearLayout) header.findViewById(R.id.enrollmentLayout);
         enrollmentDateLabel = (TextView) header.findViewById(R.id.dateOfEnrollmentLabel);
         enrollmentDateValue = (TextView) header.findViewById(R.id.dateOfEnrollmentValue);
+
+        manualid = (TextView) header.findViewById(R.id.manual_id);
+        manualidvalue = (TextView) header.findViewById(R.id.manual_id_value);
+        location = (TextView) header.findViewById(R.id.location);
+        locationvalue = (TextView) header.findViewById(R.id.location_value);
         incidentDateLabel = (TextView) header.findViewById(R.id.dateOfIncidentLabel);
         incidentDateValue = (TextView) header.findViewById(R.id.dateOfIncidentValue);
         profileCardView = (CardView) header.findViewById(R.id.profile_cardview);
@@ -396,14 +410,13 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         noActiveEnrollment = (TextView) header.findViewById(R.id.noactiveenrollment);
         programIndicatorCardView = (CardView) header.findViewById(R.id.programindicators_cardview);
         eventsCardView = (CardView) header.findViewById(R.id.events_cardview);
-
 //        completeButton = (Button) header.findViewById(R.id.complete);
-        reOpenButton = (Button) header.findViewById(R.id.re_open);
+          reOpenButton = (Button) header.findViewById(R.id.re_open);
 //        terminateButton = (Button) header.findViewById(R.id.terminate);
 //        followupButton = (ImageButton) header.findViewById(R.id.followupButton);
-        profileButton = (ImageButton) header.findViewById(R.id.profile_button);
+          profileButton = (ImageButton) header.findViewById(R.id.profile_button);
 //        completeButton.setOnClickListener(this);
-        reOpenButton.setOnClickListener(this);
+          reOpenButton.setOnClickListener(this);
 //        terminateButton.setOnClickListener(this);
 //        followupButton.setOnClickListener(this);
 //        followupButton.setVisibility(View.GONE);
@@ -420,11 +433,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         attribute1Value = (TextView) header.findViewById(R.id.headerItem1value);
         attribute2Label = (TextView) header.findViewById(R.id.headerItem2label);
         attribute2Value = (TextView) header.findViewById(R.id.headerItem2value);
-
-
-
         Bundle fragmentArguments = getArguments();
-
         if (savedInstanceState != null &&
                 savedInstanceState.getParcelable(STATE) != null) {
             mState = savedInstanceState.getParcelable(STATE);
@@ -435,20 +444,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     fragmentArguments.getString(ORG_UNIT_ID));
             Program program = MetaDataController.getProgram(
                     fragmentArguments.getString(PROGRAM_ID));
-//            if(program.getUid().equals("xO7WLJ8DIDK"))
-//            {
-//                createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
-//                createNewAnimal = (Button)header.findViewById(R.id.addanimal);
-//                createNewHumanExposure.setOnClickListener(this);
-//                createNewAnimal.setOnClickListener(this);
-//            }
-//            else if(program.getUid().equals("Hs1zoGOwY8B")||program.getUid().equals("oLY6uR5jJh9"))
-//            {
-//            createNewHumanExposure = (Button)header.findViewById(R.id.addhuman);
-//            createNewAnimal = (Button)header.findViewById(R.id.addhuman);
-//            createNewHumanExposure.setVisibility(View.GONE);
-//            createNewAnimal.setVisibility(View.GONE);
-//            }
             mState.setOrgUnit(ou.getId(), ou.getLabel());
             mState.setProgram(program.getUid(), program.getName());
             mState.setTrackedEntityInstance(
@@ -612,14 +607,12 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     @Override
     public void onLoadFinished(Loader<ProgramOverviewFragmentForm> loader,
                                ProgramOverviewFragmentForm data) {
-        List<ProgramRuleVariable> programRuleVariables = MetaDataController.getProgramRuleVariables();
 
         if (LOADER_ID == loader.getId()) {
             clearViews();
             mForm = data;
             mProgressBar.setVisibility(View.GONE);
             setRefreshing(false);
-
             mSpinner.setSelection(getSpinnerIndex(mState.getProgramName()));
 //
 //            if(mForm!=null){
@@ -648,8 +641,60 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                         true);
                 profileButton.setClickable(true);
             }
-            enrollmentDateLabel.setText(data.getDateOfEnrollmentLabel());
             enrollmentDateValue.setText(data.getDateOfEnrollmentValue());
+            TrackedEntityInstance trackedEntityInstance = TrackerController.getTrackedEntityInstance(
+                    mForm.getTrackedEntityInstance().getTrackedEntityInstance());
+            List<TrackedEntityAttributeValue> trackedEntityAttributeValues =
+                    TrackerController.getVisibleTrackedEntityAttributeValuesWithoutList(
+                            trackedEntityInstance.getLocalId());
+
+            if (trackedEntityAttributeValues != null && trackedEntityAttributeValues.size()>0) {
+
+                for(int i=0;i<trackedEntityAttributeValues.size();i++)
+                {
+                    TrackedEntityAttribute attribute = MetaDataController.getTrackedEntityAttribute(
+                            trackedEntityAttributeValues.get(i).getTrackedEntityAttributeId());
+                    //Enrollment Attributes
+                    if (attribute != null &&attribute.getUid().equals("pzhgH5qicsf")) {
+                        manualid.setText("ID");
+                        manualidvalue.setText(trackedEntityAttributeValues.get(1).getValue());
+                    }
+                    if (attribute != null &&attribute.getUid().equals("aHqngIItAmw")) {
+                        location.setText("LAST LOCATION");
+                        locationvalue.setText(trackedEntityAttributeValues.get(i).getValue());
+                    }
+                    //For Human Exposure
+                    if (attribute != null &&attribute.getUid().equals("AJKhqVOJRgT")) {
+                        manualid.setText("PERSON NAME");
+                        manualidvalue.setText(trackedEntityAttributeValues.get(i).getValue());
+                    }
+                    if (attribute != null &&attribute.getUid().equals("dqTwx0P3atQ")) {
+                        location.setText("PERSON PHONENUMBER");
+                        locationvalue.setText(trackedEntityAttributeValues.get(i).getValue());
+                    }
+
+                    //For Animal Exposure
+                    if (attribute != null &&attribute.getUid().equals("ZWKHguykALj")) {
+                        manualid.setText("PERSON NAME");
+                        manualidvalue.setText(trackedEntityAttributeValues.get(i).getValue());
+                    }
+                    if (attribute != null &&attribute.getUid().equals("ig6pxzJPIa0")) {
+                        location.setText("PERSON PHONENUMBER");
+                        locationvalue.setText(trackedEntityAttributeValues.get(i).getValue());
+                    }
+
+//                    if (trackedEntityAttributeValues.size()>1) {
+//                        attribute = MetaDataController.getTrackedEntityAttribute(
+//                                trackedEntityAttributeValues.get(3).getTrackedEntityAttributeId());
+//                        if (attribute != null) {
+////                        location.setText(attribute.getName());
+//                            locationvalue.setText(trackedEntityAttributeValues.get(3).getValue());
+//                        }
+//                    }
+                }
+
+
+            }
 
             if (!(data.getProgram().getDisplayIncidentDate())) {
                 incidentDateValue.setVisibility(View.GONE);
@@ -703,10 +748,10 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 View view = indicatorRow.getView(getChildFragmentManager(),
                         getLayoutInflater(getArguments()), null, programIndicatorLayout);
                 if(indicatorRow.getIndicator().getUid().equals(ANIMAL_EXPOSED_INDICATOR)){
-
                     indicatorRow.setValue(getIndicatorCount(getString(R.string.animal_exposure_program))+"");
                     view = indicatorRow.getView(getChildFragmentManager(),
                             getLayoutInflater(getArguments()), null, programIndicatorLayout);
+                    view.setBackgroundColor(Color.parseColor("#737A79"));
                     view.setTag(R.integer.indicator_key,ANIMAL_EXPOSED_INDICATOR);
                     view.findViewById(R.id.add_new_btn).setVisibility(View.VISIBLE);
                     view.findViewById(R.id.add_new_btn).setOnClickListener(this);
@@ -717,6 +762,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     view = indicatorRow.getView(getChildFragmentManager(),
                             getLayoutInflater(getArguments()), null, programIndicatorLayout);
                     view.setTag(R.integer.indicator_key,HUMAN_EXPOSED_INDICATOR);
+                    view.setBackgroundColor(Color.parseColor("#7798D7"));
                     view.findViewById(R.id.add_new_btn).setVisibility(View.VISIBLE);
                     view.findViewById(R.id.add_new_btn).setOnClickListener(this);
                     view.findViewById(R.id.add_new_btn).setTag(R.integer.indicator_key,HUMAN_EXPOSED_INDICATOR);
@@ -955,6 +1001,15 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                                     validRows.add(programStageRow);
                                 }
                             }
+                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(HUMAN_EXPOSURE_STAGE))
+                            {
+                                validRows.add(programStageRow);
+                            }
+
+                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(ANIMAL_EXPOSURE_STAGE))
+                            {
+                                validRows.add(programStageRow);
+                            }
 
                         }
                 }
@@ -1009,6 +1064,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         programEventsLayout.removeAllViews();
         FlowLayout keyValueLayout = (FlowLayout) eventsCardView.findViewById(
                 R.id.keyvalueeventlayout);
+
         keyValueLayout.removeAllViews();
         LinearLayout displayTextLayout = (LinearLayout) eventsCardView.findViewById(
                 R.id.texteventlayout);
@@ -1798,7 +1854,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         attributeMap.put(ANIMAL_DETAILS_ATTR_ID,mForm.getTrackedEntityInstance().getTrackedEntityInstance());
 //        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),mPrefs.getOrgUnit().first,programID,attributeMap);
         //Orgunit Fix
-        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),MetaDataController.getOrganisationUnit("C5pMQzJzCFw").getId(),programID,attributeMap);
+        List<OrganisationUnit> organisationUnits_=MetaDataController.getAssignedOrganisationUnits();
+        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),MetaDataController.getOrganisationUnit(organisationUnits_.get(0).getId()).getId(),programID,attributeMap);
     }
 
     private void addProgramRuleActionToView(ProgramRuleAction programRuleAction,
