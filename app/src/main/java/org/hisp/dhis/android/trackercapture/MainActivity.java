@@ -30,7 +30,6 @@
 package org.hisp.dhis.android.trackercapture;
 
 import static org.hisp.dhis.client.sdk.utils.StringUtils.isEmpty;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -43,7 +42,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
-
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.PeriodicSynchronizerController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
@@ -65,7 +63,6 @@ import org.hisp.dhis.client.sdk.ui.fragments.WrapperFragment;
 
 public class MainActivity extends AbsHomeActivity implements  AutoCompleteDialogFragment.OnOptionSelectedListener{
     public final static String TAG = MainActivity.class.getSimpleName();
-
     private static final String APPS_DASHBOARD_PACKAGE =
             "org.hisp.dhis.android.dashboard";
     private static final String APPS_DATA_CAPTURE_PACKAGE =
@@ -78,10 +75,10 @@ public class MainActivity extends AbsHomeActivity implements  AutoCompleteDialog
             "org.hispindia.bidtrackerreports";
     private static final int REQUEST_ACCESS_FINE_LOCATION = 1;
 
-
     protected SelectProgramFragmentPreferences mPrefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         ScreenSizeConfigurator.init(getWindowManager());
 
@@ -110,7 +107,7 @@ public class MainActivity extends AbsHomeActivity implements  AutoCompleteDialog
 
     private void setUpNavigationView(Bundle savedInstanceState) {
         removeMenuItem(R.id.drawer_item_profile);
-        addMenuItem(11, R.drawable.ic_add, R.string.select_ou);
+//        addMenuItem(11, R.drawable.ic_add, R.string.select_ou);
         //change by ifhaam for IBMC on 31-3-2018
         addMenuItem(12,R.drawable.ic_home,R.string.home); //addd menu as twelve
         if (savedInstanceState == null) {
