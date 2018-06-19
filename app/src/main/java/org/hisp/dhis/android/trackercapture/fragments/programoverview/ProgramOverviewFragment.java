@@ -187,18 +187,18 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     private   String NOTIFICATION_VALUE = "";
     private   String ETHUNIZEDANIMAL = "";
+    private   String CHECKIN_1 = "";
+    private   String CHECKIN_2 = "";
     private   String TESTRESULTS = "";
     private   String DEADANIMAL = "";
     private   String ASSESSMENT_DECISION = "";
     private   String FOLLOWUP = "";
-
+    private   String FOLLOWUP_OTHER = "";
     private static final String ANIMAL_EXPOSED_INDICATOR = "hE8L9tjVdSX";
     private static final String EVENT_NOTIFICATION = "PwGD626AbHf";
     private static final String RABIES_FOLLOWUP = "MkiHGIm385w";
     private static final String LAB_INVESTIGATION = "eSOtGji0yna";
     private static final String REPORT_DETAILS = "bXZaSp2arEk";
-
-
     private static  String ANIMALID_BARCODE = null;
     private static final String HUMAN_EXPOSURE = "Hs1zoGOwY8B";
     private static final String ANIMAL_EXPOSURE = "oLY6uR5jJh9";
@@ -411,12 +411,12 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         programIndicatorCardView = (CardView) header.findViewById(R.id.programindicators_cardview);
         eventsCardView = (CardView) header.findViewById(R.id.events_cardview);
 //        completeButton = (Button) header.findViewById(R.id.complete);
-          reOpenButton = (Button) header.findViewById(R.id.re_open);
+        reOpenButton = (Button) header.findViewById(R.id.re_open);
 //        terminateButton = (Button) header.findViewById(R.id.terminate);
 //        followupButton = (ImageButton) header.findViewById(R.id.followupButton);
-          profileButton = (ImageButton) header.findViewById(R.id.profile_button);
+        profileButton = (ImageButton) header.findViewById(R.id.profile_button);
 //        completeButton.setOnClickListener(this);
-          reOpenButton.setOnClickListener(this);
+        reOpenButton.setOnClickListener(this);
 //        terminateButton.setOnClickListener(this);
 //        followupButton.setOnClickListener(this);
 //        followupButton.setVisibility(View.GONE);
@@ -424,7 +424,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         profileCardView.setOnClickListener(this);
         enrollmentServerStatus.setOnClickListener(this);
         enrollmentLayout.setOnClickListener(this);
-
         missingEnrollmentLayout = (LinearLayout) header.findViewById(R.id.missingenrollmentlayout);
         newEnrollmentButton = (FloatingActionButton) header.findViewById(R.id.newenrollmentbutton);
         newEnrollmentButton.setOnClickListener(this);
@@ -627,7 +626,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             LinearLayout programIndicatorLayout =
                     (LinearLayout) programIndicatorCardView.findViewById(
                             R.id.programindicatorlayout);
-
             initializeEventsViews(programEventsLayout);
             initializeIndicatorViews(programIndicatorLayout);
 
@@ -655,31 +653,34 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     TrackedEntityAttribute attribute = MetaDataController.getTrackedEntityAttribute(
                             trackedEntityAttributeValues.get(i).getTrackedEntityAttributeId());
                     //Enrollment Attributes
-                    if (attribute != null &&attribute.getUid().equals("pzhgH5qicsf")) {
-                        manualid.setText("ID");
-                        manualidvalue.setText(trackedEntityAttributeValues.get(1).getValue());
+                    Log.d("attvalues",attribute.getUid());
+                    Log.d("attvalues",attribute.getName());
+
+                    if (attribute != null &&attribute.getUid().equals("I7OncVzPZKS")) {
+                        manualid.setText("ID:");
+                        manualidvalue.setText(trackedEntityAttributeValues.get(i).getValue());
                     }
-                    if (attribute != null &&attribute.getUid().equals("aHqngIItAmw")) {
-                        location.setText("LAST LOCATION");
+                    if (attribute != null &&attribute.getUid().equals("aIypqq5Mvqh")) {
+                        location.setText("LAST LOCATION:");
                         locationvalue.setText(trackedEntityAttributeValues.get(i).getValue());
                     }
                     //For Human Exposure
                     if (attribute != null &&attribute.getUid().equals("AJKhqVOJRgT")) {
-                        manualid.setText("PERSON NAME");
+                        manualid.setText("PERSON NAME:");
                         manualidvalue.setText(trackedEntityAttributeValues.get(i).getValue());
                     }
                     if (attribute != null &&attribute.getUid().equals("dqTwx0P3atQ")) {
-                        location.setText("PERSON PHONENUMBER");
+                        location.setText("PERSON PHONE NUMBER:");
                         locationvalue.setText(trackedEntityAttributeValues.get(i).getValue());
                     }
 
                     //For Animal Exposure
                     if (attribute != null &&attribute.getUid().equals("ZWKHguykALj")) {
-                        manualid.setText("PERSON NAME");
+                        manualid.setText("PERSON NAME:");
                         manualidvalue.setText(trackedEntityAttributeValues.get(i).getValue());
                     }
                     if (attribute != null &&attribute.getUid().equals("ig6pxzJPIa0")) {
-                        location.setText("PERSON PHONENUMBER");
+                        location.setText("PERSON PHONE NUMBER:");
                         locationvalue.setText(trackedEntityAttributeValues.get(i).getValue());
                     }
 
@@ -751,18 +752,19 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     indicatorRow.setValue(getIndicatorCount(getString(R.string.animal_exposure_program))+"");
                     view = indicatorRow.getView(getChildFragmentManager(),
                             getLayoutInflater(getArguments()), null, programIndicatorLayout);
-                    view.setBackgroundColor(Color.parseColor("#737A79"));
+                    view.setBackgroundColor(Color.parseColor("#FFF57C00"));
                     view.setTag(R.integer.indicator_key,ANIMAL_EXPOSED_INDICATOR);
                     view.findViewById(R.id.add_new_btn).setVisibility(View.VISIBLE);
                     view.findViewById(R.id.add_new_btn).setOnClickListener(this);
                     view.findViewById(R.id.add_new_btn).setTag(R.integer.indicator_key,ANIMAL_EXPOSED_INDICATOR);
                     view.setOnClickListener(this);
-                }else if(indicatorRow.getIndicator().getUid().equals(HUMAN_EXPOSED_INDICATOR)){
+                }
+                else if(indicatorRow.getIndicator().getUid().equals(HUMAN_EXPOSED_INDICATOR)){
                     indicatorRow.setValue(getIndicatorCount(getString(R.string.human_exposure_program))+"");
                     view = indicatorRow.getView(getChildFragmentManager(),
                             getLayoutInflater(getArguments()), null, programIndicatorLayout);
                     view.setTag(R.integer.indicator_key,HUMAN_EXPOSED_INDICATOR);
-                    view.setBackgroundColor(Color.parseColor("#7798D7"));
+                    view.setBackgroundColor(Color.parseColor("#FFFF9800"));
                     view.findViewById(R.id.add_new_btn).setVisibility(View.VISIBLE);
                     view.findViewById(R.id.add_new_btn).setOnClickListener(this);
                     view.findViewById(R.id.add_new_btn).setTag(R.integer.indicator_key,HUMAN_EXPOSED_INDICATOR);
@@ -831,25 +833,25 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 //
 
 //                else
-                    if(programStageRow instanceof  ProgramStageEventRow) {
-                        if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId())){
+                if(programStageRow instanceof  ProgramStageEventRow) {
+                    if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId())){
 
-                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(EVENT_NOTIFICATION))
+                        if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(EVENT_NOTIFICATION))
+                        {
+
+                            if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
                             {
-
-                                if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
                                 {
-                                    for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                    if(dataValue.getDataElement().equals("KUjCOboZzvM"))
                                     {
-                                        if(dataValue.getDataElement().equals("KUjCOboZzvM"))
-                                        {
-                                            NOTIFICATION_VALUE= dataValue.getValue();
-                                        }
-                                        datavalue_list.add(dataValue);
+                                        NOTIFICATION_VALUE= dataValue.getValue();
                                     }
+                                    datavalue_list.add(dataValue);
                                 }
-                                validRows.add(programStageRow);
                             }
+                            validRows.add(programStageRow);
+                        }
 
 //                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(LAB_INVESTIGATION)||((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(REPORT_DETAILS))
 //                            {
@@ -857,72 +859,73 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 //                                validRows.add(programStageRow);
 //                            }
 
-                            if(NOTIFICATION_VALUE!="")
+                        if(NOTIFICATION_VALUE!="")
+                        {
+                            if(NOTIFICATION_VALUE.contains("Rabies"))
                             {
-                                if(NOTIFICATION_VALUE.contains("Rabies"))
+                                if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(RABIESASSESMENT))
                                 {
-                                    if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(RABIESASSESMENT))
+                                    if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
                                     {
-                                        if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                        for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
                                         {
-                                            for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                            if(dataValue.getDataElement().equals("PO7gpmxOjqA"))
                                             {
-                                                if(dataValue.getDataElement().equals("PO7gpmxOjqA"))
-                                                {
-                                                    FOLLOWUP= dataValue.getValue();
-                                                }
-
-                                                if(dataValue.getDataElement().equals("AAVFsW4emeN"))
-                                                {
-                                                    ETHUNIZEDANIMAL= dataValue.getValue();
-                                                }
-                                                if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
-                                                {
-                                                    DEADANIMAL= dataValue.getValue();
-                                                }
-                                                if(dataValue.getDataElement().equals("LvhhEkHTEDE"))
-                                                {
-                                                    ASSESSMENT_DECISION= dataValue.getValue();
-                                                }
-                                                if(dataValue.getDataElement().equals("WrQmHGe6teV"))
-                                                {
-                                                    FOLLOWUP= dataValue.getValue();
-                                                }
-                                                datavalue_list.add(dataValue);
+                                                FOLLOWUP= dataValue.getValue();
                                             }
+
+                                            if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+                                            {
+                                                ETHUNIZEDANIMAL= dataValue.getValue();
+                                            }
+                                            if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+                                            {
+                                                DEADANIMAL= dataValue.getValue();
+                                            }
+                                            if(dataValue.getDataElement().equals("LvhhEkHTEDE"))
+                                            {
+                                                ASSESSMENT_DECISION= dataValue.getValue();
+                                            }
+                                            if(dataValue.getDataElement().equals("WrQmHGe6teV"))
+                                            {
+                                                FOLLOWUP_OTHER= dataValue.getValue();
+
+                                            }
+                                            datavalue_list.add(dataValue);
                                         }
-                                        validRows.add(programStageRow);
                                     }
+                                    validRows.add(programStageRow);
+                                }
 //                                    else if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
 //                                    {
 //                                        validRows.add(programStageRow);
 //                                    }
-                                }
+                            }
 
-                                 if(NOTIFICATION_VALUE.contains("Quarant"))
+                            if(NOTIFICATION_VALUE.contains("Quarant"))
+                            {
+                                if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
                                 {
-                                    if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
+                                    if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
                                     {
-                                        if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                        for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
                                         {
-                                            for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                            if(dataValue.getDataElement().equals("AAVFsW4emeN"))
                                             {
-                                                if(dataValue.getDataElement().equals("AAVFsW4emeN"))
-                                                {
-                                                    ETHUNIZEDANIMAL= dataValue.getValue();
-                                                }
-                                                if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
-                                                {
-                                                    DEADANIMAL= dataValue.getValue();
-                                                }
-                                                datavalue_list.add(dataValue);
+                                                ETHUNIZEDANIMAL= dataValue.getValue();
                                             }
+                                            if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+                                            {
+                                                DEADANIMAL= dataValue.getValue();
+                                            }
+                                            datavalue_list.add(dataValue);
                                         }
-                                        validRows.add(programStageRow);
                                     }
+                                    validRows.add(programStageRow);
                                 }
                             }
-                            if(FOLLOWUP.contains("Follow"))
+
+                            if(FOLLOWUP.contains("Follow")||FOLLOWUP_OTHER.contains("Follow"))
                             {
 
                                 if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(RABIES_FOLLOWUP))
@@ -949,69 +952,70 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                                     validRows.add(programStageRow);
                                 }
                             }
-                            if(ASSESSMENT_DECISION.contains("Quarant"))
+                        }
+                        if(ASSESSMENT_DECISION.contains("Quarant"))
+                        {
+                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
                             {
-                                if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
+                                if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                {
+                                    for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                    {
+                                        if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+                                        {
+                                            ETHUNIZEDANIMAL= dataValue.getValue();
+                                        }
+                                        if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+                                        {
+                                            DEADANIMAL= dataValue.getValue();
+                                        }
+                                        datavalue_list.add(dataValue);
+                                    }
+                                }
+                                validRows.add(programStageRow);
+                            }
+                        }
+                        if(ETHUNIZEDANIMAL!=""||DEADANIMAL!="")
+                        {
+                            if(ETHUNIZEDANIMAL.contains("true")||DEADANIMAL.contains("true"))
+                            {
+                                if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(LAB_INVESTIGATION))
                                 {
                                     if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
                                     {
                                         for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
                                         {
-                                            if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+                                            if(dataValue.getDataElement().equals("Bnn1wbADOjw"))
                                             {
-                                                ETHUNIZEDANIMAL= dataValue.getValue();
+                                                TESTRESULTS= dataValue.getValue();
                                             }
-                                            if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
-                                            {
-                                                DEADANIMAL= dataValue.getValue();
-                                            }
+
                                             datavalue_list.add(dataValue);
                                         }
                                     }
                                     validRows.add(programStageRow);
                                 }
                             }
-                            if(ETHUNIZEDANIMAL!=""||DEADANIMAL!="")
-                            {
-                                if(ETHUNIZEDANIMAL.contains("true")||DEADANIMAL.contains("true"))
-                                {
-                                    if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(LAB_INVESTIGATION))
-                                    {
-                                        if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
-                                        {
-                                            for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
-                                            {
-                                                if(dataValue.getDataElement().equals("Bnn1wbADOjw"))
-                                                {
-                                                    TESTRESULTS= dataValue.getValue();
-                                                }
-
-                                                datavalue_list.add(dataValue);
-                                            }
-                                        }
-                                        validRows.add(programStageRow);
-                                    }
-                                }
-                            }
-                            if(TESTRESULTS!="")
-                            {
-                                if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(REPORT_DETAILS))
-                                {
-
-                                    validRows.add(programStageRow);
-                                }
-                            }
-                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(HUMAN_EXPOSURE_STAGE))
-                            {
-                                validRows.add(programStageRow);
-                            }
-
-                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(ANIMAL_EXPOSURE_STAGE))
-                            {
-                                validRows.add(programStageRow);
-                            }
-
                         }
+                        if(TESTRESULTS!="")
+                        {
+                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(REPORT_DETAILS))
+                            {
+
+                                validRows.add(programStageRow);
+                            }
+                        }
+                        if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(HUMAN_EXPOSURE_STAGE))
+                        {
+                            validRows.add(programStageRow);
+                        }
+
+                        if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(ANIMAL_EXPOSURE_STAGE))
+                        {
+                            validRows.add(programStageRow);
+                        }
+
+                    }
                 }
 
 
@@ -2040,6 +2044,4 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     public void hideProgramStage(ProgramRuleAction programRuleAction) {
     }
-
-
 }
