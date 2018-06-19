@@ -51,7 +51,6 @@ import org.joda.time.LocalDate;
 public class ProgramStageEventRow implements ProgramStageRow {
 
     private static final String TAG = ProgramStageEventRow.class.getSimpleName();
-
     private final Event event;
     private boolean hasFailed = false;
     private boolean isSynchronized = false;
@@ -303,6 +302,7 @@ public class ProgramStageEventRow implements ProgramStageRow {
     }
 
     private static class EventViewHolder {
+
         public final TextView orgUnit;
         public final TextView date;
         public final ImageButton statusButton;
@@ -329,7 +329,6 @@ public class ProgramStageEventRow implements ProgramStageRow {
     public ProgramStageLabelRow getLabelRow() {
         return labelRow;
     }
-
 
     public void setLabelRow(ProgramStageLabelRow labelRow) {
         this.labelRow = labelRow;
