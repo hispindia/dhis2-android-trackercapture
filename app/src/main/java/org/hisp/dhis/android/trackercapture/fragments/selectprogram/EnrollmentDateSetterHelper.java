@@ -38,6 +38,8 @@ import org.hisp.dhis.android.sdk.ui.views.CustomDatePickerDialog;
 import org.hisp.dhis.android.trackercapture.R;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Helper-class for showing DatePickers for selecting Enrollment date, then incident date,
@@ -97,6 +99,12 @@ public class EnrollmentDateSetterHelper {
                 new CustomDatePickerDialog(context,
                         null, currentDate.getYear(),
                         currentDate.getMonthOfYear() - 1, currentDate.getDayOfMonth());
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, -6);
+        Date result = cal.getTime();
+        enrollmentDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        enrollmentDatePickerDialog.getDatePicker().setMinDate(result.getTime());
+
         enrollmentDatePickerDialog.setPermanentTitle(context.getString(R.string.please_enter) + " " + enrollmentDateLabel);
         enrollmentDatePickerDialog.setCanceledOnTouchOutside(true);
         if(!enrollmentDatesInFuture) {
@@ -135,6 +143,11 @@ public class EnrollmentDateSetterHelper {
                 new CustomDatePickerDialog(context,
                         null, currentDate.getYear(),
                         currentDate.getMonthOfYear() - 1, currentDate.getDayOfMonth());
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, -6);
+        Date result = cal.getTime();
+        incidentDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        incidentDatePickerDialog.getDatePicker().setMinDate(result.getTime());
         incidentDatePickerDialog.setPermanentTitle(context.getString(R.string.please_enter) + " " + incidentDateLabel);
         incidentDatePickerDialog.setCanceledOnTouchOutside(true);
         if(!incidentDatesInFuture) {
