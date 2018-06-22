@@ -39,7 +39,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -50,10 +49,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.events.OnTeiDownloadedEvent;
@@ -77,7 +78,6 @@ import org.hisp.dhis.android.trackercapture.fragments.selectprogram.dialogs.Item
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.dialogs.QueryTrackedEntityInstancesDialogFragment;
 import org.hisp.dhis.android.trackercapture.ui.DownloadEventSnackbar;
 import org.hisp.dhis.android.trackercapture.ui.adapters.TrackedEntityInstanceAdapter;
-import org.hisp.dhis.client.sdk.ui.activities.OnBackPressedCallback;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -107,10 +107,10 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
 
         if (getActivity() instanceof AppCompatActivity) {
             Toolbar toolbar = getParentToolbar();
-            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener(){
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view){
+                public void onClick(View view) {
                     toggleNavigationDrawer();
                 }
             });
@@ -202,7 +202,15 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register_new_event: {
-                createEnrollment();
+                List<TrackedEntityInstance> teiall= MetaDataController.getTrackedEntityInstancesAll();
+                if(teiall.size()>=1)
+                {
+                    Toast.makeText(getContext(), getContext().getString(R.string.user_validation), Toast.LENGTH_LONG).show();
+                }
+                else if(teiall.size()==0)
+                {
+                    createEnrollment();
+                }
                 break;
             }
             case R.id.upcoming_events_button: {
@@ -515,11 +523,4 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
         super.stateChanged();
     }
 
-
-    @Override
-    public boolean onBackPressed() {
-        super.onBackPressed();
-        getActivity().finish();
-        return true;
-    }
 }
