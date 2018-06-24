@@ -217,6 +217,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private static final String ANIMAL_DETAILS_ATTR_ID="S8DQwjTgtSV";
     private static final String RABIESASSESMENT="ww8DSCToHag";
     private static final String QUARANTINE="IXdxLjRSFT8";
+    public static final String QUARANTINE_SCHEDULER = "SH5ad8iQpQB";
     private static final String ANIMALSAGE_VARIABLE="R7uWYmN14HA";
     private static  String AGE_VALUE="";
 
@@ -782,57 +783,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             List<DataValue> datavalue_list_event = new ArrayList<>();
             for(ProgramStageRow programStageRow : mForm.getProgramStageRows()){
 
-//                    if(programStageRow instanceof  ProgramStageLabelRow) {
-//                        if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid())){
-//                            if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(EVENT_NOTIFICATION))
-//                            {
-//                                if(((ProgramStageLabelRow) programStageRow).getEventRows().get(0).getEvent().getDataValues().size()>0)
-//                                {
-//                                    for(DataValue dataValue:((ProgramStageLabelRow) programStageRow).getEventRows().get(0).getEvent().getDataValues())
-//                                    {
-//                                        if(dataValue.getDataElement().equals("KUjCOboZzvM"))
-//                                        {
-//                                            NOTIFICATION_VALUE= dataValue.getValue();
-//                                        }
-//                                        datavalue_list.add(dataValue);
-//                                    }
-//                                }
-//                                validRows.add(programStageRow);
-//
-//                            }
-//                            if(NOTIFICATION_VALUE!=null||NOTIFICATION_VALUE!="")
-//                            {
-//                                if(NOTIFICATION_VALUE.contains("Rabies"))
-//                                {
-//                                    if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(RABIESASSESMENT))
-//                                    {
-//
-//                                        validRows.add(programStageRow);
-//                                    }
-//                                    else if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(QUARANTINE))
-//                                    {
-//                                        validRows.add(programStageRow);
-//                                    }
-//                                }
-//                                else if(NOTIFICATION_VALUE.contains("Quarant"))
-//                                {
-//                                    if(((ProgramStageLabelRow) programStageRow).getProgramStage().getUid().equals(QUARANTINE))
-//                                    {
-//                                        validRows.add(programStageRow);
-//                                    }
-//                                }
-//
-//                            }
-//                            else
-//                            {
-////                                Log.d("EVENT STATUS","NOT COMPLETED");
-//                            }
-//
-//                        }
-//                    }
-//
-
-//                else
                 if(programStageRow instanceof  ProgramStageEventRow) {
                     if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId())){
 
@@ -901,23 +851,22 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 //                                        validRows.add(programStageRow);
 //                                    }
                             }
-
                             if(NOTIFICATION_VALUE.contains("Quarant"))
                             {
-                                if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
+                                if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE_SCHEDULER))
                                 {
                                     if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
                                     {
                                         for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
                                         {
-                                            if(dataValue.getDataElement().equals("AAVFsW4emeN"))
-                                            {
-                                                ETHUNIZEDANIMAL= dataValue.getValue();
-                                            }
-                                            if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
-                                            {
-                                                DEADANIMAL= dataValue.getValue();
-                                            }
+//                                            if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+//                                            {
+//                                                ETHUNIZEDANIMAL= dataValue.getValue();
+//                                            }
+//                                            if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+//                                            {
+//                                                DEADANIMAL= dataValue.getValue();
+//                                            }
                                             datavalue_list.add(dataValue);
                                         }
                                     }
@@ -955,20 +904,20 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                         }
                         if(ASSESSMENT_DECISION.contains("Quarant"))
                         {
-                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE))
+                            if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE_SCHEDULER))
                             {
                                 if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
                                 {
                                     for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
                                     {
-                                        if(dataValue.getDataElement().equals("AAVFsW4emeN"))
-                                        {
-                                            ETHUNIZEDANIMAL= dataValue.getValue();
-                                        }
-                                        if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
-                                        {
-                                            DEADANIMAL= dataValue.getValue();
-                                        }
+//                                        if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+//                                        {
+//                                            ETHUNIZEDANIMAL= dataValue.getValue();
+//                                        }
+//                                        if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+//                                        {
+//                                            DEADANIMAL= dataValue.getValue();
+//                                        }
                                         datavalue_list.add(dataValue);
                                     }
                                 }
@@ -2011,6 +1960,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     public void reloadProgramRules(){
         if(mForm!=null) {
+
             programRuleFragmentHelper.getHideProgramStages().clear();
             evaluateAndApplyProgramRules();
         }

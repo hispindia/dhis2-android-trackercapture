@@ -47,12 +47,17 @@ class ProgramOverviewRuleHelper implements IProgramRuleFragmentHelper {
 
     private ProgramOverviewFragment programOverviewFragment;
     private ArrayList<String> hideProgramStages;
+    private Event event;
 
     ProgramOverviewRuleHelper(ProgramOverviewFragment programOverviewFragment) {
         this.programOverviewFragment = programOverviewFragment;
         hideProgramStages = new ArrayList<>();
     }
 
+
+    public void setEvent(Event event){
+        this.event = event;
+    }
     @Override
     public ArrayList<String> getProgramRuleValidationErrors() {
         return null;
@@ -110,7 +115,7 @@ class ProgramOverviewRuleHelper implements IProgramRuleFragmentHelper {
 
     @Override
     public Event getEvent() {
-        return null;
+        return this.event;
     }
 
     @Override

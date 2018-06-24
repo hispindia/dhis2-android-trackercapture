@@ -157,7 +157,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private void directToForms(String programId){
         mPrefs = new SelectProgramFragmentPreferences(getActivity().getApplicationContext());
         Program program = MetaDataController.getProgram(programId);
-        OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit(mPrefs.getOrgUnit().first);
+        //OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit(mPrefs.getOrgUnit().first);
+        List<OrganisationUnit> organisationUnits_=MetaDataController.getAssignedOrganisationUnits();
+        OrganisationUnit organisationUnit=MetaDataController.getOrganisationUnit(organisationUnits_.get(0).getId());
+
         mForm.setProgram(program);
         mForm.setOrgUnit(organisationUnit);
         createEnrollment();
