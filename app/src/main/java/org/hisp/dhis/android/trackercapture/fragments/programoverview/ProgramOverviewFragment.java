@@ -784,6 +784,10 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             for(ProgramStageRow programStageRow : mForm.getProgramStageRows()){
 
                 if(programStageRow instanceof  ProgramStageEventRow) {
+                    if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE)){
+                        validRows.add(programStageRow);
+                    }
+
                     if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId())){
 
                         if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(EVENT_NOTIFICATION))
@@ -969,6 +973,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
 
             }
+
             mForm.setProgramStageRows(validRows);
             for (ProgramStageRow row : mForm.getProgramStageRows()) {
                 if (row instanceof ProgramStageLabelRow) {
