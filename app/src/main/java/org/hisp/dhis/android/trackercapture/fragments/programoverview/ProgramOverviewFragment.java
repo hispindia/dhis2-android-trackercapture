@@ -781,12 +781,15 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             List<ProgramStageRow> validRows = new ArrayList<>();
             List<DataValue> datavalue_list = new ArrayList<>();
             List<DataValue> datavalue_list_event = new ArrayList<>();
+
+            boolean qschFound = false;
+
+
             for(ProgramStageRow programStageRow : mForm.getProgramStageRows()){
 
                 if(programStageRow instanceof  ProgramStageEventRow) {
-                    if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE)){
-                        validRows.add(programStageRow);
-                    }
+
+
 
                     if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId())){
 
@@ -876,6 +879,9 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                                     }
                                     validRows.add(programStageRow);
                                 }
+                                qschFound = true;
+                            }else{
+                                qschFound = false;
                             }
 
                             if(FOLLOWUP.contains("Follow")||FOLLOWUP_OTHER.contains("Follow"))
@@ -966,6 +972,16 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                         if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(ANIMAL_EXPOSURE_STAGE))
                         {
                             validRows.add(programStageRow);
+                        }
+
+                        if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE)){
+
+                            if(!qschFound){
+                                ((ProgramStageEventRow) programStageRow).getEvent().delete();
+                            }else{
+                                validRows.add(programStageRow);
+                            }
+
                         }
 
                     }
