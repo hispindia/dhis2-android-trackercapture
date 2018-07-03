@@ -373,7 +373,7 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
                     trackedEntityInstancesQueryResult = TrackerController.queryTrackedEntityInstancesDataFromServer(DhisController.getInstance().getDhisApi(), orgUnit, program, queryString, params);
                 }
 
-                // showTrackedEntityInstanceQueryResultDialog(fragmentManager, trackedEntityInstancesQueryResult, orgUnit);
+//                 showTrackedEntityInstanceQueryResultDialog(fragmentManager, trackedEntityInstancesQueryResult, orgUnit);
                 showOnlineSearchResultFragment(trackedEntityInstancesQueryResult, orgUnit, program, backNavigation);
                 return new Object();
             }

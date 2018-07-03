@@ -53,17 +53,23 @@ import android.widget.TextView;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 
+import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.events.OnTeiDownloadedEvent;
 import org.hisp.dhis.android.sdk.events.OnTrackerItemClick;
 import org.hisp.dhis.android.sdk.events.UiEvent;
+import org.hisp.dhis.android.sdk.job.JobExecutor;
+import org.hisp.dhis.android.sdk.job.NetworkJob;
+import org.hisp.dhis.android.sdk.network.APIException;
+import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.models.BaseSerializableModel;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.ui.activities.SynchronisationStateHandler;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnTrackedEntityInstanceColumnClick;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
 import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentForm;
@@ -94,6 +100,8 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
     protected TextView noRowsTextView;
     private DownloadEventSnackbar snackbar;
     private MenuItem item;
+
+
 
     @Override
     protected TrackedEntityInstanceAdapter getAdapter(Bundle savedInstanceState) {
@@ -192,6 +200,7 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
     public void onReceivedUiEvent(UiEvent uiEvent) {
         if (uiEvent.getEventType() == UiEvent.UiEventType.SYNCING_END) {
             getLoaderManager().restartLoader(LOADER_ID, getArguments(), this);
+            setRefreshing(false);
         }
         super.onReceivedUiEvent(uiEvent);
     }
@@ -217,6 +226,9 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
             }
         }
     }
+
+
+
 
     private void createEnrollment() {
         if (mForm != null && mForm.getProgram() != null) {
@@ -283,19 +295,25 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
         if (LOADER_ID == loader.getId()) {
             mProgressBar.setVisibility(View.GONE);
             mForm = data;
-            ((TrackedEntityInstanceAdapter) mAdapter).setData(data.getEventRowList());
-            mAdapter.swapData(data.getEventRowList());
+            if(data!=null && data.getEventRowList().size()==1){
+                queryTrackedEntityInstances(getFragmentManager(),mState.getOrgUnitId(),mState.getProgramId());
+            }else{
+                ((TrackedEntityInstanceAdapter) mAdapter).setData(data.getEventRowList());
+                mAdapter.swapData(data.getEventRowList());
 
-            if (data.getProgram() != null && data.getProgram().isDisplayFrontPageList()) {
-                noRowsTextView.setVisibility(View.GONE);
-                if (item != null)
-                    item.setVisible(true);
-            } else {
-                noRowsTextView.setVisibility(View.VISIBLE);
+                if (data.getProgram() != null && data.getProgram().isDisplayFrontPageList()) {
+                    noRowsTextView.setVisibility(View.GONE);
+                    if (item != null)
+                        item.setVisible(true);
+                } else {
+                    noRowsTextView.setVisibility(View.VISIBLE);
 
-                if (item != null)
-                    item.setVisible(false);
+                    if (item != null)
+                        item.setVisible(false);
+                }
+
             }
+
         }
     }
 
@@ -403,7 +421,7 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
             snackbar = new DownloadEventSnackbar(this);
         }
 
-        snackbar.show(event);
+        //snackbar.show(event);
 
     }
 
