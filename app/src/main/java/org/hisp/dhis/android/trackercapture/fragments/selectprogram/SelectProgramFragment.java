@@ -49,6 +49,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
+import android.widget.Toast;
 
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
@@ -209,7 +211,16 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register_new_event: {
-                createEnrollment();
+                List<TrackedEntityInstance> teiall= MetaDataController.getTrackedEntityInstancesAll();
+                if(teiall.size()>=1)
+                {
+                    Toast.makeText(getContext(), getContext().getString(R.string.user_validation), Toast.LENGTH_LONG).show();
+                    }
+
+                    else if(teiall.size()==0)
+                    {
+                        createEnrollment();
+                           }
                 break;
             }
             case R.id.upcoming_events_button: {
@@ -295,9 +306,14 @@ public class SelectProgramFragment extends org.hisp.dhis.android.sdk.ui.fragment
         if (LOADER_ID == loader.getId()) {
             mProgressBar.setVisibility(View.GONE);
             mForm = data;
-            if(data!=null && data.getEventRowList().size()==1){
+//            if(data!=null && data.getEventRowList()!=null&&data.getEventRowList().size()==1){
+//                queryTrackedEntityInstances(getFragmentManager(),mState.getOrgUnitId(),mState.getProgramId());
+//            }
+            if(mForm!=null && mForm.getEventRowList()!=null &&mForm.getEventRowList().size()==1){
                 queryTrackedEntityInstances(getFragmentManager(),mState.getOrgUnitId(),mState.getProgramId());
-            }else{
+            }
+
+            else{
                 ((TrackedEntityInstanceAdapter) mAdapter).setData(data.getEventRowList());
                 mAdapter.swapData(data.getEventRowList());
 
