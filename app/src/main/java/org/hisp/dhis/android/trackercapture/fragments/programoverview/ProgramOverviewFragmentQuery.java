@@ -62,9 +62,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static org.hisp.dhis.android.trackercapture.fragments.programoverview.ProgramOverviewFragment.QUARANTINE;
+
 class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm> {
 
     public static final String CLASS_TAG = ProgramOverviewFragmentQuery.class.getSimpleName();
+
+    private static final String ANIMAL_STATUS_DE = "v7sgdI8CtvP";
 
     private final String mProgramId;
     private final long mTrackedEntityInstanceId;
@@ -185,7 +189,8 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
 
         for(ProgramStage programStage: program.getProgramStages()) {
 
-          List<ProgramStageDataElement> pg_=MetaDataController.getProgramStageDataElements(programStage);
+
+//          List<ProgramStageDataElement> pg_=MetaDataController.getProgramStageDataElements(programStage);
 
             List<Event> eventsForStage = eventsByStage.get(programStage.getUid());
             ProgramStageLabelRow labelRow = new ProgramStageLabelRow(programStage);
@@ -197,12 +202,42 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
                 EventDateComparator comparator = new EventDateComparator();
                 Collections.sort(eventsForStage, comparator);
             }
-            for(Event event: eventsForStage) {
-                ProgramStageEventRow row = new ProgramStageEventRow(event);
-                row.setLabelRow(labelRow);
-                labelRow.getEventRows().add(row);
-                rows.add(row);
+            //because of perfomance this loops are running inside if condition rather than the if condition inside
+            //the loop
+
+            if(programStage.getUid().equals(QUARANTINE)){
+
+                boolean animalDead = false;
+                for(Event event: eventsForStage) {
+
+                    if(!animalDead){
+                        for(DataValue dv :event.getDataValues()){
+                            if(dv.getDataElement().equals(ANIMAL_STATUS_DE)){
+                                if(dv.getValue().equalsIgnoreCase("dead")){
+                                    animalDead = true;
+                                    break;
+                                }
+                            }
+                        }
+                        ProgramStageEventRow row = new ProgramStageEventRow(event);
+                        row.setLabelRow(labelRow);
+                        labelRow.getEventRows().add(row);
+                        rows.add(row);
+                    }else{
+                        event.delete();
+                    }
+
+                }
+            }else{
+                for(Event event: eventsForStage) {
+                    ProgramStageEventRow row = new ProgramStageEventRow(event);
+                    row.setLabelRow(labelRow);
+                    labelRow.getEventRows().add(row);
+                    rows.add(row);
+                }
             }
+
+
         }
         return rows;
     }

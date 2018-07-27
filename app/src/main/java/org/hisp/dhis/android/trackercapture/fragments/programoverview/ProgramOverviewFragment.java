@@ -216,7 +216,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     private static final String ANIMAL_DETAILS_ATTR_ID="S8DQwjTgtSV";
     private static final String RABIESASSESMENT="ww8DSCToHag";
-    private static final String QUARANTINE="IXdxLjRSFT8";
+    public static final String QUARANTINE="IXdxLjRSFT8";
     public static final String QUARANTINE_SCHEDULER = "SH5ad8iQpQB";
     private static final String ANIMALSAGE_VARIABLE="R7uWYmN14HA";
     private static  String AGE_VALUE="";
