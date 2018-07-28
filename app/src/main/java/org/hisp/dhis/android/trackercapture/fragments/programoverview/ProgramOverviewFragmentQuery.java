@@ -73,6 +73,35 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
     private final String mProgramId;
     private final long mTrackedEntityInstanceId;
 
+
+    private   String NOTIFICATION_VALUE = "";
+    private   String ETHUNIZEDANIMAL = "";
+    private   String CHECKIN_1 = "";
+    private   String CHECKIN_2 = "";
+    private   String TESTRESULTS = "";
+    private   String DEADANIMAL = "";
+    private   String ASSESSMENT_DECISION = "";
+    private   String FOLLOWUP = "";
+    private   String FOLLOWUP_OTHER = "";
+    private static final String ANIMAL_EXPOSED_INDICATOR = "hE8L9tjVdSX";
+    private static final String EVENT_NOTIFICATION = "PwGD626AbHf";
+    private static final String RABIES_FOLLOWUP = "MkiHGIm385w";
+    private static final String LAB_INVESTIGATION = "eSOtGji0yna";
+    private static final String REPORT_DETAILS = "bXZaSp2arEk";
+    private static  String ANIMALID_BARCODE = null;
+    private static final String HUMAN_EXPOSURE = "Hs1zoGOwY8B";
+    private static final String ANIMAL_EXPOSURE = "oLY6uR5jJh9";
+
+    private static final String HUMAN_EXPOSURE_STAGE = "DbsGMk0zLxr";
+    private static final String ANIMAL_EXPOSURE_STAGE = "R8zfsjiFerK";
+
+
+    private static final String ANIMAL_DETAILS_ATTR_ID="S8DQwjTgtSV";
+    private static final String RABIESASSESMENT="ww8DSCToHag";
+    public static final String QUARANTINE="IXdxLjRSFT8";
+    public static final String QUARANTINE_SCHEDULER = "SH5ad8iQpQB";
+
+
     public ProgramOverviewFragmentQuery(String programId, long trackedEntityInstanceId) {
         mProgramId = programId;
         mTrackedEntityInstanceId = trackedEntityInstanceId;
@@ -202,8 +231,6 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
                 EventDateComparator comparator = new EventDateComparator();
                 Collections.sort(eventsForStage, comparator);
             }
-            //because of perfomance this loops are running inside if condition rather than the if condition inside
-            //the loop
 
             if(programStage.getUid().equals(QUARANTINE)){
 
@@ -239,6 +266,7 @@ class ProgramOverviewFragmentQuery implements Query<ProgramOverviewFragmentForm>
 
 
         }
+
         return rows;
     }
 

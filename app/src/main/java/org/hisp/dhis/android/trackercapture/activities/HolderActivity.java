@@ -52,6 +52,7 @@ public class HolderActivity extends AbsHomeActivity{
     public static final String ARG_TYPE_SELECT_PROGRAME_FRAGMENT = "arg:SelectProgramFragment";
     private static final String ARG_TYPE_UPCOMINGEVENTSFRAGMENT = "arg:UpcomingEventsFragment";
 
+
     OnBackPressedListener onBackPressedListener;
     public static OnlineSearchResultFragment.CallBack mCallBack;
 
@@ -262,7 +263,7 @@ public class HolderActivity extends AbsHomeActivity{
 
     public static void navigateToDataEntryFragment(Activity activity, String orgUnitId,
                                                    String programId, String programStageId,
-                                                   long localEnrollmentId, long eventId) {
+                                                   long localEnrollmentId, long eventId,String lastCompletedEventDate ) {
         Intent intent = new Intent(activity, HolderActivity.class);
         intent.putExtra(EventDataEntryFragment.ORG_UNIT_ID, orgUnitId);
         intent.putExtra(EventDataEntryFragment.PROGRAM_ID, programId);
@@ -270,6 +271,7 @@ public class HolderActivity extends AbsHomeActivity{
         intent.putExtra(EventDataEntryFragment.ENROLLMENT_ID, localEnrollmentId);
         intent.putExtra(EventDataEntryFragment.EVENT_ID, eventId);
         intent.putExtra(ARG_TYPE, ARG_TYPE_DATAENTRYFRAGMENT);
+        intent.putExtra(EventDataEntryFragment.LAST_COMPLETED_EVENT_DATE,lastCompletedEventDate);
         activity.startActivity(intent);
     }
     

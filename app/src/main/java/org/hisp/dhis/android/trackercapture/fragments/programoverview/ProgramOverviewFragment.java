@@ -286,6 +286,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private static  DataValue ANIMALVACCINATIONSTATUS=new DataValue();
     private static  DataValue ANIMALGENDER=new DataValue();
 
+    String lastCompletedEventDate = null;
+
     public ProgramOverviewFragment() {
         setProgramRuleFragmentHelper(new ProgramOverviewRuleHelper(this));
     }
@@ -980,6 +982,10 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                                 ((ProgramStageEventRow) programStageRow).getEvent().delete();
                             }else{
                                 validRows.add(programStageRow);
+                                if((((ProgramStageEventRow) programStageRow).getEvent().getStatus().equals(Event                                                    .STATUS_COMPLETED))){
+                                    if(((ProgramStageEventRow) programStageRow).getEvent().getEventDate()!=null)
+                                        lastCompletedEventDate = ((ProgramStageEventRow) programStageRow).getEvent().getEventDate();
+                                }
                             }
 
                         }
@@ -1423,7 +1429,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             } else {
                 HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
                         args.getString(PROGRAM_ID), programStage,
-                        mForm.getEnrollment().getLocalId(), event.getLocalId());
+                        mForm.getEnrollment().getLocalId(), event.getLocalId(),lastCompletedEventDate );
             }
 //            }else{
 //                UiUtils.showErrorDialog(getActivity(),"Not Allowed","This program stage is not allowed yet");
@@ -1435,7 +1441,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             } else {
                 HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
                         args.getString(PROGRAM_ID), programStage,
-                        mForm.getEnrollment().getLocalId(), event.getLocalId());
+                        mForm.getEnrollment().getLocalId(), event.getLocalId(),lastCompletedEventDate);
             }
         }
 
