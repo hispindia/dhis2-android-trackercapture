@@ -36,6 +36,7 @@ import org.hisp.dhis.client.sdk.ui.activities.OnBackPressedFromFragmentCallback;
 import org.hisp.dhis.client.sdk.ui.fragments.BaseFragment;
 import org.joda.time.DateTime;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener, IEnroller {
@@ -93,8 +94,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 //                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
 //                            mPrefs.getOrgUnit().first,getString(R.string.intake_form_program_id));
 
-                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
-                            organisationUnit.getId(),getString(R.string.intake_form_program_id));
+//                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
+//                            organisationUnit.getId(),getString(R.string.intake_form_program_id));
+                    HolderActivity.navigateToLocalSearchResultFragment(getActivity(),organisationUnit.getId(),getString(R.string.intake_form_program_id),new HashMap<String, String>());
                     break;
 
                 case R.id.ibmc_new_case:
