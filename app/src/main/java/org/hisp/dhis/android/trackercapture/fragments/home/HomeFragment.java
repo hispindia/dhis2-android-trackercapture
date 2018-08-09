@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-
+import java.util.HashMap;
+import android.content.Intent;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
@@ -26,6 +26,8 @@ import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmen
 import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentPreferences;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 import org.hisp.dhis.android.trackercapture.MainActivity;
+import org.hisp.dhis.android.trackercapture.PDFViewActivity;
+import org.hisp.dhis.android.trackercapture.PDFViewActivity_;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.EnrollmentDateSetterHelper;
@@ -36,18 +38,18 @@ import org.hisp.dhis.client.sdk.ui.activities.OnBackPressedFromFragmentCallback;
 import org.hisp.dhis.client.sdk.ui.fragments.BaseFragment;
 import org.joda.time.DateTime;
 
-import java.util.HashMap;
 import java.util.List;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener, IEnroller {
+public class HomeFragment extends BaseFragment implements View.OnClickListener,IEnroller{
     protected SelectProgramFragmentPreferences mPrefs;
     private OnBackPressedFromFragmentCallback onBackPressedFromFragmentCallback;
-    private SelectProgramFragmentForm mForm;
+    protected SelectProgramFragmentForm mForm;
+
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 //        setHasOptionsMenu(true);
-        mForm = new SelectProgramFragmentForm();
         mPrefs = new SelectProgramFragmentPreferences(getActivity().getApplicationContext());
+        mForm = new SelectProgramFragmentForm();
     }
 
     @Nullable
@@ -66,7 +68,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             });
         }
         return view;
-
     }
 
     @Override
@@ -77,7 +78,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         view.findViewById(R.id.ibmc_review_cases).setOnClickListener(this);
         view.findViewById(R.id.ibmc_upload).setOnClickListener(this);
         view.findViewById(R.id.ibmc_statistics).setOnClickListener(this);
-        view.findViewById(R.id.ibmc_notifications).setOnClickListener(this);
+//        view.findViewById(R.id.ibmc_notifications).setOnClickListener(this);
     }
 
     @Override
@@ -85,47 +86,59 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 //        if(mPrefs.getOrgUnit()==null){
 //            Toast.makeText(getContext(),"Please Select and Organization unit",Toast.LENGTH_LONG).show();
 //        }else {
-
             switch (view.getId()) {
                 case R.id.ibmc_jobs:
-//                    OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit("C5pMQzJzCFw");
+//                    List<OrganisationUnit> organisationUnits_=MetaDataController.getAssignedOrganisationUnits();
+//                    OrganisationUnit organisationUnit=MetaDataController.getOrganisationUnit(organisationUnits_.get(0).getId());
+//
+//                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
+//                            organisationUnit.getId(),getString(R.string.intake_form_program_id));
+//                    break;
+                    OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit("C5pMQzJzCFw");
                     List<OrganisationUnit> organisationUnits_=MetaDataController.getAssignedOrganisationUnits();
-                    OrganisationUnit organisationUnit=MetaDataController.getOrganisationUnit(organisationUnits_.get(0).getId());
+                    OrganisationUnit organisationUnit1=MetaDataController.getOrganisationUnit(organisationUnits_.get(0).getId());
 //                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
 //                            mPrefs.getOrgUnit().first,getString(R.string.intake_form_program_id));
 
 //                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
 //                            organisationUnit.getId(),getString(R.string.intake_form_program_id));
-                    HolderActivity.navigateToLocalSearchResultFragment(getActivity(),organisationUnit.getId(),getString(R.string.intake_form_program_id),new HashMap<String, String>());
+                    HolderActivity.navigateToLocalSearchResultFragment(getActivity(),organisationUnit1.getId(),getString(R.string.intake_form_program_id),new HashMap<String, String>());
                     break;
 
                 case R.id.ibmc_new_case:
 //                    ((MainActivity) getActivity()).navigateToSelectProgramFragment();
-//                    ((MainActivity) getActivity()).navigateToNewcaseFragment();
+                    //((MainActivity) getActivity()).navigateToNewcaseFragment();
                     directToForms(getString(R.string.intake_form_program_id));
                     break;
 
                 case R.id.ibmc_review_cases:
-                    Toast.makeText(getContext(), "Review Cases", Toast.LENGTH_LONG).show();
+
+//                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
+//                            mPrefs.getOrgUnit().first,getString(R.string.intake_form_program_id));
+                    List<OrganisationUnit> organisationUnits__=MetaDataController.getAssignedOrganisationUnits();
+                    OrganisationUnit organisationUnit_=MetaDataController.getOrganisationUnit(organisationUnits__.get(0).getId());
+                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
+                            organisationUnit_.getId(),getString(R.string.intake_form_program_id));
                     break;
 
                 case R.id.ibmc_upload:
-                    Toast.makeText(getContext(), "Upload", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getContext(), "Upload", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(view.getContext(), PDFViewActivity_.class);
+                    view.getContext().startActivity(i);
                     break;
 
                 case R.id.ibmc_statistics:
-                    Toast.makeText(getContext(), "Statistics", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getContext(), "Statistics", Toast.LENGTH_LONG).show();
                     break;
 
-                case R.id.ibmc_notifications:
-                    Toast.makeText(getContext(), "Notifications", Toast.LENGTH_LONG).show();
-                    break;
+//                case R.id.ibmc_notifications:
+////                    Toast.makeText(getContext(), "Notifications", Toast.LENGTH_LONG).show();
+//                    break;
             }
 //        }
 
 
     }
-
     @Override
     public boolean onBackPressed() {
         if (onBackPressedFromFragmentCallback != null) {
@@ -134,7 +147,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
         return true;
     }
-
     @Override
     public void onAttach(Context context) {
         if (context instanceof BaseActivity) {
@@ -159,21 +171,20 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private void directToForms(String programId){
         mPrefs = new SelectProgramFragmentPreferences(getActivity().getApplicationContext());
         Program program = MetaDataController.getProgram(programId);
-        //OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit(mPrefs.getOrgUnit().first);
         List<OrganisationUnit> organisationUnits_=MetaDataController.getAssignedOrganisationUnits();
         OrganisationUnit organisationUnit=MetaDataController.getOrganisationUnit(organisationUnits_.get(0).getId());
-
         mForm.setProgram(program);
         mForm.setOrgUnit(organisationUnit);
         createEnrollment();
     }
 
-   private void createEnrollment() {
+
+    private void createEnrollment() {
         if (mForm != null && mForm.getProgram() != null) {
-        EnrollmentDateSetterHelper.createEnrollment(this, getActivity(), mForm.getProgram().
-               getDisplayIncidentDate(), mForm.getProgram().getSelectEnrollmentDatesInFuture(),
-                mForm.getProgram().getSelectIncidentDatesInFuture(), mForm.getProgram().getEnrollmentDateLabel(),
-                mForm.getProgram().getIncidentDateLabel());
+            EnrollmentDateSetterHelper.createEnrollment(this, getActivity(), mForm.getProgram().
+                            getDisplayIncidentDate(), mForm.getProgram().getSelectEnrollmentDatesInFuture(),
+                    mForm.getProgram().getSelectIncidentDatesInFuture(), mForm.getProgram().getEnrollmentDateLabel(),
+                    mForm.getProgram().getIncidentDateLabel());
         }
     }
 
@@ -181,14 +192,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         String enrollmentDateString = enrollmentDate.toString();
         String incidentDateString = null;
         if (incidentDate != null) {
-                incidentDateString = incidentDate.toString();
-            }
+            incidentDateString = incidentDate.toString();
+        }
         if (trackedEntityInstance == null) {
-                HolderActivity.navigateToEnrollmentDataEntryFragment(getActivity(), mForm.getOrgUnit().getId(), mForm.getProgram().getUid(), enrollmentDateString, incidentDateString);
+            HolderActivity.navigateToEnrollmentDataEntryFragment(getActivity(), mForm.getOrgUnit().getId(), mForm.getProgram().getUid(), enrollmentDateString, incidentDateString);
 
         } else {
-                HolderActivity.navigateToEnrollmentDataEntryFragment(getActivity(), mForm.getOrgUnit().getId(), mForm.getProgram().getUid(), trackedEntityInstance.getLocalId(), enrollmentDateString, incidentDateString);
+            HolderActivity.navigateToEnrollmentDataEntryFragment(getActivity(), mForm.getOrgUnit().getId(), mForm.getProgram().getUid(), trackedEntityInstance.getLocalId(), enrollmentDateString, incidentDateString);
 
         }
+
     }
+
+
 }
