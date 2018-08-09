@@ -173,8 +173,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         LoaderManager.LoaderCallbacks<ProgramOverviewFragmentForm>,
         AdapterView.OnItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, IEnroller,
         OnBackPressedListener {
-
-
     public static final String CLASS_TAG = ProgramOverviewFragment.class.getSimpleName();
     private static final String STATE = "state:UpcomingEventsFragment";
     private static final int LOADER_ID = 578922123;
@@ -184,7 +182,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     private static final String ORG_UNIT_ID = "extra:orgUnitId";
     private static final String PROGRAM_ID = "extra:ProgramId";
-
     private   String NOTIFICATION_VALUE = "";
     private   String ETHUNIZEDANIMAL = "";
     private   String CHECKIN_1 = "";
@@ -197,6 +194,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private static final String ANIMAL_EXPOSED_INDICATOR = "hE8L9tjVdSX";
     private static final String EVENT_NOTIFICATION = "PwGD626AbHf";
     private static final String RABIES_FOLLOWUP = "MkiHGIm385w";
+    private static final String RABIESASSESMENT="ww8DSCToHag";
     private static final String LAB_INVESTIGATION = "eSOtGji0yna";
     private static final String REPORT_DETAILS = "bXZaSp2arEk";
     private static  String ANIMALID_BARCODE = null;
@@ -207,15 +205,15 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private static final String ANIMAL_EXPOSURE_STAGE = "R8zfsjiFerK";
 
     private static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
-
     private static final String COMPLETED = "COMPLETED";
     private  static Boolean EVENT_STATUS = false;
     private  static Boolean RABIES = false;
     private static final String HUMAN_EXPOSED_INDICATOR = "ZOeqJmFlsDL";
     private static final String OTHER_INDICATOR = "other";
+    private static final String ANIMAL_COUNT = "HGBJd2Yws8x";
+    private static final String HUMANS_COUNT = "LtJml5JhIbU";
 
     private static final String ANIMAL_DETAILS_ATTR_ID="S8DQwjTgtSV";
-    private static final String RABIESASSESMENT="ww8DSCToHag";
     public static final String QUARANTINE="IXdxLjRSFT8";
     public static final String QUARANTINE_SCHEDULER = "SH5ad8iQpQB";
     private static final String ANIMALSAGE_VARIABLE="R7uWYmN14HA";
@@ -247,10 +245,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
     private CardView profileCardView;
     private CardView enrollmentCardview;
-
     private CardView programIndicatorCardView;
     private CardView eventsCardView;
-
     private ImageButton followupButton;
     private ImageButton profileButton;
     private ImageView enrollmentServerStatus;
@@ -629,8 +625,13 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             LinearLayout programIndicatorLayout =
                     (LinearLayout) programIndicatorCardView.findViewById(
                             R.id.programindicatorlayout);
+
+            LinearLayout programIndicatorLayout_ =
+                    (LinearLayout) programIndicatorCardView.findViewById(
+                            R.id.programindicatorlayout_);
             initializeEventsViews(programEventsLayout);
             initializeIndicatorViews(programIndicatorLayout);
+            initializeIndicatorViews(programIndicatorLayout_);
 
             if (mForm == null || mForm.getEnrollment() == null) {
                 showNoActiveEnrollment(mForm);
@@ -749,9 +750,10 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 
             for (IndicatorRow indicatorRow : mForm.getProgramIndicatorRows().values()) {
 
-                View view = indicatorRow.getView(getChildFragmentManager(),
-                        getLayoutInflater(getArguments()), null, programIndicatorLayout);
+
                 if(indicatorRow.getIndicator().getUid().equals(ANIMAL_EXPOSED_INDICATOR)){
+                    View view = indicatorRow.getView(getChildFragmentManager(),
+                            getLayoutInflater(getArguments()), null, programIndicatorLayout);
                     indicatorRow.setValue(getIndicatorCount(getString(R.string.animal_exposure_program))+"");
                     view = indicatorRow.getView(getChildFragmentManager(),
                             getLayoutInflater(getArguments()), null, programIndicatorLayout);
@@ -761,8 +763,11 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     view.findViewById(R.id.add_new_btn).setOnClickListener(this);
                     view.findViewById(R.id.add_new_btn).setTag(R.integer.indicator_key,ANIMAL_EXPOSED_INDICATOR);
                     view.setOnClickListener(this);
+                    programIndicatorLayout.addView(view);
                 }
                 else if(indicatorRow.getIndicator().getUid().equals(HUMAN_EXPOSED_INDICATOR)){
+                    View view = indicatorRow.getView(getChildFragmentManager(),
+                            getLayoutInflater(getArguments()), null, programIndicatorLayout);
                     indicatorRow.setValue(getIndicatorCount(getString(R.string.human_exposure_program))+"");
                     view = indicatorRow.getView(getChildFragmentManager(),
                             getLayoutInflater(getArguments()), null, programIndicatorLayout);
@@ -772,10 +777,28 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     view.findViewById(R.id.add_new_btn).setOnClickListener(this);
                     view.findViewById(R.id.add_new_btn).setTag(R.integer.indicator_key,HUMAN_EXPOSED_INDICATOR);
                     view.setOnClickListener(this);
-                }else{
-                    view.setTag(OTHER_INDICATOR);
+                    programIndicatorLayout.addView(view);
                 }
-                programIndicatorLayout.addView(view);
+                else if(indicatorRow.getIndicator().getUid().equals(ANIMAL_COUNT)){
+                    View view = indicatorRow.getView(getChildFragmentManager(),
+                            getLayoutInflater(getArguments()), null, programIndicatorLayout_);
+                    indicatorRow.setValue("ANIMAL EXPOSED COUNT");
+                    view.setBackgroundColor(Color.parseColor("#FFF57C00"));
+                    programIndicatorLayout_.addView(view);
+                }
+                else if(indicatorRow.getIndicator().getUid().equals(HUMANS_COUNT)){
+                    View view = indicatorRow.getView(getChildFragmentManager(),
+                            getLayoutInflater(getArguments()), null, programIndicatorLayout_);
+                    indicatorRow.setValue("HUMAN EXPOSED COUNT");
+                    view.setBackgroundColor(Color.parseColor("#FFFF9800"));
+                    programIndicatorLayout_.addView(view);
+                }
+
+//                else{
+//                    view.setTag(OTHER_INDICATOR);
+//                }
+
+
             }
 
             //ToDo ps view
@@ -785,6 +808,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             List<DataValue> datavalue_list_event = new ArrayList<>();
 
             boolean qschFound = false;
+            boolean qschFound_rabies = false;
 
 
             for(ProgramStageRow programStageRow : mForm.getProgramStageRows()){
@@ -868,22 +892,19 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                                     {
                                         for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
                                         {
-//                                            if(dataValue.getDataElement().equals("AAVFsW4emeN"))
-//                                            {
-//                                                ETHUNIZEDANIMAL= dataValue.getValue();
-//                                            }
-//                                            if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
-//                                            {
-//                                                DEADANIMAL= dataValue.getValue();
-//                                            }
+                                            if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+                                            {
+                                                ETHUNIZEDANIMAL= dataValue.getValue();
+                                            }
+                                            if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+                                            {
+                                                DEADANIMAL= dataValue.getValue();
+                                            }
                                             datavalue_list.add(dataValue);
                                         }
                                     }
                                     validRows.add(programStageRow);
                                 }
-                                qschFound = true;
-                            }else{
-                                qschFound = false;
                             }
 
                             if(FOLLOWUP.contains("Follow")||FOLLOWUP_OTHER.contains("Follow"))
@@ -922,14 +943,14 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                                 {
                                     for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
                                     {
-//                                        if(dataValue.getDataElement().equals("AAVFsW4emeN"))
-//                                        {
-//                                            ETHUNIZEDANIMAL= dataValue.getValue();
-//                                        }
-//                                        if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
-//                                        {
-//                                            DEADANIMAL= dataValue.getValue();
-//                                        }
+                                        if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+                                        {
+                                            ETHUNIZEDANIMAL= dataValue.getValue();
+                                        }
+                                        if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+                                        {
+                                            DEADANIMAL= dataValue.getValue();
+                                        }
                                         datavalue_list.add(dataValue);
                                     }
                                 }
@@ -976,13 +997,50 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                             validRows.add(programStageRow);
                         }
 
+                        if(NOTIFICATION_VALUE.contains("Quarant") ||ASSESSMENT_DECISION.contains("Quarant"))
+                        {
+                            qschFound=true;
+                        }
+                        if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(RABIES_FOLLOWUP))
+                        {
+                            qschFound_rabies=true;
+                        }
                         if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(QUARANTINE)){
 
                             if(!qschFound){
                                 ((ProgramStageEventRow) programStageRow).getEvent().delete();
                             }else{
+                                if(((ProgramStageEventRow) programStageRow).getEvent().getDataValues().size()>0)
+                                {
+                                    for(DataValue dataValue:((ProgramStageEventRow) programStageRow).getEvent().getDataValues())
+                                    {
+                                        if(dataValue.getDataElement().equals("AAVFsW4emeN"))
+                                        {
+                                            ETHUNIZEDANIMAL= dataValue.getValue();
+                                        }
+                                        if(dataValue.getDataElement().equals("wuYV8zhSGa5"))
+                                        {
+                                            DEADANIMAL= dataValue.getValue();
+                                        }
+                                        datavalue_list.add(dataValue);
+                                    }
+                                }
                                 validRows.add(programStageRow);
-                                if((((ProgramStageEventRow) programStageRow).getEvent().getStatus().equals(Event                                                    .STATUS_COMPLETED))){
+                                if((((ProgramStageEventRow) programStageRow).getEvent().getStatus().equals(Event.STATUS_COMPLETED))){
+                                    if(((ProgramStageEventRow) programStageRow).getEvent().getEventDate()!=null)
+                                        lastCompletedEventDate = ((ProgramStageEventRow) programStageRow).getEvent().getEventDate();
+                                }
+                            }
+
+                        }
+
+                        if(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId().equals(RABIES_FOLLOWUP)){
+
+                            if(!qschFound_rabies){
+                                ((ProgramStageEventRow) programStageRow).getEvent().delete();
+                            }else{
+//                                validRows.add(programStageRow);
+                                if((((ProgramStageEventRow) programStageRow).getEvent().getStatus().equals(Event.STATUS_COMPLETED))){
                                     if(((ProgramStageEventRow) programStageRow).getEvent().getEventDate()!=null)
                                         lastCompletedEventDate = ((ProgramStageEventRow) programStageRow).getEvent().getEventDate();
                                 }
