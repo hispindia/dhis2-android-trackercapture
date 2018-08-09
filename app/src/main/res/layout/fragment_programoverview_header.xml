@@ -28,76 +28,76 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:nestedScrollingEnabled="false"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:nestedScrollingEnabled="false"
+    android:orientation="vertical">
 
     <ProgressBar
-            android:id="@+id/progress_bar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="28dp"
-            android:indeterminate="true" />
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="28dp"
+        android:indeterminate="true" />
 
     <android.support.v7.widget.CardView
-            android:id="@+id/enrollment_cardview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp">
+        android:id="@+id/enrollment_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp">
 
         <LinearLayout
-                android:id="@+id/missingenrollmentlayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+            android:id="@+id/missingenrollmentlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
-                    android:id="@+id/noactiveenrollment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="5dp"
-                    android:text="@string/no_active_enrollment"
-                    android:textSize="@dimen/medium_text_size" />
+                android:id="@+id/noactiveenrollment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
+                android:text="@string/no_active_enrollment"
+                android:textSize="@dimen/medium_text_size" />
 
             <org.hisp.dhis.android.sdk.ui.views.FloatingActionButton
-                    android:id="@+id/newenrollmentbutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center"
-                    android:src="@drawable/ic_new" />
+                android:id="@+id/newenrollmentbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:src="@drawable/ic_new" />
 
             <Button
-                    android:id="@+id/re_open"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/rounded_imagebutton_orange"
-                    android:padding="4dp"
-                    android:text="@string/re_open" />
+                android:id="@+id/re_open"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_imagebutton_orange"
+                android:padding="4dp"
+                android:text="@string/re_open" />
 
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/enrollmentLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="6dp">
+            android:id="@+id/enrollmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="6dp">
 
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->
@@ -108,125 +108,125 @@
 
                 <!--For Enrollment replaced by Case Management-->
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textAlignment="center"
-                        android:background="@color/color_accent_dark"
-                        android:text="@string/casemanagement"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/medium_text_size" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:background="@color/color_accent_dark"
+                    android:text="@string/casemanagement"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/medium_text_size" />
                 <ImageView
-                        android:id="@+id/enrollmentstatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="right"
-                        android:src="@drawable/ic_offline" />
+                    android:id="@+id/enrollmentstatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:src="@drawable/ic_offline" />
 
             </LinearLayout>
 
 
             <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="1dp"
-                    android:background="@color/light_grey" />
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/light_grey" />
 
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                    <TextView
-                            android:id="@+id/manual_id"
-                            android:layout_width="0dp"
-                            android:textStyle="bold"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="ID:"
-                            android:textSize="@dimen/small_text_size" />
-
-                    <TextView
-                            android:id="@+id/manual_id_value"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text=""
-                            android:textSize="@dimen/small_text_size" />
-                </LinearLayout>
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                    <TextView
-                            android:id="@+id/dateOfEnrollmentLabel"
-                            android:layout_width="0dp"
-                            android:textStyle="bold"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="START:"
-                            android:textSize="@dimen/small_text_size" />
-
-                    <TextView
-                            android:id="@+id/dateOfEnrollmentValue"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text=""
-                            android:textSize="@dimen/small_text_size" />
-                </LinearLayout>
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                    <TextView
-                            android:id="@+id/location"
-                            android:textStyle="bold"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="LOCATION:"
-                            android:textSize="@dimen/small_text_size" />
-
-                    <TextView
-                            android:id="@+id/location_value"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text=""
-                            android:textSize="@dimen/small_text_size" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/manual_id"
+                        android:layout_width="0dp"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ID:"
+                        android:textSize="@dimen/small_text_size" />
 
-                <TextView
-                        android:id="@+id/dateOfIncidentLabel"
+                    <TextView
+                        android:id="@+id/manual_id_value"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text=""
                         android:textSize="@dimen/small_text_size" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/dateOfEnrollmentLabel"
+                        android:layout_width="0dp"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="START:"
+                        android:textSize="@dimen/small_text_size" />
 
-                <TextView
-                        android:id="@+id/dateOfIncidentValue"
+                    <TextView
+                        android:id="@+id/dateOfEnrollmentValue"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text=""
                         android:textSize="@dimen/small_text_size" />
-            </LinearLayout>
-
-            <LinearLayout
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/location"
+                        android:textStyle="bold"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="LOCATION:"
+                        android:textSize="@dimen/small_text_size" />
+
+                    <TextView
+                        android:id="@+id/location_value"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=""
+                        android:textSize="@dimen/small_text_size" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/dateOfIncidentLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textSize="@dimen/small_text_size" />
+
+                <TextView
+                    android:id="@+id/dateOfIncidentValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textSize="@dimen/small_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <!--<Button-->
                 <!--android:id="@+id/complete"-->
@@ -262,86 +262,86 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-            android:id="@+id/profile_cardview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp">
+        android:id="@+id/profile_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp">
 
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="6dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="6dp">
 
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/profile"
-                        android:textSize="@dimen/medium_text_size" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile"
+                    android:textSize="@dimen/medium_text_size" />
 
                 <ImageButton
-                        android:id="@+id/profile_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="right"
-                        android:background="@color/transparent"
-                        android:src="@drawable/ic_dataentry" />
+                    android:id="@+id/profile_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_dataentry" />
             </LinearLayout>
 
 
             <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="1dp"
-                    android:background="@color/light_grey" />
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/light_grey" />
 
             <LinearLayout
-                    android:layout_width="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/headerItem1label"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textSize="@dimen/small_text_size" />
 
                 <TextView
-                        android:id="@+id/headerItem1label"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=""
-                        android:textSize="@dimen/small_text_size" />
-
-                <TextView
-                        android:id="@+id/headerItem1value"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=""
-                        android:textSize="@dimen/small_text_size" />
+                    android:id="@+id/headerItem1value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textSize="@dimen/small_text_size" />
 
             </LinearLayout>
 
             <LinearLayout
-                    android:layout_width="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/headerItem2label"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textSize="@dimen/small_text_size" />
 
                 <TextView
-                        android:id="@+id/headerItem2label"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=""
-                        android:textSize="@dimen/small_text_size" />
-
-                <TextView
-                        android:id="@+id/headerItem2value"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=""
-                        android:textSize="@dimen/small_text_size" />
+                    android:id="@+id/headerItem2value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textSize="@dimen/small_text_size" />
 
             </LinearLayout>
 
@@ -412,55 +412,90 @@
 
     <!--</android.support.v7.widget.CardView>-->
 
+    <HorizontalScrollView
+        android:id="@+id/hsv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:fillViewport="true"
+        android:measureAllChildren="false"
+        android:scrollbars="none" >
+
     <android.support.v7.widget.CardView
-            android:id="@+id/programindicators_cardview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-    >
+        android:id="@+id/programindicators_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:orientation="vertical"
-                android:padding="6dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/transparent"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/indicators"-->
+            <!--android:textSize="@dimen/medium_text_size" />-->
+            <!--</LinearLayout>-->
+
+            <!--<View-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="@color/light_grey" />-->
 
             <LinearLayout
-                    android:id="@+id/programindicatorlayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="1dp"
-            ></LinearLayout>
+                android:id="@+id/programindicatorlayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="1dp"
+                ></LinearLayout>
+            <LinearLayout
+                android:id="@+id/programindicatorlayout_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="1dp"
+                ></LinearLayout>
 
             <org.hisp.dhis.android.trackercapture.fragments.programoverview.FlowLayout
-                    android:id="@+id/keyvaluelayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"></org.hisp.dhis.android.trackercapture.fragments.programoverview.FlowLayout>
+                android:id="@+id/keyvaluelayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp"></org.hisp.dhis.android.trackercapture.fragments.programoverview.FlowLayout>
 
             <LinearLayout
-                    android:id="@+id/textlayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="6dp"></LinearLayout>
+                android:id="@+id/textlayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="6dp"></LinearLayout>
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+    </HorizontalScrollView>
 
     <android.support.v7.widget.CardView
-            android:id="@+id/events_cardview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp">
+        android:id="@+id/events_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp">
 
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:orientation="vertical"
-                android:padding="6dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:orientation="vertical"
+            android:padding="6dp">
 
 
             <!--<LinearLayout-->
@@ -479,29 +514,29 @@
             <!--</LinearLayout>-->
 
             <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="1dp"
-                    android:background="@color/light_grey" />
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/light_grey" />
 
             <LinearLayout
-                    android:id="@+id/programeventlayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="6dp"></LinearLayout>
+                android:id="@+id/programeventlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="6dp"></LinearLayout>
 
             <org.hisp.dhis.android.trackercapture.fragments.programoverview.FlowLayout
-                    android:id="@+id/keyvalueeventlayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="6dp"></org.hisp.dhis.android.trackercapture.fragments.programoverview.FlowLayout>
+                android:id="@+id/keyvalueeventlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"></org.hisp.dhis.android.trackercapture.fragments.programoverview.FlowLayout>
 
             <LinearLayout
-                    android:id="@+id/texteventlayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="6dp"></LinearLayout>
+                android:id="@+id/texteventlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="6dp"></LinearLayout>
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
