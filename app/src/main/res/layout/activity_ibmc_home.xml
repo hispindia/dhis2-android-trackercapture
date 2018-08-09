@@ -339,7 +339,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
         <TextView
-            android:text="INTERGRATED BITE CASE MANAGEMENT"
+            android:text="INTEGRATED BITE CASE MANAGEMENT"
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="20dp"
@@ -425,7 +425,7 @@
                 android:layout_weight="1"/>
             <TextView
                 android:textColor="@color/white"
-                android:text="Review Cases"
+                android:text="Archived Cases"
                 android:gravity="center_horizontal"
                 android:textSize="18dp"
                 android:layout_width="match_parent"
@@ -443,14 +443,14 @@
             android:layout_margin="10dp">
             <ImageView
                 android:paddingTop="5dp"
-                app:srcCompat="@drawable/ic_cloud_upload"
+                app:srcCompat="@drawable/dadd"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
             <TextView
                 android:textColor="@color/white"
-                android:text="Upload"
+                android:text="User Manual"
                 android:gravity="center_horizontal"
                 android:textSize="18dp"
                 android:layout_width="match_parent"
@@ -487,30 +487,30 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"/>
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/ibmc_notifications"
-            android:background="@drawable/home_button"
-            android:backgroundTint="@color/dark_navy_blue"
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp">
-            <ImageView
-                android:paddingTop="5dp"
-                app:srcCompat="@drawable/ic_home_notification"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-            <TextView
-                android:textColor="@color/white"
-                android:text="Notifications"
-                android:gravity="center_horizontal"
-                android:textSize="18dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"/>
-        </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:id="@+id/ibmc_notifications"-->
+            <!--android:background="@drawable/home_button"-->
+            <!--android:backgroundTint="@color/dark_navy_blue"-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_margin="10dp">-->
+            <!--<ImageView-->
+                <!--android:paddingTop="5dp"-->
+                <!--app:srcCompat="@drawable/ic_home_notification"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1"/>-->
+            <!--<TextView-->
+                <!--android:textColor="@color/white"-->
+                <!--android:text="Notifications"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:textSize="18dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingBottom="10dp"/>-->
+        <!--</LinearLayout>-->
     </LinearLayout>
 </LinearLayout>
