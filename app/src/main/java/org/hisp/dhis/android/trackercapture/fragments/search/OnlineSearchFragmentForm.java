@@ -1,5 +1,6 @@
 package org.hisp.dhis.android.trackercapture.fragments.search;
 
+import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
@@ -17,6 +18,24 @@ public class OnlineSearchFragmentForm {
     private List<TrackedEntityAttribute> trackedEntityAttributes;
     private List<TrackedEntityAttributeValue> trackedEntityAttributeValues;
     private List<Row> dataEntryRows;
+    private BaseValue startDate;
+    private BaseValue endDate;
+
+    public BaseValue getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(BaseValue startDate) {
+        this.startDate = startDate;
+    }
+
+    public BaseValue getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(BaseValue endDate) {
+        this.endDate = endDate;
+    }
 
     public String getOrganisationUnit() {
         return organisationUnit;

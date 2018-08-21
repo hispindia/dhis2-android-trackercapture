@@ -30,6 +30,8 @@ import org.hisp.dhis.android.trackercapture.PDFViewActivity;
 import org.hisp.dhis.android.trackercapture.PDFViewActivity_;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
+import org.hisp.dhis.android.trackercapture.fragments.search.OnlineSearchFragment;
+import org.hisp.dhis.android.trackercapture.fragments.search.OnlineSearchResultFragment;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.EnrollmentDateSetterHelper;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.IEnroller;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.SelectProgramFragment;
@@ -112,13 +114,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,I
                     break;
 
                 case R.id.ibmc_review_cases:
+//                    Toast.makeText(getContext(), "Review Cases", Toast.LENGTH_LONG).show();
+                    Program program = MetaDataController.getProgram(getString(R.string.intake_form_program_id));
+                    //OrganisationUnit organisationUnit = MetaDataController.getOrganisationUnit(mPrefs.getOrgUnit().first);
+                    List<OrganisationUnit> organisationUnits=MetaDataController.getAssignedOrganisationUnits();
+                    OrganisationUnit ou=MetaDataController.getOrganisationUnit(organisationUnits.get(0).getId());
 
-//                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
-//                            mPrefs.getOrgUnit().first,getString(R.string.intake_form_program_id));
-                    List<OrganisationUnit> organisationUnits__=MetaDataController.getAssignedOrganisationUnits();
-                    OrganisationUnit organisationUnit_=MetaDataController.getOrganisationUnit(organisationUnits__.get(0).getId());
-                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
-                            organisationUnit_.getId(),getString(R.string.intake_form_program_id));
+                    mForm.setProgram(program);
+                    mForm.setOrgUnit(ou);
+                    HolderActivity.navigateToOnlineSearchFragment(getActivity(),mForm.getProgram().getUid(),
+                            mForm.getOrgUnit().getId(),true,
+                            new OnlineSearchResultFragment.CallBack() {
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(getContext(),"Done downloading",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+
                     break;
 
                 case R.id.ibmc_upload:
