@@ -335,7 +335,7 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
                 queryTrackedEntityInstances(getChildFragmentManager(),
                         mForm.getOrganisationUnit(), mForm.getProgram(),
                         mForm.getQueryString
-                                (), detailedSearch, searchValues.toArray(new TrackedEntityAttributeValue[]{}));
+                                (), detailedSearch,mForm.getStartDate().getValue(),mForm.getEndDate().getValue(), searchValues.toArray(new TrackedEntityAttributeValue[]{}));
             } catch (Exception e) {
                 showQueryError();
             }
@@ -369,6 +369,27 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
                 List<TrackedEntityInstance> trackedEntityInstancesQueryResult = null;
                 if (detailedSearch) {
                     trackedEntityInstancesQueryResult = TrackerController.queryTrackedEntityInstancesDataFromAllAccessibleOrgUnits(DhisController.getInstance().getDhisApi(), orgUnit, program, queryString, detailedSearch, params);
+                } else {
+                    trackedEntityInstancesQueryResult = TrackerController.queryTrackedEntityInstancesDataFromServer(DhisController.getInstance().getDhisApi(), orgUnit, program, queryString, params);
+                }
+
+                // showTrackedEntityInstanceQueryResultDialog(fragmentManager, trackedEntityInstancesQueryResult, orgUnit);
+                showOnlineSearchResultFragment(trackedEntityInstancesQueryResult, orgUnit, program, backNavigation);
+                return new Object();
+            }
+        });
+    }public void queryTrackedEntityInstances(final FragmentManager fragmentManager, final String orgUnit, final String program, final String queryString, final boolean detailedSearch, final String startDate, final String endDate, final TrackedEntityAttributeValue... params)
+            throws APIException {
+
+        JobExecutor.enqueueJob(new NetworkJob<Object>(1,
+                null) {
+
+            @Override
+            public Object execute() throws APIException {
+
+                List<TrackedEntityInstance> trackedEntityInstancesQueryResult = null;
+                if (detailedSearch) {
+                    trackedEntityInstancesQueryResult = TrackerController.queryTrackedEntityInstancesDataFromAllAccessibleOrgUnits(DhisController.getInstance().getDhisApi(), orgUnit, program, queryString, detailedSearch,startDate,endDate, params);
                 } else {
                     trackedEntityInstancesQueryResult = TrackerController.queryTrackedEntityInstancesDataFromServer(DhisController.getInstance().getDhisApi(), orgUnit, program, queryString, params);
                 }

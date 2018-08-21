@@ -5,11 +5,13 @@ import android.util.Log;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
+import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowFactory;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DatePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
 
 import java.util.ArrayList;
@@ -42,6 +44,12 @@ public class OnlineSearchFragmentQuery implements Query<OnlineSearchFragmentForm
                 program.getProgramTrackedEntityAttributes();
         List<TrackedEntityAttributeValue> values = new ArrayList<>();
         List<Row> dataEntryRows = new ArrayList<>();
+        BaseValue startDate = new BaseValue(){};
+        BaseValue endDate = new BaseValue(){};
+        dataEntryRows.add(new DatePickerRow("StartDate",false,null,startDate,true));
+        dataEntryRows.add(new DatePickerRow("End Date ", false, null, endDate,true));
+        form.setStartDate(startDate);
+        form.setEndDate(endDate);
         for (ProgramTrackedEntityAttribute ptea : programAttrs) {
             TrackedEntityAttribute trackedEntityAttribute = ptea.getTrackedEntityAttribute();
             TrackedEntityAttributeValue value = new TrackedEntityAttributeValue();
