@@ -10,6 +10,8 @@ import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
+import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
+import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Option;
@@ -25,6 +27,7 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.events.EventRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceDynamicColumnRows;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
 import org.hisp.dhis.android.sdk.utils.ScreenSizeConfigurator;
+import org.hisp.dhis.android.trackercapture.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,6 +77,7 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
                 }
             }
         }
+        row.addColumn("Event Status");
 
         eventRows.add(row);
 
@@ -169,6 +173,9 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
         }
 
         Map<String, TrackedEntityAttributeValue> trackedEntityAttributeValueMapForTrackedEntityInstance = cachedTrackedEntityAttributeValuesForTrackedEntityInstances.get(trackedEntityInstance.getLocalId());
+
+
+
         for (int i = 0; i < attributesToShow.size(); i++) {
             String value = " ";
 
@@ -208,6 +215,48 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
             }
             trackedEntityInstanceItemRow.addColumn(value);
         }
+        List<Enrollment> enrollments = new ArrayList<>();
+        enrollments = TrackerController.getEnrollments(programId,trackedEntityInstance);
+        String text = "";
+
+        for(Enrollment enrollment:enrollments){
+            List<Event> eventsByEnrollment = TrackerController.getEventsByEnrollment(enrollment.getLocalId());
+            for(Event event:eventsByEnrollment){
+                event.getStatus();
+                switch (event.getProgramStageId()){
+                    case "PwGD626AbHf"://Event notification
+                        text += " Ev Notification : " + event.getStatus();
+                        break;
+
+                    case "ww8DSCToHag":
+                        text +=" Rabies Ass : " + event.getStatus();
+                        break;
+
+                    case "MkiHGIm385w":
+                        text +=" Rabies Ass fol : "+event.getStatus();
+                        break;
+
+                    case "SH5ad8iQpQB":
+                        text +=" Quarantine Sched :"+event.getStatus();
+                        break;
+
+                    case "IXdxLjRSFT8":
+                        text+= " Quarantine :"+ event.getStatus();
+                        break;
+
+                    case "eSOtGji0yna":
+                        text+= " Lab Invest :"+event.getStatus();
+                        break;
+
+                    case "bXZaSp2arEk":
+                        text += " Report Details :"+event.getStatus();
+                        break;
+                }
+            }
+        }
+        trackedEntityInstanceItemRow.addColumn(text);
+
+
         return trackedEntityInstanceItemRow;
     }
 
