@@ -263,7 +263,7 @@ public class HolderActivity extends AbsHomeActivity{
 
     public static void navigateToDataEntryFragment(Activity activity, String orgUnitId,
                                                    String programId, String programStageId,
-                                                   long localEnrollmentId, long eventId,String lastCompletedEventDate ) {
+                                                   long localEnrollmentId, long eventId,String lastCompletedEventDate,String lastUnCompletedDate) {
         Intent intent = new Intent(activity, HolderActivity.class);
         intent.putExtra(EventDataEntryFragment.ORG_UNIT_ID, orgUnitId);
         intent.putExtra(EventDataEntryFragment.PROGRAM_ID, programId);
@@ -272,6 +272,7 @@ public class HolderActivity extends AbsHomeActivity{
         intent.putExtra(EventDataEntryFragment.EVENT_ID, eventId);
         intent.putExtra(ARG_TYPE, ARG_TYPE_DATAENTRYFRAGMENT);
         intent.putExtra(EventDataEntryFragment.LAST_COMPLETED_EVENT_DATE,lastCompletedEventDate);
+        intent.putExtra(EventDataEntryFragment.LAST_UNCOMPLETED_EVENT_DATE,lastUnCompletedDate);
         activity.startActivity(intent);
     }
     

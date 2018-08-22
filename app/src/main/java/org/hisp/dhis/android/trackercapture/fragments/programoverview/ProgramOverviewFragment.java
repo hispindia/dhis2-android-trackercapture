@@ -30,7 +30,6 @@
 package org.hisp.dhis.android.trackercapture.fragments.programoverview;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -67,7 +66,6 @@ import com.raizlabs.android.dbflow.sql.queriable.StringQuery;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 
-import org.apache.commons.jexl2.Main;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
@@ -85,11 +83,9 @@ import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramRuleAction;
-import org.hisp.dhis.android.sdk.persistence.models.ProgramRuleVariable;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.Relationship;
-import org.hisp.dhis.android.sdk.persistence.models.RelationshipType;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
@@ -120,12 +116,10 @@ import org.hisp.dhis.android.sdk.ui.dialogs.ProgramDialogFragment;
 import org.hisp.dhis.android.sdk.ui.fragments.common.AbsProgramRuleFragment;
 import org.hisp.dhis.android.sdk.ui.fragments.selectprogram.SelectProgramFragmentPreferences;
 import org.hisp.dhis.android.sdk.ui.views.FloatingActionButton;
-import org.hisp.dhis.android.sdk.ui.views.FontTextView;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 import org.hisp.dhis.android.sdk.utils.comparators.EnrollmentDateComparator;
 import org.hisp.dhis.android.sdk.utils.services.ProgramRuleService;
-import org.hisp.dhis.android.sdk.utils.services.VariableService;
 import org.hisp.dhis.android.trackercapture.MainActivity;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
@@ -144,27 +138,16 @@ import org.hisp.dhis.android.trackercapture.ui.rows.programoverview.ProgramStage
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
 
-
-import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem$Table;
-import org.hisp.dhis.android.sdk.persistence.models.Option;
-import org.hisp.dhis.android.sdk.persistence.models.OptionSet;
-import org.hisp.dhis.android.sdk.persistence.models.Program;
-import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue$Table;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance$Table;
 
 public class ProgramOverviewFragment extends AbsProgramRuleFragment implements View.OnClickListener,
@@ -283,6 +266,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
     private static  DataValue ANIMALGENDER=new DataValue();
 
     String lastCompletedEventDate = null;
+    private String lastUnCompletedEventDate = null;
 
     public ProgramOverviewFragment() {
         setProgramRuleFragmentHelper(new ProgramOverviewRuleHelper(this));
@@ -657,8 +641,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                     TrackedEntityAttribute attribute = MetaDataController.getTrackedEntityAttribute(
                             trackedEntityAttributeValues.get(i).getTrackedEntityAttributeId());
                     //Enrollment Attributes
-                    Log.d("attvalues",attribute.getUid());
-                    Log.d("attvalues",attribute.getName());
+//                    Log.d("attvalues",attribute.getUid());
+//                    Log.d("attvalues",attribute.getName());
 
                     if (attribute != null &&attribute.getUid().equals("I7OncVzPZKS")) {
                         manualid.setText("ID:");
@@ -814,6 +798,14 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             for(ProgramStageRow programStageRow : mForm.getProgramStageRows()){
 
                 if(programStageRow instanceof  ProgramStageEventRow) {
+                    Event curEvent = ((ProgramStageEventRow)programStageRow).getEvent();
+                    if(!(curEvent.getStatus().equalsIgnoreCase("COMPLETED"))){
+                        if(lastUnCompletedEventDate ==null ||
+                                new DateTime(lastUnCompletedEventDate)
+                                        .isAfter(new DateTime(curEvent.getEventDate()))){
+                            lastUnCompletedEventDate = curEvent.getEventDate();
+                        }
+                    }
 
 
 
@@ -1487,7 +1479,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             } else {
                 HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
                         args.getString(PROGRAM_ID), programStage,
-                        mForm.getEnrollment().getLocalId(), event.getLocalId(),lastCompletedEventDate );
+                        mForm.getEnrollment().getLocalId(), event.getLocalId(),lastCompletedEventDate, lastUnCompletedEventDate);
             }
 //            }else{
 //                UiUtils.showErrorDialog(getActivity(),"Not Allowed","This program stage is not allowed yet");
@@ -1499,7 +1491,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             } else {
                 HolderActivity.navigateToDataEntryFragment(getActivity(), args.getString(ORG_UNIT_ID),
                         args.getString(PROGRAM_ID), programStage,
-                        mForm.getEnrollment().getLocalId(), event.getLocalId(),lastCompletedEventDate);
+                        mForm.getEnrollment().getLocalId(), event.getLocalId(),lastCompletedEventDate,lastUnCompletedEventDate);
             }
         }
 
