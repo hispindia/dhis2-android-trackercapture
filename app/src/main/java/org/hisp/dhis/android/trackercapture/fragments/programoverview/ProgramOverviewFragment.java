@@ -798,16 +798,6 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
             for(ProgramStageRow programStageRow : mForm.getProgramStageRows()){
 
                 if(programStageRow instanceof  ProgramStageEventRow) {
-                    Event curEvent = ((ProgramStageEventRow)programStageRow).getEvent();
-                    if(!(curEvent.getStatus().equalsIgnoreCase("COMPLETED"))){
-                        if(lastUnCompletedEventDate ==null ||
-                                new DateTime(lastUnCompletedEventDate)
-                                        .isAfter(new DateTime(curEvent.getEventDate()))){
-                            lastUnCompletedEventDate = curEvent.getEventDate();
-                        }
-                    }
-
-
 
                     if (!programRuleFragmentHelper.getHideProgramStages().contains(((ProgramStageEventRow) programStageRow).getEvent().getProgramStageId())){
 
