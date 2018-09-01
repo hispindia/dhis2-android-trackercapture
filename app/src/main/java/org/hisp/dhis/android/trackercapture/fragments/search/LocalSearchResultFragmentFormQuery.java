@@ -28,6 +28,7 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceDy
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
 import org.hisp.dhis.android.sdk.utils.ScreenSizeConfigurator;
 import org.hisp.dhis.android.trackercapture.R;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -222,6 +223,12 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
         for(Enrollment enrollment:enrollments){
             List<Event> eventsByEnrollment = TrackerController.getEventsByEnrollment(enrollment.getLocalId());
             for(Event event:eventsByEnrollment){
+                if(trackedEntityInstanceItemRow.getLatestEvent()==null ||
+                        trackedEntityInstanceItemRow.getLatestEvent().isBefore(
+                        new DateTime(event.getLastUpdated()))) {
+                    trackedEntityInstanceItemRow.setLatestEvent(
+                            new DateTime(event.getLastUpdated()));
+                }
                 event.getStatus();
                 switch (event.getProgramStageId()){
                     case "PwGD626AbHf"://Event notification
