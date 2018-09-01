@@ -82,7 +82,7 @@
         </activity>
 
 
-        <receiver android:name="org.hisp.dhis.android.sdk.services.PeriodicSynchronizerAutoStarter">
+        <receiver android:process=":remote" android:name="org.hisp.dhis.android.sdk.services.PeriodicSynchronizerAutoStarter">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

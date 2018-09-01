@@ -37,6 +37,7 @@ import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.activities.INavigationHandler;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.TrackerAssociateRowActionListener;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.events.EventRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.trackercapture.R;
@@ -45,10 +46,17 @@ import org.hisp.dhis.android.trackercapture.fragments.TrackerAssociate.TrackerAs
 import org.hisp.dhis.android.trackercapture.fragments.programoverview.ProgramOverviewFragment;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.dialogs.ItemStatusDialogFragment;
 import org.hisp.dhis.android.trackercapture.ui.adapters.TrackedEntityInstanceAdapter;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static android.text.TextUtils.isEmpty;
 
 public class LocalSearchResultFragment extends Fragment implements LoaderManager.LoaderCallbacks<LocalSearchResultFragmentForm>,
                                                                     View.OnClickListener{
@@ -245,7 +253,53 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         if (LOADER_ID == loader.getId()) {
             progressBar.setVisibility(View.GONE);
             mForm = data;
-            mAdapter.swapData(data.getEventRowList());
+            Collections.sort(data.getEventRowList(), new Comparator<EventRow>() {
+                        @Override
+                        public int compare(EventRow lhs, EventRow rhs) {
+                            if(lhs == null && rhs == null) {
+                                return 0;
+                            } else if (lhs == null) {
+                                return -1;
+                            } else if (rhs == null) {
+                                return 1;
+                            }
+
+                            if(!(lhs instanceof TrackedEntityInstanceItemRow)
+                                    && (!(rhs instanceof TrackedEntityInstanceItemRow))) {
+                                return 0;
+                            } else if (!(lhs instanceof TrackedEntityInstanceItemRow) ){
+                                return -1;
+                            } else if (!(rhs instanceof TrackedEntityInstanceItemRow) ) {
+                                return 1;
+                            }
+                            DateTime lhsDate = ((TrackedEntityInstanceItemRow)lhs).getLatestEvent();
+                            DateTime rhsDate = ((TrackedEntityInstanceItemRow)rhs).getLatestEvent();
+                            if(isEmpty(lhsDate.toString()) && isEmpty(rhsDate.toString())) {
+                                return 0;
+                            } else if (isEmpty(lhsDate.toString())) {
+                                return -1;
+                            } else if (isEmpty(rhsDate.toString())) {
+                                return 1;
+                            }
+                            if(lhsDate == null && rhsDate == null) {
+                                return 0;
+                            } else if (lhsDate == null) {
+                                return -1;
+                            } else if (rhsDate == null) {
+                                return 1;
+                            } else {
+                                if(lhsDate.isBefore(rhsDate)) {
+                                    return 1;
+                                } else if(lhsDate.isAfter(rhsDate)) {
+                                    return -1;
+                                } else {
+                                    return 0;
+                                }
+                            }
+                        }
+                    });
+
+                    mAdapter.swapData(data.getEventRowList());
         }
     }
 
