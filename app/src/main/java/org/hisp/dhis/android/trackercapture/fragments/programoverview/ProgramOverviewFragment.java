@@ -1686,7 +1686,8 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         String firstValue;
         TrackedEntityAttribute firstTrackedEntityAttribute = trackedEntityAttributeMap.get(firstId);
         String firstCompareOperator;
-        if(firstTrackedEntityAttribute.getOptionSet() != null) {
+
+        if(firstTrackedEntityAttribute!=null&& firstTrackedEntityAttribute.getOptionSet() != null) {
             firstCompareOperator = "IS";
             firstValue = attributesWithValuesMap.get(firstId);
         } else {

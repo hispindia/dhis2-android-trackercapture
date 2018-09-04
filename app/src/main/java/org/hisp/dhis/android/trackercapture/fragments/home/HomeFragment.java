@@ -136,7 +136,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     break;
 
                 case R.id.ibmc_notifications:
-                    Toast.makeText(getContext(), "Notifications", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Notifications", Toast.LENGTH_LONG).show();            HolderActivity.startMaps(getActivity());
                     break;
             }
 //        }

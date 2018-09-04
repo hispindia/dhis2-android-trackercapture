@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.hisp.dhis.android.sdk.persistence.models.Event;
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.activities.OnBackPressedListener;
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment;
@@ -34,6 +36,9 @@ import org.hisp.dhis.client.sdk.ui.fragments.WrapperFragment;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static org.hisp.dhis.android.trackercapture.activities.MapActivity.ATTRIBUTE_COORDINATES;
 
 public class HolderActivity extends AbsHomeActivity{
 
@@ -337,6 +342,16 @@ public class HolderActivity extends AbsHomeActivity{
         intent.putExtra(OnlineSearchFragment.EXTRA_NAVIGATION, backNavigation);
         intent.putExtra(ARG_TYPE, ARG_TYPE_ONLINESEARCHFRAGMENT);
         intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY); // we don't want to keep it to backstack
+        activity.startActivity(intent);
+    }
+
+    public static void startMaps(Activity activity){
+        Intent intent = new Intent(activity,MapActivity.class);
+        activity.startActivity(intent);
+    }
+    public static void startMaps(Activity activity,ArrayList<TrackedEntityAttributeValue> data){
+        Intent intent = new Intent(activity,MapActivity.class);
+        intent.putExtra(ATTRIBUTE_COORDINATES,data);
         activity.startActivity(intent);
     }
 

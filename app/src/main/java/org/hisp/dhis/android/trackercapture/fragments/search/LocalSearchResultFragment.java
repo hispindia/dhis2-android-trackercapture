@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -34,6 +35,7 @@ import org.hisp.dhis.android.sdk.persistence.models.BaseSerializableModel;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.activities.INavigationHandler;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.TrackerAssociateRowActionListener;
@@ -55,6 +57,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -72,7 +75,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     private LocalSearchResultFragmentForm mForm;
     private ProgressBar progressBar;
     private CardView cardView;
-
+    private Button allinmap;
 
 
     public static LocalSearchResultFragment newInstance(String orgUnitId, String programId, HashMap<String,String> attributeValueMap) {
@@ -127,12 +130,13 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         searchResultsListView = (ListView) view.findViewById(R.id.listview_search_results);
         progressBar = (ProgressBar) view.findViewById(R.id.local_search_progressbar);
         cardView = (CardView) view.findViewById(R.id.search_online_cardview);
-
+        allinmap = (Button) view.findViewById(R.id.showallinmap);
         mAdapter = new TrackedEntityInstanceAdapter(getLayoutInflater(savedInstanceState));
         searchResultsListView.setAdapter(mAdapter);
         progressBar.setVisibility(View.VISIBLE);
         cardView.setVisibility(View.GONE);
         cardView.setOnClickListener(this);
+        allinmap.setOnClickListener(this);
     }
 
 
@@ -375,6 +379,23 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
             case R.id.search_online_cardview: {
                 searchOnline();
             }
+            case R.id.showallinmap:
+                showMap();
         }
+    }
+
+    private void showMap(){
+        List<TrackedEntityAttributeValue> data = new ArrayList<>();
+        for(EventRow eventRow :mForm.getEventRowList()){
+            if(eventRow instanceof TrackedEntityInstanceItemRow){
+                Map<String, TrackedEntityAttributeValue> attributes = ((TrackedEntityInstanceItemRow) eventRow).getAttributes();
+                if(attributes != null){
+                    data.add(attributes.get("x8iA6APPjTm"));
+                }
+            }
+        }
+
+        HolderActivity.startMaps(getActivity(),
+                (ArrayList<TrackedEntityAttributeValue>) data);
     }
 }
