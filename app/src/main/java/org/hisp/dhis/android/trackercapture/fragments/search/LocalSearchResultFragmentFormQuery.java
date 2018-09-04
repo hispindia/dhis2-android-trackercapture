@@ -68,7 +68,9 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
                 row = new TrackedEntityInstanceDynamicColumnRows();
         int numberOfColumns = ScreenSizeConfigurator.getInstance().getFields();
          for (ProgramTrackedEntityAttribute attribute : attributes) {
-            if (attribute.getDisplayInList() && attributesToShow.size() < numberOfColumns) {
+             //ToDO Fix attribute display size for 4.4
+            // if (attribute.getDisplayInList() && attributesToShow.size() < numberOfColumns) {
+            if (attribute.getDisplayInList() && attributesToShow.size() < 4) {
                 attributesToShow.add(attribute.getTrackedEntityAttributeId());
                 attributesToShowMap.put(attribute.getTrackedEntityAttributeId(), attribute.getTrackedEntityAttribute());
                 if (attribute.getTrackedEntityAttribute() != null) {
