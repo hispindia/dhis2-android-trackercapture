@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,6 +16,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.trackercapture.R;
+import org.hisp.dhis.client.sdk.ui.activities.BaseActivity;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ import static org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.AbsDatePicker
 import static org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.QuestionCoordinatesRow.UNDEFINED;
 
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     private GoogleMap mMap;
     public static String ATTRIBUTE_COORDINATES = "coordinate_attributes_extra";
     @Override
