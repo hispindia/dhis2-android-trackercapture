@@ -262,7 +262,7 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
             }
         }
         trackedEntityInstanceItemRow.addColumn(text);
-
+        trackedEntityInstanceItemRow.addAtributeValue("x8iA6APPjTm",trackedEntityAttributeValueMapForTrackedEntityInstance.get("x8iA6APPjTm"));
 
         return trackedEntityInstanceItemRow;
     }
