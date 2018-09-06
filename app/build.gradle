@@ -44,7 +44,6 @@ android {
 //    }
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
@@ -83,21 +82,25 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
-    compile project(':core')
-    compile project(':ui')
+    implementation project(':core')
+    implementation project(':ui')
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+
+    api('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
-    compile 'com.github.barteksc:android-pdf-viewer:2.8.2'
-    compile 'com.android.support:multidex:1.0.1'
+    api 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    api 'com.android.support:multidex:1.0.1'
 
     provided 'org.androidannotations:androidannotations:4.0.0'
-    compile 'org.androidannotations:androidannotations-api:4.0.0'
+    api 'org.androidannotations:androidannotations-api:4.0.0'
 
-    implementation 'com.google.android.gms:play-services-maps:12.0.1'
-
+    api('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
+    }
+    api 'org.osmdroid:osmdroid-android:5.6.5'
 }
