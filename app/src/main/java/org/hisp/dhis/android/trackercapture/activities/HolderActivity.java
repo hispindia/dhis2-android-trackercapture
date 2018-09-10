@@ -391,11 +391,16 @@ public class HolderActivity extends AbsHomeActivity{
         activity.startActivity(intent);
     }
 
-    public static void navigateToLocalSearchResultFragment(Activity activity, String organisationUnitId, String program, HashMap<String, String> attributeValues) {
+    public static void navigateToLocalSearchResultFragment(Activity activity, String organisationUnitId, String program, HashMap<String, String> attributeValues,String startDate,String endDate,String stageId,String atrCord,String decord) {
         Intent intent = new Intent(activity, HolderActivity.class);
         intent.putExtra(LocalSearchResultFragment.EXTRA_ORGUNIT, organisationUnitId);
         intent.putExtra(LocalSearchResultFragment.EXTRA_PROGRAM, program);
         intent.putExtra(LocalSearchResultFragment.EXTRA_ATTRIBUTEVALUEMAP, attributeValues);
+        intent.putExtra(LocalSearchResultFragment.START_DATE,startDate);
+        intent.putExtra(LocalSearchResultFragment.END_DATE,endDate);
+        intent.putExtra(LocalSearchResultFragment.EXTRA_STAGE_ID,stageId);
+        intent.putExtra(LocalSearchResultFragment.EXTRA_COORD_ATR,atrCord);
+        intent.putExtra(LocalSearchResultFragment.EXTRA_COORD_DE,decord);
         intent.putExtra(ARG_TYPE, ARG_TYPE_LOCALSEARCHRESULTFRAGMENT);
         activity.startActivity(intent);
     }

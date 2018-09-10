@@ -98,7 +98,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
 //                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
 //                            organisationUnit.getId(),getString(R.string.intake_form_program_id));
-                    HolderActivity.navigateToLocalSearchResultFragment(getActivity(),organisationUnit.getId(),getString(R.string.intake_form_program_id),new HashMap<String, String>());
+                    HolderActivity.navigateToLocalSearchResultFragment(getActivity(),organisationUnit.getId(),getString(R.string.intake_form_program_id),new HashMap<String, String>(),null,null,null,null,null);
                     break;
 
                 case R.id.ibmc_new_case:
@@ -128,6 +128,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     break;
 
                 case R.id.ibmc_upload:
+                    Program programt = MetaDataController.getProgram(getString(R.string.intake_form_program_id));
+
+                    List<OrganisationUnit> organisationUnitst=MetaDataController.getAssignedOrganisationUnits();
+                    OrganisationUnit out=MetaDataController.getOrganisationUnit(organisationUnitst.get(0).getId());
+
+                    mForm.setProgram(programt);
+                    mForm.setOrgUnit(out);
+                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
+                            mForm.getOrgUnit().getId(),mForm.getProgram().getUid());
                     Toast.makeText(getContext(), "Upload", Toast.LENGTH_LONG).show();
                     break;
 

@@ -10,6 +10,7 @@ import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
+import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
@@ -31,6 +32,7 @@ import org.hisp.dhis.android.trackercapture.R;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -39,14 +41,41 @@ import java.util.Map;
 import java.util.Set;
 
 public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResultFragmentForm> {
+
+    String stagefl;
     String orgUnitId;
     String programId;
     HashMap<String, String> attributeValueMap;
+    DateTime startDate;
+    DateTime endDate;
+    String cordatrfl;
+    String corddefl;
 
-    public LocalSearchResultFragmentFormQuery(String orgUnitId, String programId, HashMap<String, String> attributeValueMap) {
+
+    public static final String ATR_COORD_ID = "x8iA6APPjTm";
+    public static final String DE_COORD_ID = "QMGWGK6wkET";
+    public static final String EVENT_NOTIFICATION_STAGE = "PwGD626AbHf";
+//    public LocalSearchResultFragmentFormQuery(String orgUnitId, String programId, HashMap<String, String> attributeValueMap) {
+//        this.orgUnitId = orgUnitId;
+//        this.programId = programId;
+//        this.attributeValueMap = attributeValueMap;
+//    }
+
+    public LocalSearchResultFragmentFormQuery(String orgUnitId, String programId, HashMap<String, String> attributeValueMap,String startDate,String endDate,String stageId,
+                                              String cordatrfl,String corddefl) {
         this.orgUnitId = orgUnitId;
         this.programId = programId;
         this.attributeValueMap = attributeValueMap;
+        if(startDate==null || endDate==null || startDate.equals("") || endDate.equals("")){
+
+        }else{
+            this.startDate = new DateTime(startDate);
+            this.endDate = new DateTime(endDate);
+        }
+        this.stagefl = stageId;
+        this.cordatrfl = cordatrfl;
+        this.corddefl = corddefl;
+
     }
 
 
@@ -108,8 +137,89 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
             TrackedEntityInstance tei = teiIterator.next();
             if(TrackerController.getEnrollments(programId,tei).size()==0){
                 teiIterator.remove();
+                continue;
             }
+
+
+
+            //filter for start date and end date
+            boolean intime = false;
+
+            if(startDate!=null && endDate!=null){
+                List<Enrollment> enrollments = TrackerController.getEnrollments(programId,tei);
+                for(Enrollment enrollment:enrollments){
+                    DateTime enDate = new DateTime(enrollment.getEnrollmentDate());
+                    if(enDate.isAfter(startDate) && enDate.isBefore(endDate)){
+                        intime = true;
+                        break;
+                    }
+
+                }
+            }else{
+                intime =true;
+            }
+            if(!intime) teiIterator.remove();
+
+            //filter for stages
+            boolean hasEvent = false;
+            if(stagefl!=null && !stagefl.equals("")){
+                for(Enrollment enrollment:TrackerController.getEnrollments(programId,tei)){
+                    Event event = TrackerController.getEvent(enrollment.getLocalId(), stagefl);
+                    if(event!=null && event.getDataValues().size()>0){
+                        hasEvent =true;
+                        break;
+                    }
+                }
+            }else {
+                hasEvent = true;
+            }
+
+            if(!hasEvent) teiIterator.remove();
+
+
+            //filter with atrcordfl
+            boolean hasatr = false;
+            if(cordatrfl!=null && (cordatrfl.equalsIgnoreCase("YES") || cordatrfl.equalsIgnoreCase("true"))  ){
+                TrackedEntityAttributeValue tav = TrackerController.getTrackedEntityAttributeValue
+                        (ATR_COORD_ID, tei.getLocalId());
+                if(tav!=null && tav.getValue()!=null && !tav.getValue().equals("")){
+                    hasatr = true;
+                }
+
+            }else{
+                hasatr = true;
+            }
+
+            if(!hasatr) teiIterator.remove();
+
+
+            //filter with decordfl
+            boolean hasde = false;
+            if(corddefl!=null && (corddefl.equalsIgnoreCase("YES") || corddefl.equalsIgnoreCase("true"))  ){
+                for(Enrollment enrollment:TrackerController.getEnrollments(programId,tei)){
+                    Event event = TrackerController.getEvent(enrollment.getLocalId(), EVENT_NOTIFICATION_STAGE);
+                    if(event!=null && event.getDataValues().size()>0){
+                        for(DataValue value:event.getDataValues()){
+                            if(value.getDataElement().equals(DE_COORD_ID)){
+                                String vv = value.getValue();
+                                if(vv!=null && !vv.equals("")){
+                                    hasde = true;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+
+
+            }else{
+                hasde = true;
+            }
+
+            if(!hasde) teiIterator.remove();
         }
+
+
 
         //caching tracked entity attributes
         List<TrackedEntityAttribute> trackedEntityAttributes = new Select().from(TrackedEntityAttribute.class).queryList();
@@ -356,6 +466,71 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
      */
     private String getTrackedEntityInstancesQuery(HashMap<String, String> attributesWithValuesMap,
                                                   Map<String, TrackedEntityAttribute> trackedEntityAttributeMap) {
+        Set<String> attributesIdsUsedInQuery = attributesWithValuesMap.keySet();
+        Iterator<String> attributesIdsUsedInQueryIterator = attributesIdsUsedInQuery.iterator();
+        String firstId;
+        if(attributesIdsUsedInQueryIterator.hasNext()) {
+            firstId = attributesIdsUsedInQueryIterator.next();
+        } else {
+            //no values have been used in the query show with no filter
+            return "SELECT * FROM " + TrackedEntityInstance.class.getSimpleName() + " WHERE "
+                    + TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE + " IN (SELECT " +
+                    TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID + " FROM " +
+                    TrackedEntityAttributeValue.class.getSimpleName() + ")";
+        }
+        String firstValue;
+        TrackedEntityAttribute firstTrackedEntityAttribute = trackedEntityAttributeMap.get(firstId);
+        String firstCompareOperator;
+        if(firstTrackedEntityAttribute.getOptionSet() != null) {
+            firstCompareOperator = "IS";
+            firstValue = attributesWithValuesMap.get(firstId);
+        } else {
+            firstCompareOperator = "LIKE";
+            firstValue = '%' + attributesWithValuesMap.get(firstId) + '%';
+        }
+
+        String query = "SELECT * FROM " + TrackedEntityInstance.class.getSimpleName() + " WHERE "
+                + TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE + " IN (SELECT " +
+                TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID + " FROM " +
+                TrackedEntityAttributeValue.class.getSimpleName() + " WHERE " + TrackedEntityAttributeValue$Table.TRACKEDENTITYATTRIBUTEID +
+                " IS '" + firstId + "' AND " + TrackedEntityAttributeValue$Table.VALUE + ' ' + firstCompareOperator +' ' + "'" + firstValue + "'";
+
+        int closingParenthesis = 1;
+
+        while (attributesIdsUsedInQueryIterator.hasNext()) {
+            String attributeId = attributesIdsUsedInQueryIterator.next();
+            String attributeValue;
+            TrackedEntityAttribute trackedEntityAttribute = trackedEntityAttributeMap.get(attributeId);
+            String compareOperator;
+            if(trackedEntityAttribute.getOptionSet() != null) {
+                compareOperator = "IS";
+                attributeValue = attributesWithValuesMap.get(attributeId);
+            } else {
+                compareOperator = "LIKE";
+                attributeValue = '%' + attributesWithValuesMap.get(attributeId) + '%';
+            }
+
+            String queryToAppend = " AND " + TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID +
+                    " IN ( SELECT " + TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID +
+                    " FROM " + TrackedEntityAttributeValue.class.getSimpleName() + " WHERE " + TrackedEntityAttributeValue$Table.TRACKEDENTITYATTRIBUTEID +
+                    " IS '" + attributeId + "' AND " + TrackedEntityAttributeValue$Table.VALUE + ' ' + compareOperator +' ' + "'" + attributeValue + "'";
+            query += queryToAppend;
+            closingParenthesis++;
+        }
+
+        for(int i = 0; i<closingParenthesis; i++) {
+            query += ')';
+        }
+        query += ';';
+        return query;
+    }/**
+     * Returns a SQL query to fetch Tracked Entity Instances based on attribute values
+     * @param attributesWithValuesMap
+     * @param trackedEntityAttributeMap
+     * @return
+     */
+    private String getTrackedEntityInstancesQuery(HashMap<String, String> attributesWithValuesMap,
+                                                  Map<String, TrackedEntityAttribute> trackedEntityAttributeMap,String startDate,String endDate) {
         Set<String> attributesIdsUsedInQuery = attributesWithValuesMap.keySet();
         Iterator<String> attributesIdsUsedInQueryIterator = attributesIdsUsedInQuery.iterator();
         String firstId;

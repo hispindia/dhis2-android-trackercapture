@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
@@ -66,6 +67,11 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     public static final String EXTRA_PROGRAM = "extra:ProgramId";
     public static final String EXTRA_ORGUNIT = "extra:OrgUnitId";
     public static final String EXTRA_ATTRIBUTEVALUEMAP = "extra:AttributeValueMap";
+    public static final String START_DATE = "extra:startDate";
+    public static final String END_DATE = "extra:endDate";
+    public static final String EXTRA_STAGE_ID = "extra:stageId";
+    public static final String EXTRA_COORD_ATR = "extra:cord_atr_fl";
+    public static final String EXTRA_COORD_DE = "extra:cord_de_fl";
     private String orgUnitId;
     private String programId;
     private HashMap<String,String> attributeValueMap;
@@ -77,13 +83,31 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     private CardView cardView;
     private Button allinmap;
 
+    String startDate;
+    String endDate;
+    String stageId;
+    String cordAtrFl;
+    String cordDeFl;
 
-    public static LocalSearchResultFragment newInstance(String orgUnitId, String programId, HashMap<String,String> attributeValueMap) {
+    private List<EventRow> completeEventRows;
+    private int startIndex=1;
+    private static final int ROWS_PER_PAGE = 10;
+    private Button nextButton;
+    private Button previousButton;
+    private TextView infoText;
+
+    public static LocalSearchResultFragment newInstance(String orgUnitId, String programId, HashMap<String,String> attributeValueMap,
+                                                        String startDate,String endDate,String stageId, String cordAtrFlP,String cordDeFlP) {
         LocalSearchResultFragment fragment = new LocalSearchResultFragment();
         Bundle args = new Bundle();
         args.putString(EXTRA_ORGUNIT, orgUnitId);
         args.putString(EXTRA_PROGRAM, programId);
         args.putSerializable(EXTRA_ATTRIBUTEVALUEMAP, attributeValueMap);
+        args.putString(START_DATE,startDate);
+        args.putString(END_DATE,endDate);
+        args.putString(EXTRA_STAGE_ID,stageId);
+        args.putString(EXTRA_COORD_ATR,cordAtrFlP);
+        args.putString(EXTRA_COORD_DE,cordDeFlP);
         fragment.setArguments(args);
 
         Log.d("HashMap size", attributeValueMap.size() + "");
@@ -99,6 +123,11 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         orgUnitId = args.getString(EXTRA_ORGUNIT);
         programId = args.getString(EXTRA_PROGRAM);
         attributeValueMap = (HashMap) args.getSerializable(EXTRA_ATTRIBUTEVALUEMAP);
+        startDate = args.getString(START_DATE);
+        endDate = args.getString(END_DATE);
+        stageId = args.getString(EXTRA_STAGE_ID);
+        cordAtrFl = args.getString(EXTRA_COORD_ATR);
+        cordDeFl = args.getString(EXTRA_COORD_DE);
         setHasOptionsMenu(true);
     }
 
@@ -131,12 +160,18 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         progressBar = (ProgressBar) view.findViewById(R.id.local_search_progressbar);
         cardView = (CardView) view.findViewById(R.id.search_online_cardview);
         allinmap = (Button) view.findViewById(R.id.showallinmap);
+        nextButton = (Button) view.findViewById(R.id.next_set);
+        previousButton = (Button) view.findViewById(R.id.prev_set);
+        infoText = (TextView) view.findViewById(R.id.pag_info);
         mAdapter = new TrackedEntityInstanceAdapter(getLayoutInflater(savedInstanceState));
         searchResultsListView.setAdapter(mAdapter);
         progressBar.setVisibility(View.VISIBLE);
         cardView.setVisibility(View.GONE);
         cardView.setOnClickListener(this);
         allinmap.setOnClickListener(this);
+        ((Button)view.findViewById(R.id.filter)).setOnClickListener(this);
+        nextButton.setOnClickListener(this);
+        previousButton.setOnClickListener(this);
     }
 
 
@@ -228,6 +263,11 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         bundle.putString(EXTRA_ORGUNIT, orgUnitId);
         bundle.putString(EXTRA_PROGRAM, programId);
         bundle.putSerializable(EXTRA_ATTRIBUTEVALUEMAP, attributeValueMap);
+        bundle.putString(START_DATE,startDate);
+        bundle.putString(END_DATE,endDate);
+        bundle.putString(EXTRA_STAGE_ID,stageId);
+        bundle.putString(EXTRA_COORD_ATR,cordAtrFl);
+        bundle.putString(EXTRA_COORD_DE,cordDeFl);
         getLoaderManager().initLoader(LOADER_ID, bundle, this);
     }
 
@@ -238,7 +278,11 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
             String orgUnitId = args.getString(EXTRA_ORGUNIT);
             String programId = args.getString(EXTRA_PROGRAM);
             HashMap<String,String> attributeValueMap = (HashMap) args.getSerializable(EXTRA_ATTRIBUTEVALUEMAP);
-
+            String startDate = args.getString(START_DATE);
+            String endDate = args.getString(END_DATE);
+            String stagefl = args.getString(EXTRA_STAGE_ID);
+            String coordatrfl = args.getString(EXTRA_COORD_ATR);
+            String coorddefl = args.getString(EXTRA_COORD_DE);
             List<Class<? extends Model>> modelsToTrack = new ArrayList<>();
             modelsToTrack.add(TrackedEntityInstance.class);
             modelsToTrack.add(Enrollment.class);
@@ -246,7 +290,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
             modelsToTrack.add(FailedItem.class);
             return new DbLoader<>(
                     getActivity().getBaseContext(), modelsToTrack,
-                    new LocalSearchResultFragmentFormQuery(orgUnitId, programId,attributeValueMap));
+                    new LocalSearchResultFragmentFormQuery(orgUnitId, programId,attributeValueMap,startDate,endDate,stagefl,coordatrfl,coorddefl));
         }
 
         return null;
@@ -303,8 +347,30 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
                         }
                     });
 
-                    mAdapter.swapData(data.getEventRowList());
+//                    mAdapter.swapData(data.getEventRowList());
+            completeEventRows = data.getEventRowList();
+            startIndex=1;
+            refreshData();
         }
+    }
+
+    private void refreshData(){
+
+        if(completeEventRows.size()>0){
+            int ending = startIndex;
+            if((startIndex+ROWS_PER_PAGE)>completeEventRows.size()){
+                ending = completeEventRows.size();
+            }else{
+                ending = startIndex + ROWS_PER_PAGE;
+            }
+            List<EventRow> dataToShow = new ArrayList<>();
+            dataToShow.add(completeEventRows.get(0));
+            dataToShow.addAll(completeEventRows.subList(startIndex,ending));
+            mAdapter.swapData(dataToShow);
+            String text = "Showing "+(startIndex)+" - "+(startIndex+mAdapter.getCount()-2)+" of "+(completeEventRows.size()-1);
+            infoText.setText(text);
+        }
+
     }
 
     @Subscribe
@@ -378,10 +444,36 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         switch (view.getId()) {
             case R.id.search_online_cardview: {
                 searchOnline();
+                break;
             }
             case R.id.showallinmap:
                 showMap();
+                break;
+
+            case R.id.filter:
+                showFilter();
+                break;
+
+            case R.id.next_set:
+                if(startIndex+ROWS_PER_PAGE<completeEventRows.size()){
+                    startIndex+=ROWS_PER_PAGE;
+                }
+                refreshData();
+                break;
+
+            case R.id.prev_set:
+                if(startIndex-ROWS_PER_PAGE>=0){
+                    startIndex-=ROWS_PER_PAGE;
+                }else{
+                    startIndex=1;
+                }
+                refreshData();
+                break;
         }
+    }
+
+    private void showFilter(){
+        HolderActivity.navigateToLocalSearchFragment(getActivity(),orgUnitId,programId);
     }
 
     private void showMap(){
