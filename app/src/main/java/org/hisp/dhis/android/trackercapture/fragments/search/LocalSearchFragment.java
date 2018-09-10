@@ -136,7 +136,9 @@ public class LocalSearchFragment extends Fragment implements
 // ());
             HolderActivity.navigateToLocalSearchResultFragment(getActivity(),
                     mForm.getOrganisationUnitId(),
-                    mForm.getProgram(), mForm.getAttributeValues());
+                    mForm.getProgram(), mForm.getAttributeValues(),mForm.getStartDate().getValue(),mForm.getEndDate().getValue(),mForm.getStageFilter().getValue()
+                    ,mForm.getAtr_coord()==null?null:mForm.getAtr_coord().getValue()
+                    ,mForm.getDe_coord()==null?null:mForm.getDe_coord().getValue());
 //            navigationHandler.switchFragment(
 //                    fragment, fragment.getClass().getSimpleName(), true);
         } else if (id == android.R.id.home) {

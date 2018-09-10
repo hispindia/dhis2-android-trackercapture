@@ -104,7 +104,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,I
 
 //                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
 //                            organisationUnit.getId(),getString(R.string.intake_form_program_id));
-                    HolderActivity.navigateToLocalSearchResultFragment(getActivity(),organisationUnit1.getId(),getString(R.string.intake_form_program_id),new HashMap<String, String>());
+
+                    HolderActivity.navigateToLocalSearchResultFragment(getActivity(),organisationUnit.getId(),getString(R.string.intake_form_program_id),new HashMap<String, String>(),null,null,null,null,null);
+
                     break;
 
                 case R.id.ibmc_new_case:
@@ -135,9 +137,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,I
                     break;
 
                 case R.id.ibmc_upload:
+
 //                    Toast.makeText(getContext(), "Upload", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(view.getContext(), PDFViewActivity_.class);
                     view.getContext().startActivity(i);
+
                     break;
 
                 case R.id.ibmc_statistics:
