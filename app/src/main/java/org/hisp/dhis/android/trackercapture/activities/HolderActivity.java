@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hisp.dhis.android.trackercapture.activities.MapActivity.ATTRIBUTE_COORDINATES;
+import static org.hisp.dhis.android.trackercapture.activities.MapActivity.DATAELEMENT_COORDINATES;
 
 public class HolderActivity extends AbsHomeActivity{
 
@@ -56,6 +58,7 @@ public class HolderActivity extends AbsHomeActivity{
     public static final String ARG_TYPE_ONLINESEARCHRESULTFRAGMENT = "arg:OnlineSearchResultFragment";
     public static final String ARG_TYPE_SELECT_PROGRAME_FRAGMENT = "arg:SelectProgramFragment";
     private static final String ARG_TYPE_UPCOMINGEVENTSFRAGMENT = "arg:UpcomingEventsFragment";
+
 
 
     OnBackPressedListener onBackPressedListener;
@@ -349,9 +352,10 @@ public class HolderActivity extends AbsHomeActivity{
         Intent intent = new Intent(activity,MapActivity.class);
         activity.startActivity(intent);
     }
-    public static void startMaps(Activity activity,ArrayList<TrackedEntityAttributeValue> data){
+    public static void startMaps(Activity activity, ArrayList<TrackedEntityAttributeValue> data, ArrayList<DataValue> dataElementValues){
         Intent intent = new Intent(activity,MapActivity.class);
         intent.putExtra(ATTRIBUTE_COORDINATES,data);
+        intent.putExtra(DATAELEMENT_COORDINATES,dataElementValues);
         activity.startActivity(intent);
     }
 

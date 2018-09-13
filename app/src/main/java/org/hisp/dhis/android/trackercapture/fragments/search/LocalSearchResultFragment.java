@@ -33,6 +33,7 @@ import org.hisp.dhis.android.sdk.events.UiEvent;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.models.BaseSerializableModel;
+import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
@@ -72,6 +73,8 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     public static final String EXTRA_STAGE_ID = "extra:stageId";
     public static final String EXTRA_COORD_ATR = "extra:cord_atr_fl";
     public static final String EXTRA_COORD_DE = "extra:cord_de_fl";
+    private static final String PERSONS_LOCATION_DATAELEMENT = "QMGWGK6wkET";
+
     private String orgUnitId;
     private String programId;
     private HashMap<String,String> attributeValueMap;
@@ -478,16 +481,34 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
 
     private void showMap(){
         List<TrackedEntityAttributeValue> data = new ArrayList<>();
+        List<DataValue> persons_locations = new ArrayList<>();
         for(EventRow eventRow :mForm.getEventRowList()){
             if(eventRow instanceof TrackedEntityInstanceItemRow){
                 Map<String, TrackedEntityAttributeValue> attributes = ((TrackedEntityInstanceItemRow) eventRow).getAttributes();
                 if(attributes != null){
-                    data.add(attributes.get("x8iA6APPjTm"));
+                    data.add(attributes.get("x8iA6APPjTm"));//last known attribute values
                 }
+                TrackedEntityInstance trackedEntityInstance = ((TrackedEntityInstanceItemRow) eventRow).getTrackedEntityInstance();
+                for(Enrollment enrollment:TrackerController.getEnrollments(programId,trackedEntityInstance)){
+                    List<Event> events = TrackerController.getEventsByEnrollment(enrollment.getLocalId());
+                    for(Event event : events){
+                        if(event.getProgramStageId().equals(LocalSearchResultFragmentFormQuery.EVENT_NOTIFICATION_STAGE)){
+                            for(DataValue dataValue:event.getDataValues()){
+                                if(dataValue.getDataElement().equals(PERSONS_LOCATION_DATAELEMENT)){
+                                    persons_locations.add(dataValue);
+                                }
+                            }
+                        }
+                    }
+                }
+                
             }
         }
+        
+        //persons location on event notification stage 
+        
 
         HolderActivity.startMaps(getActivity(),
-                (ArrayList<TrackedEntityAttributeValue>) data);
+                (ArrayList<TrackedEntityAttributeValue>) data, (ArrayList<DataValue>) persons_locations);
     }
 }
