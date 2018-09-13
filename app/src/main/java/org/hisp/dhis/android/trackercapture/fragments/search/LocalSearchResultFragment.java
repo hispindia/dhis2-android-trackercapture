@@ -33,6 +33,7 @@ import org.hisp.dhis.android.sdk.events.UiEvent;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.models.BaseSerializableModel;
+import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
@@ -72,6 +73,9 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     public static final String EXTRA_STAGE_ID = "extra:stageId";
     public static final String EXTRA_COORD_ATR = "extra:cord_atr_fl";
     public static final String EXTRA_COORD_DE = "extra:cord_de_fl";
+    private static final String PERSONS_LOCATION_DATAELEMENT = "QMGWGK6wkET";
+    public static final String EXTRA_ENROLLMENT_FL = "extra:enrollment_fl";
+
     private String orgUnitId;
     private String programId;
     private HashMap<String,String> attributeValueMap;
@@ -88,6 +92,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     String stageId;
     String cordAtrFl;
     String cordDeFl;
+    String enrollment_fl;
 
     private List<EventRow> completeEventRows;
     private int startIndex=1;
@@ -97,7 +102,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     private TextView infoText;
 
     public static LocalSearchResultFragment newInstance(String orgUnitId, String programId, HashMap<String,String> attributeValueMap,
-                                                        String startDate,String endDate,String stageId, String cordAtrFlP,String cordDeFlP) {
+                                                        String startDate,String endDate,String stageId, String cordAtrFlP,String cordDeFlP,String enrollmentfl) {
         LocalSearchResultFragment fragment = new LocalSearchResultFragment();
         Bundle args = new Bundle();
         args.putString(EXTRA_ORGUNIT, orgUnitId);
@@ -108,6 +113,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         args.putString(EXTRA_STAGE_ID,stageId);
         args.putString(EXTRA_COORD_ATR,cordAtrFlP);
         args.putString(EXTRA_COORD_DE,cordDeFlP);
+        args.putString(EXTRA_ENROLLMENT_FL,enrollmentfl);
         fragment.setArguments(args);
 
         Log.d("HashMap size", attributeValueMap.size() + "");
@@ -128,6 +134,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         stageId = args.getString(EXTRA_STAGE_ID);
         cordAtrFl = args.getString(EXTRA_COORD_ATR);
         cordDeFl = args.getString(EXTRA_COORD_DE);
+        enrollment_fl = args.getString(EXTRA_ENROLLMENT_FL);
         setHasOptionsMenu(true);
     }
 
@@ -268,6 +275,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         bundle.putString(EXTRA_STAGE_ID,stageId);
         bundle.putString(EXTRA_COORD_ATR,cordAtrFl);
         bundle.putString(EXTRA_COORD_DE,cordDeFl);
+        bundle.putString(EXTRA_ENROLLMENT_FL,enrollment_fl);
         getLoaderManager().initLoader(LOADER_ID, bundle, this);
     }
 
@@ -283,6 +291,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
             String stagefl = args.getString(EXTRA_STAGE_ID);
             String coordatrfl = args.getString(EXTRA_COORD_ATR);
             String coorddefl = args.getString(EXTRA_COORD_DE);
+            String enrollmentfl = args.getString(EXTRA_ENROLLMENT_FL);
             List<Class<? extends Model>> modelsToTrack = new ArrayList<>();
             modelsToTrack.add(TrackedEntityInstance.class);
             modelsToTrack.add(Enrollment.class);
@@ -290,7 +299,7 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
             modelsToTrack.add(FailedItem.class);
             return new DbLoader<>(
                     getActivity().getBaseContext(), modelsToTrack,
-                    new LocalSearchResultFragmentFormQuery(orgUnitId, programId,attributeValueMap,startDate,endDate,stagefl,coordatrfl,coorddefl));
+                    new LocalSearchResultFragmentFormQuery(orgUnitId, programId,attributeValueMap,startDate,endDate,stagefl,coordatrfl,coorddefl,enrollmentfl));
         }
 
         return null;
@@ -478,16 +487,34 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
 
     private void showMap(){
         List<TrackedEntityAttributeValue> data = new ArrayList<>();
+        List<DataValue> persons_locations = new ArrayList<>();
         for(EventRow eventRow :mForm.getEventRowList()){
             if(eventRow instanceof TrackedEntityInstanceItemRow){
                 Map<String, TrackedEntityAttributeValue> attributes = ((TrackedEntityInstanceItemRow) eventRow).getAttributes();
                 if(attributes != null){
-                    data.add(attributes.get("x8iA6APPjTm"));
+                    data.add(attributes.get("x8iA6APPjTm"));//last known attribute values
                 }
+                TrackedEntityInstance trackedEntityInstance = ((TrackedEntityInstanceItemRow) eventRow).getTrackedEntityInstance();
+                for(Enrollment enrollment:TrackerController.getEnrollments(programId,trackedEntityInstance)){
+                    List<Event> events = TrackerController.getEventsByEnrollment(enrollment.getLocalId());
+                    for(Event event : events){
+                        if(event.getProgramStageId().equals(LocalSearchResultFragmentFormQuery.EVENT_NOTIFICATION_STAGE)){
+                            for(DataValue dataValue:event.getDataValues()){
+                                if(dataValue.getDataElement().equals(PERSONS_LOCATION_DATAELEMENT)){
+                                    persons_locations.add(dataValue);
+                                }
+                            }
+                        }
+                    }
+                }
+                
             }
         }
+        
+        //persons location on event notification stage 
+        
 
         HolderActivity.startMaps(getActivity(),
-                (ArrayList<TrackedEntityAttributeValue>) data);
+                (ArrayList<TrackedEntityAttributeValue>) data, (ArrayList<DataValue>) persons_locations);
     }
 }

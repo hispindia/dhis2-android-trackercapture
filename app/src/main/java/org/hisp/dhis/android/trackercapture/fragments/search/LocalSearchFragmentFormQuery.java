@@ -59,6 +59,7 @@ public class LocalSearchFragmentFormQuery implements Query<LocalSearchFragmentFo
         BaseValue stageFl = new BaseValue(){};
         BaseValue atrFl = new BaseValue() {};
         BaseValue deFl = new BaseValue() {};
+        BaseValue enrollmentFl = new BaseValue() {};
 
         dataEntryRows.add(new DatePickerRow("StartDate",false,null,startDate,true));
         dataEntryRows.add(new DatePickerRow("End Date ", false, null, endDate,true));
@@ -75,11 +76,13 @@ public class LocalSearchFragmentFormQuery implements Query<LocalSearchFragmentFo
         dataEntryRows.add(new CheckBoxRow("Persons Location ",false,null,deFl));
         dataEntryRows.add(new CheckBoxRow("Last Known Location", false, null, atrFl));
         dataEntryRows.add(new RadioButtonsOptionSetRow("Contain Stage",false,"",stageFl,options));
+        dataEntryRows.add(new CheckBoxRow("Active Enrollment",false,null,enrollmentFl));
         form.setStageFilter(stageFl);
         form.setStartDate(startDate);
         form.setEndDate(endDate);
         form.setAtr_coord(atrFl);
         form.setDe_coord(deFl);
+        form.setEn_fl(enrollmentFl);
         for (ProgramTrackedEntityAttribute ptea : programAttrs) {
             TrackedEntityAttribute trackedEntityAttribute = ptea.getTrackedEntityAttribute();
             if(!ptea.getTrackedEntityAttributeId().equals(ATR_COORD_ID)){

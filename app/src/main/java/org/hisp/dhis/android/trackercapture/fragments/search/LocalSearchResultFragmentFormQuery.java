@@ -50,6 +50,7 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
     DateTime endDate;
     String cordatrfl;
     String corddefl;
+    String enrollmentfl;
 
 
     public static final String ATR_COORD_ID = "x8iA6APPjTm";
@@ -62,7 +63,7 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
 //    }
 
     public LocalSearchResultFragmentFormQuery(String orgUnitId, String programId, HashMap<String, String> attributeValueMap,String startDate,String endDate,String stageId,
-                                              String cordatrfl,String corddefl) {
+                                              String cordatrfl,String corddefl,String enrollmentfl) {
         this.orgUnitId = orgUnitId;
         this.programId = programId;
         this.attributeValueMap = attributeValueMap;
@@ -75,6 +76,7 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
         this.stagefl = stageId;
         this.cordatrfl = cordatrfl;
         this.corddefl = corddefl;
+        this.enrollmentfl = enrollmentfl;
 
     }
 
@@ -219,6 +221,25 @@ public class LocalSearchResultFragmentFormQuery implements Query<LocalSearchResu
             }
 
             if(!hasde) teiIterator.remove();
+
+
+
+            boolean hasacen = false;
+            if(enrollmentfl!=null && (enrollmentfl.equalsIgnoreCase("YES") || enrollmentfl.equalsIgnoreCase("true"))  ){
+                for(Enrollment enrollment:TrackerController.getEnrollments(programId,tei)){
+                    if(enrollment.getStatus().equals(Enrollment.ACTIVE)){
+                        hasacen = true;
+                        break;
+                    }
+                }
+
+
+            }else{
+                hasacen = true;
+            }
+            //filter for active enrollment
+
+            if(!hasacen)teiIterator.remove();
         }
 
 

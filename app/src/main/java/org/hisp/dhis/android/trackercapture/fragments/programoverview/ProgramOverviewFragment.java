@@ -1876,7 +1876,7 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
 //        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),mPrefs.getOrgUnit().first,programID,attributeMap);
         //Orgunit Fix
         List<OrganisationUnit> organisationUnits_=MetaDataController.getAssignedOrganisationUnits();
-        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),MetaDataController.getOrganisationUnit(organisationUnits_.get(0).getId()).getId(),programID,attributeMap,null,null,null,null,null);
+        HolderActivity.navigateToLocalSearchResultFragment(getActivity(),MetaDataController.getOrganisationUnit(organisationUnits_.get(0).getId()).getId(),programID,attributeMap,null,null,null,null,null,null);
     }
 
     private void addProgramRuleActionToView(ProgramRuleAction programRuleAction,

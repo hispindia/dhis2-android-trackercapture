@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hisp.dhis.android.trackercapture.activities.MapActivity.ATTRIBUTE_COORDINATES;
+import static org.hisp.dhis.android.trackercapture.activities.MapActivity.DATAELEMENT_COORDINATES;
 
 public class HolderActivity extends AbsHomeActivity{
 
@@ -56,6 +58,7 @@ public class HolderActivity extends AbsHomeActivity{
     public static final String ARG_TYPE_ONLINESEARCHRESULTFRAGMENT = "arg:OnlineSearchResultFragment";
     public static final String ARG_TYPE_SELECT_PROGRAME_FRAGMENT = "arg:SelectProgramFragment";
     private static final String ARG_TYPE_UPCOMINGEVENTSFRAGMENT = "arg:UpcomingEventsFragment";
+
 
 
     OnBackPressedListener onBackPressedListener;
@@ -349,9 +352,10 @@ public class HolderActivity extends AbsHomeActivity{
         Intent intent = new Intent(activity,MapActivity.class);
         activity.startActivity(intent);
     }
-    public static void startMaps(Activity activity,ArrayList<TrackedEntityAttributeValue> data){
+    public static void startMaps(Activity activity, ArrayList<TrackedEntityAttributeValue> data, ArrayList<DataValue> dataElementValues){
         Intent intent = new Intent(activity,MapActivity.class);
         intent.putExtra(ATTRIBUTE_COORDINATES,data);
+        intent.putExtra(DATAELEMENT_COORDINATES,dataElementValues);
         activity.startActivity(intent);
     }
 
@@ -391,7 +395,7 @@ public class HolderActivity extends AbsHomeActivity{
         activity.startActivity(intent);
     }
 
-    public static void navigateToLocalSearchResultFragment(Activity activity, String organisationUnitId, String program, HashMap<String, String> attributeValues,String startDate,String endDate,String stageId,String atrCord,String decord) {
+    public static void navigateToLocalSearchResultFragment(Activity activity, String organisationUnitId, String program, HashMap<String, String> attributeValues,String startDate,String endDate,String stageId,String atrCord,String decord,String enrollmentfl) {
         Intent intent = new Intent(activity, HolderActivity.class);
         intent.putExtra(LocalSearchResultFragment.EXTRA_ORGUNIT, organisationUnitId);
         intent.putExtra(LocalSearchResultFragment.EXTRA_PROGRAM, program);
@@ -401,6 +405,7 @@ public class HolderActivity extends AbsHomeActivity{
         intent.putExtra(LocalSearchResultFragment.EXTRA_STAGE_ID,stageId);
         intent.putExtra(LocalSearchResultFragment.EXTRA_COORD_ATR,atrCord);
         intent.putExtra(LocalSearchResultFragment.EXTRA_COORD_DE,decord);
+        intent.putExtra(LocalSearchResultFragment.EXTRA_ENROLLMENT_FL,enrollmentfl);
         intent.putExtra(ARG_TYPE, ARG_TYPE_LOCALSEARCHRESULTFRAGMENT);
         activity.startActivity(intent);
     }

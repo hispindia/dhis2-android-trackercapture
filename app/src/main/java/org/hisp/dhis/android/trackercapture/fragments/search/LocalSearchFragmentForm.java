@@ -25,6 +25,15 @@ public class LocalSearchFragmentForm {
 
     private BaseValue atr_coord;
     private BaseValue de_coord;
+    private BaseValue en_fl;
+
+    public BaseValue getEn_fl() {
+        return en_fl;
+    }
+
+    public void setEn_fl(BaseValue en_fl) {
+        this.en_fl = en_fl;
+    }
 
     public BaseValue getDe_coord() {
         return de_coord;
