@@ -98,7 +98,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
 //                    HolderActivity.navigateToLocalSearchFragment(getActivity(),
 //                            organisationUnit.getId(),getString(R.string.intake_form_program_id));
-                    HolderActivity.navigateToLocalSearchResultFragment(getActivity(),organisationUnit.getId(),getString(R.string.intake_form_program_id),new HashMap<String, String>(),null,null,null,null,null);
+                    HolderActivity.navigateToLocalSearchResultFragment(getActivity(),organisationUnit.getId(),getString(R.string.intake_form_program_id),new HashMap<String, String>(),null,null,null,null,null,null);
                     break;
 
                 case R.id.ibmc_new_case:

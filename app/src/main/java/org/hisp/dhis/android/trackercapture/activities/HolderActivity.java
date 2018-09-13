@@ -395,7 +395,7 @@ public class HolderActivity extends AbsHomeActivity{
         activity.startActivity(intent);
     }
 
-    public static void navigateToLocalSearchResultFragment(Activity activity, String organisationUnitId, String program, HashMap<String, String> attributeValues,String startDate,String endDate,String stageId,String atrCord,String decord) {
+    public static void navigateToLocalSearchResultFragment(Activity activity, String organisationUnitId, String program, HashMap<String, String> attributeValues,String startDate,String endDate,String stageId,String atrCord,String decord,String enrollmentfl) {
         Intent intent = new Intent(activity, HolderActivity.class);
         intent.putExtra(LocalSearchResultFragment.EXTRA_ORGUNIT, organisationUnitId);
         intent.putExtra(LocalSearchResultFragment.EXTRA_PROGRAM, program);
@@ -405,6 +405,7 @@ public class HolderActivity extends AbsHomeActivity{
         intent.putExtra(LocalSearchResultFragment.EXTRA_STAGE_ID,stageId);
         intent.putExtra(LocalSearchResultFragment.EXTRA_COORD_ATR,atrCord);
         intent.putExtra(LocalSearchResultFragment.EXTRA_COORD_DE,decord);
+        intent.putExtra(LocalSearchResultFragment.EXTRA_ENROLLMENT_FL,enrollmentfl);
         intent.putExtra(ARG_TYPE, ARG_TYPE_LOCALSEARCHRESULTFRAGMENT);
         activity.startActivity(intent);
     }
