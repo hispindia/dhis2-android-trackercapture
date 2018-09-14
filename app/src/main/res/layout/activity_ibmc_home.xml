@@ -5,342 +5,343 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp">
+
     <ImageView
 
-        android:layout_width="349dp"
+        android:layout_width="311dp"
         android:layout_height="113dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="10dp"
         android:adjustViewBounds="true"
         android:src="@drawable/rabies_logo" />
     <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent">-->
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
-            <!--<ImageButton-->
-                <!--android:id="@+id/ibmc_jobs"-->
-                <!---->
+    <!--<ImageButton-->
+    <!--android:id="@+id/ibmc_jobs"-->
+    <!---->
 
-                <!--android:src="@drawable/ic_jobs"-->
-                <!--style="@style/ibcm_launcher_img_style"/>-->
+    <!--android:src="@drawable/ic_jobs"-->
+    <!--style="@style/ibcm_launcher_img_style"/>-->
 
-            <!--<ImageButton-->
-                <!--android:id="@+id/ibmc_review_cases"-->
-                <!--android:src="@mipmap/ic_review_case"-->
-                <!--style="@style/ibcm_launcher_img_style"-->
-                <!--/>-->
-            <!--<ImageButton-->
-                <!--android:id="@+id/ibmc_statistics"-->
-                <!--android:src="@mipmap/ic_stat"-->
-                <!--style="@style/ibcm_launcher_img_style"-->
-                <!--/>-->
+    <!--<ImageButton-->
+    <!--android:id="@+id/ibmc_review_cases"-->
+    <!--android:src="@mipmap/ic_review_case"-->
+    <!--style="@style/ibcm_launcher_img_style"-->
+    <!--/>-->
+    <!--<ImageButton-->
+    <!--android:id="@+id/ibmc_statistics"-->
+    <!--android:src="@mipmap/ic_stat"-->
+    <!--style="@style/ibcm_launcher_img_style"-->
+    <!--/>-->
 
-        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
     <!--</LinearLayout>-->
     <!--<LinearLayout-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-            <!--<ImageButton-->
-                <!--android:id="@+id/ibmc_new_case"-->
-                <!--android:src="@mipmap/ic_new_case"-->
-                <!--style="@style/ibcm_launcher_img_style"-->
-                <!--/>-->
-            <!--<ImageButton-->
-                <!--android:id="@+id/ibmc_upload"-->
-                <!--android:src="@mipmap/ic_upload"-->
-                <!--style="@style/ibcm_launcher_img_style"-->
-                <!--/>-->
-            <!--<ImageButton-->
-                <!--android:id="@+id/ibmc_notifications"-->
-                <!--android:src="@mipmap/ic_notifications"-->
-                <!--style="@style/ibcm_launcher_img_style"-->
-                <!--/>-->
-        <!--</LinearLayout>-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<ImageButton-->
+    <!--android:id="@+id/ibmc_new_case"-->
+    <!--android:src="@mipmap/ic_new_case"-->
+    <!--style="@style/ibcm_launcher_img_style"-->
+    <!--/>-->
+    <!--<ImageButton-->
+    <!--android:id="@+id/ibmc_upload"-->
+    <!--android:src="@mipmap/ic_upload"-->
+    <!--style="@style/ibcm_launcher_img_style"-->
+    <!--/>-->
+    <!--<ImageButton-->
+    <!--android:id="@+id/ibmc_notifications"-->
+    <!--android:src="@mipmap/ic_notifications"-->
+    <!--style="@style/ibcm_launcher_img_style"-->
+    <!--/>-->
     <!--</LinearLayout>-->
-   <!--<LinearLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent">-->
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/ibmc_jobs"-->
-
-                <!--android:src="@mipmap/ic_jobs"-->
-
-                <!--android:scaleType="centerCrop"-->
-                <!--android:text="Jobs"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="match_parent" />-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/ibmc_review_cases"-->
-                <!--android:src="@mipmap/ic_review_case"-->
-
-                <!--android:scaleType="centerCrop"-->
-                <!--android:text="Jobs"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="match_parent"-->
-                <!--/>-->
-            <!--<ImageView-->
-                <!--android:id="@+id/ibmc_statistics"-->
-                <!--android:src="@mipmap/ic_stat"-->
-
-                <!--android:scaleType="centerCrop"-->
-                <!--android:text="Jobs"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="match_parent"-->
-                <!--/>-->
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1">-->
-
-            <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
     <!--</LinearLayout>-->
     <!--<LinearLayout-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent">-->
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-            <!--<ImageView-->
-                <!--android:id="@+id/ibmc_new_case"-->
-                <!--android:src="@mipmap/ic_new_case"-->
-                <!--android:scaleType="centerCrop"-->
-                <!--android:text="Jobs"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="match_parent"-->
-                <!--/>-->
-            <!--<ImageView-->
-                <!--android:id="@+id/ibmc_upload"-->
-                <!--android:scaleType="centerCrop"-->
-                <!--android:src="@mipmap/ic_upload"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="match_parent"-->
-                <!--/>-->
-            <!--<ImageView-->
-                <!--android:id="@+id/ibmc_notifications"-->
-                <!--android:scaleType="centerCrop"-->
-                <!--android:src="@mipmap/ic_notifications"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="match_parent"-->
-                <!--/>-->
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1">-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_jobs"-->
 
-            <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
+    <!--android:src="@mipmap/ic_jobs"-->
+
+    <!--android:scaleType="centerCrop"-->
+    <!--android:text="Jobs"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_review_cases"-->
+    <!--android:src="@mipmap/ic_review_case"-->
+
+    <!--android:scaleType="centerCrop"-->
+    <!--android:text="Jobs"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--/>-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_statistics"-->
+    <!--android:src="@mipmap/ic_stat"-->
+
+    <!--android:scaleType="centerCrop"-->
+    <!--android:text="Jobs"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--/>-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1">-->
+
+    <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+    <!--<LinearLayout-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_new_case"-->
+    <!--android:src="@mipmap/ic_new_case"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:text="Jobs"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--/>-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_upload"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:src="@mipmap/ic_upload"-->
+
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--/>-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_notifications"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:src="@mipmap/ic_notifications"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--/>-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1">-->
+
+    <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
     <!--</LinearLayout><LinearLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent">-->
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
 
-            <!--<Button-->
-                <!--android:id="@+id/ibmc_jobs"-->
-                <!--style="@style/ibcm_launcher_button_style"-->
+    <!--<Button-->
+    <!--android:id="@+id/ibmc_jobs"-->
+    <!--style="@style/ibcm_launcher_button_style"-->
 
 
-                <!--android:drawableTop="@drawable/ic_jobs"-->
-                <!--android:text="Jobs" />-->
+    <!--android:drawableTop="@drawable/ic_jobs"-->
+    <!--android:text="Jobs" />-->
 
-            <!--<Button-->
-                <!--android:id="@+id/ibmc_review_cases"-->
-                <!--android:text="Review Cases"-->
-                <!--style="@style/ibcm_launcher_button_style"-->
-                <!--/>-->
-            <!--<Button-->
-                <!--android:id="@+id/ibmc_statistics"-->
-                <!--android:text="Review Cases"-->
-                <!--style="@style/ibcm_launcher_button_style"-->
-                <!--/>-->
+    <!--<Button-->
+    <!--android:id="@+id/ibmc_review_cases"-->
+    <!--android:text="Review Cases"-->
+    <!--style="@style/ibcm_launcher_button_style"-->
+    <!--/>-->
+    <!--<Button-->
+    <!--android:id="@+id/ibmc_statistics"-->
+    <!--android:text="Review Cases"-->
+    <!--style="@style/ibcm_launcher_button_style"-->
+    <!--/>-->
 
-        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
     <!--</LinearLayout>-->
     <!--<LinearLayout-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent">-->
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-            <!--<Button-->
-                <!--android:id="@+id/ibmc_new_case"-->
-                <!--android:text="Jobs"-->
-                <!--style="@style/ibcm_launcher_button_style"-->
-                <!--/>-->
-            <!--<Button-->
-                <!--android:id="@+id/ibmc_upload"-->
-                <!--android:text="Review Cases"-->
-                <!--style="@style/ibcm_launcher_button_style"-->
-                <!--/>-->
-            <!--<Button-->
-                <!--android:id="@+id/ibmc_notifications"-->
-                <!--android:text="Review Cases"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<Button-->
+    <!--android:id="@+id/ibmc_new_case"-->
+    <!--android:text="Jobs"-->
+    <!--style="@style/ibcm_launcher_button_style"-->
+    <!--/>-->
+    <!--<Button-->
+    <!--android:id="@+id/ibmc_upload"-->
+    <!--android:text="Review Cases"-->
+    <!--style="@style/ibcm_launcher_button_style"-->
+    <!--/>-->
+    <!--<Button-->
+    <!--android:id="@+id/ibmc_notifications"-->
+    <!--android:text="Review Cases"-->
 
-                <!--style="@style/ibcm_launcher_button_style"-->
-                <!--/>-->
-        <!--</LinearLayout>-->
+    <!--style="@style/ibcm_launcher_button_style"-->
+    <!--/>-->
+    <!--</LinearLayout>-->
     <!--</LinearLayout>-->
 
     <!--<GridLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:columnCount="2"-->
-        <!--android:rowCount="3">-->
-        <!--&lt;!&ndash;<Button&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/ibmc_jobs"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:text="1"&ndash;&gt;-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:columnCount="2"-->
+    <!--android:rowCount="3">-->
+    <!--&lt;!&ndash;<Button&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/ibmc_jobs"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:text="1"&ndash;&gt;-->
 
-            <!--&lt;!&ndash;/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<Button&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/ibmc_new_case"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:text="2"&ndash;&gt;-->
+    <!--&lt;!&ndash;/>&ndash;&gt;-->
+    <!--&lt;!&ndash;<Button&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/ibmc_new_case"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:text="2"&ndash;&gt;-->
 
-            <!--&lt;!&ndash;/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<Button&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/ibmc_review_cases"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:text="3"&ndash;&gt;-->
+    <!--&lt;!&ndash;/>&ndash;&gt;-->
+    <!--&lt;!&ndash;<Button&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/ibmc_review_cases"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:text="3"&ndash;&gt;-->
 
-            <!--&lt;!&ndash;/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<Button&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/ibmc_upload"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:text="4"&ndash;&gt;-->
+    <!--&lt;!&ndash;/>&ndash;&gt;-->
+    <!--&lt;!&ndash;<Button&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/ibmc_upload"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:text="4"&ndash;&gt;-->
 
-            <!--&lt;!&ndash;/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<Button&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/ibmc_statistics"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:text="5"&ndash;&gt;-->
+    <!--&lt;!&ndash;/>&ndash;&gt;-->
+    <!--&lt;!&ndash;<Button&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/ibmc_statistics"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:text="5"&ndash;&gt;-->
 
-            <!--&lt;!&ndash;/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<Button&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/ibmc_notifications"&ndash;&gt;-->
+    <!--&lt;!&ndash;/>&ndash;&gt;-->
+    <!--&lt;!&ndash;<Button&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/ibmc_notifications"&ndash;&gt;-->
 
-            <!--&lt;!&ndash;android:text="6"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:text="6"&ndash;&gt;-->
 
-            <!--&lt;!&ndash;/>&ndash;&gt;-->
+    <!--&lt;!&ndash;/>&ndash;&gt;-->
 
     <!--</GridLayout>-->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_height="match_parent">-->
-            <!--<LinearLayout-->
-                <!--android:orientation="vertical"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/ibmc_jobs"-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_jobs"-->
 
-                    <!--android:src="@mipmap/ic_jobs"-->
+    <!--android:src="@mipmap/ic_jobs"-->
 
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:text="Jobs"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="match_parent" />-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:text="Jobs"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent" />-->
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/ibmc_review_cases"-->
-                    <!--android:src="@mipmap/ic_review_case"-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_review_cases"-->
+    <!--android:src="@mipmap/ic_review_case"-->
 
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:text="Jobs"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--/>-->
-                <!--<ImageView-->
-                    <!--android:id="@+id/ibmc_statistics"-->
-                    <!--android:src="@mipmap/ic_stat"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:text="Jobs"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--/>-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_statistics"-->
+    <!--android:src="@mipmap/ic_stat"-->
 
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:text="Jobs"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--/>-->
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1">-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:text="Jobs"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--/>-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1">-->
 
-                <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent">-->
-            <!--<LinearLayout-->
-                <!--android:orientation="vertical"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent">-->
-                <!--<ImageView-->
-                    <!--android:id="@+id/ibmc_new_case"-->
-                    <!--android:src="@mipmap/ic_new_case"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:text="Jobs"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--/>-->
-                <!--<ImageView-->
-                    <!--android:id="@+id/ibmc_upload"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:src="@mipmap/ic_upload"-->
+    <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+    <!--<LinearLayout-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_new_case"-->
+    <!--android:src="@mipmap/ic_new_case"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:text="Jobs"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--/>-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_upload"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:src="@mipmap/ic_upload"-->
 
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--/>-->
-                <!--<ImageView-->
-                    <!--android:id="@+id/ibmc_notifications"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:src="@mipmap/ic_notifications"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--/>-->
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1">-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--/>-->
+    <!--<ImageView-->
+    <!--android:id="@+id/ibmc_notifications"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:src="@mipmap/ic_notifications"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--/>-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1">-->
 
-                <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
     <!--</LinearLayout>-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -451,7 +452,7 @@
             android:layout_margin="10dp">
             <ImageView
                 android:paddingTop="5dp"
-                app:srcCompat="@drawable/dadd"
+                app:srcCompat="@drawable/ic_assignment_black_24dp"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -496,29 +497,29 @@
                 android:paddingBottom="10dp"/>
         </LinearLayout>
         <!--<LinearLayout-->
-            <!--android:id="@+id/ibmc_notifications"-->
-            <!--android:background="@drawable/home_button"-->
-            <!--android:backgroundTint="@color/dark_navy_blue"-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_margin="10dp">-->
-            <!--<ImageView-->
-                <!--android:paddingTop="5dp"-->
-                <!--app:srcCompat="@drawable/ic_home_notification"-->
-                <!--android:gravity="center"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"/>-->
-            <!--<TextView-->
-                <!--android:textColor="@color/white"-->
-                <!--android:text="Notifications"-->
-                <!--android:gravity="center_horizontal"-->
-                <!--android:textSize="18dp"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:paddingBottom="10dp"/>-->
+        <!--android:id="@+id/ibmc_notifications"-->
+        <!--android:background="@drawable/home_button"-->
+        <!--android:backgroundTint="@color/dark_navy_blue"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_margin="10dp">-->
+        <!--<ImageView-->
+        <!--android:paddingTop="5dp"-->
+        <!--app:srcCompat="@drawable/ic_home_notification"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1"/>-->
+        <!--<TextView-->
+        <!--android:textColor="@color/white"-->
+        <!--android:text="Notifications"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:textSize="18dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingBottom="10dp"/>-->
         <!--</LinearLayout>-->
     </LinearLayout>
 </LinearLayout>
