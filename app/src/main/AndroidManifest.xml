@@ -47,7 +47,7 @@
         android:name="org.hisp.dhis.android.trackercapture.TrackerCaptureApplication"
         android:allowBackup="false"
         tools:replace="android:allowBackup"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/rabies_logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme.Base">
 
