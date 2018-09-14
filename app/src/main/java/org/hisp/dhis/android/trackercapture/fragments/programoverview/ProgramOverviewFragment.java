@@ -393,12 +393,12 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
         noActiveEnrollment = (TextView) header.findViewById(R.id.noactiveenrollment);
         programIndicatorCardView = (CardView) header.findViewById(R.id.programindicators_cardview);
         eventsCardView = (CardView) header.findViewById(R.id.events_cardview);
-//        completeButton = (Button) header.findViewById(R.id.complete);
+       completeButton = (Button) header.findViewById(R.id.complete);
         reOpenButton = (Button) header.findViewById(R.id.re_open);
 //        terminateButton = (Button) header.findViewById(R.id.terminate);
 //        followupButton = (ImageButton) header.findViewById(R.id.followupButton);
         profileButton = (ImageButton) header.findViewById(R.id.profile_button);
-//        completeButton.setOnClickListener(this);
+       completeButton.setOnClickListener(this);
         reOpenButton.setOnClickListener(this);
 //        terminateButton.setOnClickListener(this);
 //        followupButton.setOnClickListener(this);
@@ -1574,21 +1574,35 @@ public class ProgramOverviewFragment extends AbsProgramRuleFragment implements V
                 break;
             }
 
+            // case R.id.complete: {
+            //     UiUtils.showConfirmDialog(getActivity(),
+            //             getString(R.string.un_enroll),
+            //             getString(R.string.confirm_complete_enrollment),
+            //             getString(R.string.un_enroll),
+            //             getString(R.string.cancel),
+            //             new DialogInterface.OnClickListener() {
+            //                 @Override
+            //                 public void onClick(DialogInterface dialog, int which) {
+            //                     completeEnrollment();
+            //                 }
+            //             });
+            //     break;
+            // }
             case R.id.complete: {
-                UiUtils.showConfirmDialog(getActivity(),
-                        getString(R.string.un_enroll),
-                        getString(R.string.confirm_complete_enrollment),
-                        getString(R.string.un_enroll),
-                        getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                completeEnrollment();
-                            }
-                        });
-                break;
-            }
-            case R.id.re_open: {
+               UiUtils.showConfirmDialog(getActivity(),
+                       getString(R.string.complete),
+                       getString(R.string.confirm_complete_enrollment_),
+                       getString(R.string.complete),
+                       getString(R.string.cancel),
+                       new DialogInterface.OnClickListener() {
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                               completeEnrollment();
+                           }
+                       });
+               break;
+           }
+          case R.id.re_open: {
                 Enrollment enrollment = getLastEnrollmentForTrackedEntityInstance();
                 if(enrollment!=null) {
                     enrollment.setStatus(Enrollment.ACTIVE);
