@@ -352,10 +352,10 @@ public class HolderActivity extends AbsHomeActivity{
         Intent intent = new Intent(activity,MapActivity.class);
         activity.startActivity(intent);
     }
-    public static void startMaps(Activity activity, ArrayList<TrackedEntityAttributeValue> data, ArrayList<DataValue> dataElementValues){
+    public static void startMaps(Activity activity, ArrayList<DataValue> dataElementOneValues, ArrayList<DataValue> dataElementTwoValues){
         Intent intent = new Intent(activity,MapActivity.class);
-        intent.putExtra(ATTRIBUTE_COORDINATES,data);
-        intent.putExtra(DATAELEMENT_COORDINATES,dataElementValues);
+        intent.putExtra(ATTRIBUTE_COORDINATES,dataElementOneValues);
+        intent.putExtra(DATAELEMENT_COORDINATES,dataElementTwoValues);
         activity.startActivity(intent);
     }
 

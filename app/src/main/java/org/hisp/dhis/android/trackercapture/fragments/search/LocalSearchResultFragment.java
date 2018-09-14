@@ -1,7 +1,6 @@
 package org.hisp.dhis.android.trackercapture.fragments.search;
 
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ import com.squareup.otto.Subscribe;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.events.OnTrackerItemClick;
-import org.hisp.dhis.android.sdk.events.UiEvent;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.models.BaseSerializableModel;
@@ -37,29 +35,21 @@ import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
-import org.hisp.dhis.android.sdk.ui.activities.INavigationHandler;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.TrackerAssociateRowActionListener;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.EventRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.android.trackercapture.activities.HolderActivity;
-import org.hisp.dhis.android.trackercapture.fragments.TrackerAssociate.TrackerAssociateSearchResultFragment;
-import org.hisp.dhis.android.trackercapture.fragments.programoverview.ProgramOverviewFragment;
 import org.hisp.dhis.android.trackercapture.fragments.selectprogram.dialogs.ItemStatusDialogFragment;
 import org.hisp.dhis.android.trackercapture.ui.adapters.TrackedEntityInstanceAdapter;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -73,8 +63,16 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     public static final String EXTRA_STAGE_ID = "extra:stageId";
     public static final String EXTRA_COORD_ATR = "extra:cord_atr_fl";
     public static final String EXTRA_COORD_DE = "extra:cord_de_fl";
-    private static final String PERSONS_LOCATION_DATAELEMENT = "QMGWGK6wkET";
+    private static final String OWNER_LOCATION_DATAELEMENT = "pCtN3Pil3Wi";
+    private static final String PERSONS_LOCATION_DATALEMENT = "QMGWGK6wkET";
     public static final String EXTRA_ENROLLMENT_FL = "extra:enrollment_fl";
+    private static final String LAST_KNOWN_LOCATION_DATAELEMENT = "Ukr7UK2GTA2";
+    private static final String ANIMAL_CASE_REGISTRATION = "xO7WLJ8DIDK";
+    private static final String ANIMAL_EXPOSURE = "oLY6uR5jJh9)";
+    private static final String HUMAN_EXPOSURE = "Hs1zoGOwY8B";
+    private static final String EXPOSURE_DETAILS_STAGE_HUMAN_EXPOSURE = "DbsGMk0zLxr";//of human exposure program DbsGMk0zLxr
+    private static final String EXPOSURE_DETAILS_STAGE_ANIMAL_EXPOSURE = "R8zfsjiFerK";//of animal exposure program
+
 
     private String orgUnitId;
     private String programId;
@@ -486,27 +484,76 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
     }
 
     private void showMap(){
-        List<TrackedEntityAttributeValue> data = new ArrayList<>();
+        List<DataValue> lastknownlocations = new ArrayList<>();
         List<DataValue> persons_locations = new ArrayList<>();
         for(EventRow eventRow :mForm.getEventRowList()){
             if(eventRow instanceof TrackedEntityInstanceItemRow){
-                Map<String, TrackedEntityAttributeValue> attributes = ((TrackedEntityInstanceItemRow) eventRow).getAttributes();
-                if(attributes != null){
-                    data.add(attributes.get("x8iA6APPjTm"));//last known attribute values
-                }
-                TrackedEntityInstance trackedEntityInstance = ((TrackedEntityInstanceItemRow) eventRow).getTrackedEntityInstance();
-                for(Enrollment enrollment:TrackerController.getEnrollments(programId,trackedEntityInstance)){
-                    List<Event> events = TrackerController.getEventsByEnrollment(enrollment.getLocalId());
-                    for(Event event : events){
-                        if(event.getProgramStageId().equals(LocalSearchResultFragmentFormQuery.EVENT_NOTIFICATION_STAGE)){
-                            for(DataValue dataValue:event.getDataValues()){
-                                if(dataValue.getDataElement().equals(PERSONS_LOCATION_DATAELEMENT)){
-                                    persons_locations.add(dataValue);
+                TrackedEntityInstance trackedEntityInstance =
+                        ((TrackedEntityInstanceItemRow) eventRow).getTrackedEntityInstance();
+
+
+                switch(programId) {
+                    case ANIMAL_CASE_REGISTRATION:
+                        for (Enrollment enrollment : TrackerController
+                                .getEnrollments(programId, trackedEntityInstance)) {
+                            List<Event> events =
+                                    TrackerController.getEventsByEnrollment(enrollment.getLocalId());
+                            for (Event event : events) {
+                                if (event.getProgramStageId()
+                                        .equals(LocalSearchResultFragmentFormQuery.EVENT_NOTIFICATION_STAGE)) {
+                                    for (DataValue dataValue : event.getDataValues()) {
+                                        if (dataValue.getDataElement().equals(PERSONS_LOCATION_DATALEMENT)) {
+                                            persons_locations.add(dataValue);
+                                        }
+                                        if (dataValue.getDataElement().equals(LAST_KNOWN_LOCATION_DATAELEMENT)) {
+                                            lastknownlocations.add(dataValue);
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
+                        break;
+
+                    case ANIMAL_EXPOSURE:
+                        for (Enrollment enrollment : TrackerController
+                                .getEnrollments(programId, trackedEntityInstance)) {
+                            List<Event> events =
+                                    TrackerController.getEventsByEnrollment(enrollment.getLocalId());
+                            for (Event event : events) {
+                                if (event.getProgramStageId()
+                                        .equals(EXPOSURE_DETAILS_STAGE_ANIMAL_EXPOSURE)) {
+                                    for (DataValue dataValue : event.getDataValues()) {
+                                        if (dataValue.getDataElement().equals(OWNER_LOCATION_DATAELEMENT)) {
+                                            persons_locations.add(dataValue);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
+                    case HUMAN_EXPOSURE:
+                        for (Enrollment enrollment : TrackerController
+                                .getEnrollments(programId, trackedEntityInstance)) {
+                            List<Event> events =
+                                    TrackerController.getEventsByEnrollment(enrollment.getLocalId());
+                            for (Event event : events) {
+                                if (event.getProgramStageId()
+                                        .equals(EXPOSURE_DETAILS_STAGE_HUMAN_EXPOSURE)) {
+                                    for (DataValue dataValue : event.getDataValues()) {
+                                        if (dataValue.getDataElement().equals(PERSONS_LOCATION_DATALEMENT)) {
+                                            persons_locations.add(dataValue);
+
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+
                 }
+
+
                 
             }
         }
@@ -515,6 +562,6 @@ public class LocalSearchResultFragment extends Fragment implements LoaderManager
         
 
         HolderActivity.startMaps(getActivity(),
-                (ArrayList<TrackedEntityAttributeValue>) data, (ArrayList<DataValue>) persons_locations);
+                (ArrayList<DataValue>) persons_locations, (ArrayList<DataValue>) lastknownlocations);
     }
 }

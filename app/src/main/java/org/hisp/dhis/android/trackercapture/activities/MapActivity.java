@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 
+import org.hisp.dhis.android.sdk.controllers.GpsController;
+import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
@@ -29,9 +31,11 @@ public class MapActivity extends BaseActivity{
     MapView map = null;
     public static String ATTRIBUTE_COORDINATES = "coordinate_attributes_extra";
     public static final String DATAELEMENT_COORDINATES = "data_element_coordinates:extra";
+    public static final String MANUAL_ID_ATTRIBUTE = "I7OncVzPZKS";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GpsController.activateGps(getBaseContext());
         setContentView(R.layout.activity_map);
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -42,12 +46,16 @@ public class MapActivity extends BaseActivity{
         map.setMultiTouchControls(true);
 
 
-        ArrayList<TrackedEntityAttributeValue> values =
-        (ArrayList<TrackedEntityAttributeValue>) getIntent().getExtras()
+        ArrayList<DataValue> values =
+        (ArrayList<DataValue>) getIntent().getExtras()
          .get(ATTRIBUTE_COORDINATES);
          if(values!=null){
 
-                 for(TrackedEntityAttributeValue value :values){
+                 for(DataValue value :values){
+                     String manualId =
+                             TrackerController.getTrackedEntityAttributeValue(
+                                     MANUAL_ID_ATTRIBUTE,TrackerController.getEvent(value.getLocalEventId()).getTrackedEntityInstance()
+                             ).getValue();
                         if(!getLatitudeFromValue(value).equals("")) {
                                 Marker marker =  new Marker(map);
                                 marker.setIcon( ContextCompat.getDrawable(getApplicationContext(),R.drawable.lastknown_location_icon));
@@ -56,6 +64,7 @@ public class MapActivity extends BaseActivity{
                                                 Double.parseDouble(getLatitudeFromValue(value)),
                                                 Double.parseDouble(getLongitudeFromValue(value)));
                                 marker.setPosition(tempGeo);
+                                marker.setTitle(manualId);
                                 map.getOverlays().add(marker);
 
                             }
@@ -70,6 +79,10 @@ public class MapActivity extends BaseActivity{
 
             for(DataValue value :dataValues){
                 if(!getLatitudeFromValue(value).equals("")) {
+                    String manualId =
+                            TrackerController.getTrackedEntityAttributeValue(
+                                    MANUAL_ID_ATTRIBUTE,TrackerController.getEvent(value.getLocalEventId()).getTrackedEntityInstance()
+                            ).getValue();
                     Marker marker =  new Marker(map);
                     marker.setIcon( ContextCompat.getDrawable(getApplicationContext(),R.drawable.persons_location_icon));
 
@@ -77,6 +90,7 @@ public class MapActivity extends BaseActivity{
                             Double.parseDouble(getLatitudeFromValue(value)),
                             Double.parseDouble(getLongitudeFromValue(value)));
                     marker.setPosition(tempGeo);
+                    marker.setTitle(manualId);
                     map.getOverlays().add(marker);
 
                 }
@@ -84,7 +98,11 @@ public class MapActivity extends BaseActivity{
 
         }
 
-
+        Marker marker = new Marker(map);
+        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(),R.drawable.current_location_icon));
+        GeoPoint tempGeo = new GeoPoint(GpsController.getLocation().getLatitude(),GpsController.getLocation().getLongitude());
+        marker.setPosition(tempGeo);
+        map.getOverlays().add(marker);
 
 
     }
