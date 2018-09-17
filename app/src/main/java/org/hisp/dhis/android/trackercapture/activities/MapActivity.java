@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 
 
 import org.hisp.dhis.android.sdk.controllers.GpsController;
@@ -15,6 +16,7 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.trackercapture.R;
 import org.hisp.dhis.client.sdk.ui.activities.BaseActivity;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
@@ -22,6 +24,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.AbsDatePickerRow.EMPTY_FIELD;
 import static org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.QuestionCoordinatesRow.UNDEFINED;
@@ -45,7 +48,7 @@ public class MapActivity extends BaseActivity{
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
-
+        List<GeoPoint> pointsforBoundingBox = new ArrayList<>();
         ArrayList<DataValue> values =
         (ArrayList<DataValue>) getIntent().getExtras()
          .get(ATTRIBUTE_COORDINATES);
@@ -66,6 +69,7 @@ public class MapActivity extends BaseActivity{
                                 marker.setPosition(tempGeo);
                                 marker.setTitle(manualId);
                                 map.getOverlays().add(marker);
+                                pointsforBoundingBox.add(tempGeo);
 
                             }
                 }
@@ -92,7 +96,7 @@ public class MapActivity extends BaseActivity{
                     marker.setPosition(tempGeo);
                     marker.setTitle(manualId);
                     map.getOverlays().add(marker);
-
+                    pointsforBoundingBox.add(tempGeo);
                 }
             }
 
@@ -103,6 +107,17 @@ public class MapActivity extends BaseActivity{
         GeoPoint tempGeo = new GeoPoint(GpsController.getLocation().getLatitude(),GpsController.getLocation().getLongitude());
         marker.setPosition(tempGeo);
         map.getOverlays().add(marker);
+
+
+
+        pointsforBoundingBox.add(tempGeo);
+        BoundingBox bb = BoundingBox.fromGeoPoints(pointsforBoundingBox);
+//        map.zoomToBoundingBox(bb,false);
+//        map.getController().zoomToSpan(tempGeo.getLatitude(),tempGeo.getLongitude());
+//        map.setTilesScaledToDpi(true);
+        map.getController().zoomTo(9);
+        map.getController().animateTo(tempGeo);
+
 
 
     }
