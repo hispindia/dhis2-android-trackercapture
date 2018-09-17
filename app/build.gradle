@@ -96,11 +96,13 @@ dependencies {
     api 'com.github.barteksc:android-pdf-viewer:2.8.2'
     api 'com.android.support:multidex:1.0.1'
 
+
     provided 'org.androidannotations:androidannotations:4.0.0'
     api 'org.androidannotations:androidannotations-api:4.0.0'
 
     api('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
-    api 'org.osmdroid:osmdroid-android:5.6.5'
+    api 'org.osmdroid:osmdroid-android:6.0.2'
+
 }
