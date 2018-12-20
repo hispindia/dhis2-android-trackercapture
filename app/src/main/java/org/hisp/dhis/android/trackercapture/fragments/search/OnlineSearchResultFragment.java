@@ -78,7 +78,7 @@ public class OnlineSearchResultFragment extends Fragment implements AdapterView.
     private boolean backNavigation;
     private ProgressBar mProgressBar;
     private FontEditText filterButton;
-    private int MAX_ATTR_NUMBER_TO_DOWNLOAD=5;
+    private int MAX_ATTR_NUMBER_TO_DOWNLOAD_FOR_DISPLAY=5;
     private Button searchButton;
 
     public static final String EXTRA_TRACKEDENTITYINSTANCESLIST = "extra:trackedEntityInstances";
@@ -221,11 +221,13 @@ public class OnlineSearchResultFragment extends Fragment implements AdapterView.
         Map<String, ProgramTrackedEntityAttribute> attributeMap = new HashMap<>();
         for (ProgramTrackedEntityAttribute programTrackedEntityAttribute : programTrackedEntityAttributes) {
 
-            for(int i=0;i<MAX_ATTR_NUMBER_TO_DOWNLOAD;i++)
+//Temperory hack
+            for(int i=0;i<MAX_ATTR_NUMBER_TO_DOWNLOAD_FOR_DISPLAY;i++)
             {
                 attributeMap.put(programTrackedEntityAttributes.get(i).getTrackedEntityAttributeId(), programTrackedEntityAttributes.get(i));
             }
 
+//ToDO Find better solution for download & display all attributes by default on download
 //            attributeMap.put(programTrackedEntityAttribute.getTrackedEntityAttributeId(), programTrackedEntityAttribute);
         }
         return attributeMap;
