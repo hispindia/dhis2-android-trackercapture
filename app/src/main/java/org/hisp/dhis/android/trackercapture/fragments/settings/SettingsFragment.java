@@ -153,7 +153,6 @@ public class SettingsFragment extends Fragment
         }
 
 
-
         synchronizeButton = (Button) view.findViewById(R.id.settings_sync_button);
 
         synchronizeRemovedEventsButton = (Button) view.findViewById(
@@ -284,7 +283,7 @@ public class SettingsFragment extends Fragment
                                     getActivity().finish();
                                     Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
                                     startActivity(intent);
-//                                    deleteAppData(getContext());
+                                    deleteAppData(getContext());
                                     deleteCache(getContext());
                                 }
                                 else {
@@ -292,7 +291,7 @@ public class SettingsFragment extends Fragment
 //                                    getActivity().finish();
                                     Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
                                     startActivity(intent);
-//                                    deleteAppData(getContext());
+                                    deleteAppData(getContext());
                                     deleteCache(getContext());
                                 }
 
