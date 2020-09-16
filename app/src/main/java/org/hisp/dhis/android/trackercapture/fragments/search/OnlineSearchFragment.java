@@ -60,7 +60,9 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
     private int mDialogId;
     private View progressBar;
     private boolean backNavigation;
-
+    private int server_count;
+    private int chunk_size=500;
+    private int local_count;
     public static final String EXTRA_PROGRAM = "extra:trackedEntityAttributes";
     public static final String EXTRA_ORGUNIT = "extra:orgUnit";
     public static final String EXTRA_DETAILED = "extra:detailed";
@@ -380,14 +382,69 @@ public class OnlineSearchFragment extends Fragment implements View.OnClickListen
     }
 
     public void showOnlineSearchResultFragment(final List<TrackedEntityInstance> trackedEntityInstances, final String orgUnit, final String programId, final boolean backNavigation) {
-        if (getActivity() != null && isAdded()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    HolderActivity.navigateToOnlineSearchResultFragment(getActivity(), trackedEntityInstances, orgUnit, programId, backNavigation);
+        //@Sou hack to downlaod data
+        if (trackedEntityInstances!=null)
+        {
+            List<TrackedEntityInstance> tei_list= MetaDataController.getTrackedEntityInstancesFromLocal();
+            local_count=tei_list.size();
+            int loop_count=0;
+            server_count=trackedEntityInstances.size();
+
+            if (local_count>server_count)
+
+            {
+                if (getActivity() != null && isAdded()) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            server_total.setText("Total: "+server_count);
+                            local_total.setText("Downloaded: "+local_count);
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getContext(), "No More records to download, you have downloaded all: "+server_count+" records", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
-            });
+
+
+            }
+            else
+            {
+                for(int i=local_count;i<server_count;i++)
+                {
+                    loop_count++;
+                    if (loop_count<=chunk_size)
+                    {
+                        trackedEntityInstances1.add(trackedEntityInstances.get(i));
+                    }
+
+                }
+
+                if (getActivity() != null && isAdded()) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            server_total.setText("Total: "+server_count);
+                            local_total.setText("Downloaded: "+local_count);
+                            progressBar.setVisibility(View.INVISIBLE);
+                            HolderActivity.navigateToOnlineSearchResultFragment(getActivity(), trackedEntityInstances1, orgUnit, programId,server_count,local_count);
+                        }
+                    });
+                }
+            }
+        }
+        else
+        {
+            if (getActivity() != null && isAdded()) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getContext(), "Please try to Download again", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+
         }
     }
 }
